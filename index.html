@@ -82,14 +82,51 @@
             background: #0d0d0d;
             border-radius: 8px;
             padding: 10px;
-            max-height: 300px;
+            max-height: 350px;
             overflow-y: auto;
         }
-        .support .tickets .ticket { border-bottom: 1px dashed #2a2a2a; padding: 6px 0; }
-        .support .tickets .ticket .ticket-header { display: flex; justify-content: space-between; font-weight: bold; color: #66ccff; }
-        .support .tickets .ticket .ticket-body { color: #bbb; font-size: 0.9em; margin: 4px 0; }
-        .support .tickets .ticket .ticket-answer { color: #ffaa00; font-size: 0.85em; border-left: 2px solid #ffaa00; padding-left: 8px; margin-top: 4px; }
-        .support .tickets .ticket .ticket-answer input {
+        .support .tickets .ticket {
+            border-bottom: 1px dashed #2a2a2a;
+            padding: 8px 0;
+        }
+        .support .tickets .ticket .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            color: #66ccff;
+        }
+        .support .tickets .ticket .ticket-body {
+            color: #bbb;
+            font-size: 0.9em;
+            margin: 4px 0;
+        }
+        .support .tickets .ticket .ticket-answer {
+            color: #66ff66;
+            font-size: 0.85em;
+            border-left: 2px solid #66ff66;
+            padding-left: 8px;
+            margin-top: 4px;
+        }
+        .support .tickets .ticket .ticket-status {
+            font-size: 0.75em;
+            padding: 2px 10px;
+            border-radius: 12px;
+            background: #2a2a2a;
+        }
+        .support .tickets .ticket .ticket-status.new { color: #ffaa00; }
+        .support .tickets .ticket .ticket-status.answered { color: #66ff66; }
+
+        /* Админ-панель (видна только при вводе пароля) */
+        .admin-panel {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: #1a2a1a;
+            border-radius: 8px;
+            border: 1px solid #66ff66;
+        }
+        .admin-panel.show { display: block; }
+        .admin-panel input {
             width: 100%;
             padding: 4px 8px;
             border-radius: 6px;
@@ -99,7 +136,7 @@
             margin-top: 4px;
             font-size: 0.85em;
         }
-        .support .tickets .ticket .ticket-answer button {
+        .admin-panel button {
             background: #ffaa00;
             color: #0d0d0d;
             border: none;
@@ -108,8 +145,9 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 0.8em;
+            margin-top: 4px;
         }
-        .support .tickets .ticket .ticket-answer button:hover { background: #ffcc44; }
+        .admin-panel button:hover { background: #ffcc44; }
 
         .category {
             background: #181818;
@@ -210,7 +248,7 @@
             <div class="header-repo">
                 <span class="repo-icon">📁</span>
                 <a href="#">guimods</a>
-                <span style="color:#555; font-size:0.8em;">(v.7.1)</span>
+                <span style="color:#555; font-size:0.8em;">(v.7.2)</span>
             </div>
         </div>
         <div class="header-right">
@@ -245,6 +283,15 @@
                 <button onclick="createTicket()">📩 Отправить заявку</button>
             </div>
             <div class="tickets" id="ticketsList"></div>
+        </div>
+        <button class="header-btn" onclick="document.getElementById('adminPanel').classList.toggle('show')" style="margin-top:8px;">🔐 Вход для администратора</button>
+        <div class="admin-panel" id="adminPanel">
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <input type="password" id="adminPassword" placeholder="Введите пароль админа" style="flex:1; min-width:150px;">
+                <button onclick="checkAdminPassword()">🔑 Войти</button>
+                <button onclick="hideAdminPanel()" style="background:#ff4444; color:white;">❌ Выйти</button>
+            </div>
+            <div id="adminStatus" style="margin-top:6px; color:#ffaa00; font-size:0.85em;"></div>
         </div>
     </div>
 
@@ -321,6 +368,11 @@
 <!-- ====================================================================== -->
 <script>
     // ============================================================
+    // 0. ПАРОЛЬ АДМИНИСТРАТОРА (ИЗМЕНЁН)
+    // ============================================================
+    const ADMIN_PASSWORD = 'samuh+mod';
+
+    // ============================================================
     // 1. БАЗА МОДОВ
     // ============================================================
     const defaultMods = {
@@ -394,50 +446,64 @@
 
     let userMods = getStorage('userMods', []);
     let modFeedback = getStorage('modFeedback', {});
+    let tickets = getStorage('tickets', []);
+    let isAdmin = getStorage('isAdmin', false);
 
     // ============================================================
     // 3. ТЕХНИЧЕСКАЯ ПОДДЕРЖКА
     // ============================================================
-    let tickets = getStorage('tickets', []);
-
     function renderTickets() {
         const list = document.getElementById('ticketsList');
         list.innerHTML = '';
         if (tickets.length === 0) {
             list.innerHTML = '<div style="color:#555; text-align:center; padding:20px;">Нет заявок. Напиши в поддержку!</div>';
             document.getElementById('ticketCount').textContent = '0 заявок';
+            document.title = 'GuiMods';
             return;
         }
-        document.getElementById('ticketCount').textContent = tickets.length + ' заявок';
+
+        const unanswered = tickets.filter(t => !t.answer).length;
+        document.getElementById('ticketCount').textContent = tickets.length + ' заявок (' + unanswered + ' новых)';
+        document.title = unanswered > 0 ? '(' + unanswered + ') GuiMods' : 'GuiMods';
+
         tickets.slice().reverse().forEach(ticket => {
             const div = document.createElement('div');
             div.className = 'ticket';
-            const status = ticket.answer ? '✅ Отвечено' : '⏳ Ожидает ответа';
+            const isAnswered = !!ticket.answer;
             div.innerHTML = `
                 <div class="ticket-header">
                     <span>#${ticket.id} ${ticket.subject}</span>
-                    <span style="color:${ticket.answer ? '#66ff66' : '#ffaa00'};">${status}</span>
+                    <span class="ticket-status ${isAnswered ? 'answered' : 'new'}">${isAnswered ? '✅ Отвечено' : '⏳ Ожидает'}</span>
                 </div>
                 <div class="ticket-body"><strong>${ticket.name}</strong> (${ticket.category}): ${ticket.text}</div>
                 <div style="font-size:0.7em; color:#555;">${ticket.date}</div>
-                <div class="ticket-answer">
-                    ${ticket.answer ? `<div>✅ Ответ: ${ticket.answer}</div>` : ''}
-                    <input type="text" placeholder="Напиши ответ..." class="answer-input" style="width:100%; padding:4px 8px; border-radius:6px; border:1px solid #333; background:#1a1a1a; color:#ccc; margin-top:4px; font-size:0.85em;">
-                    <button class="answer-btn" style="background:#ffaa00; color:#0d0d0d; border:none; padding:2px 12px; border-radius:12px; cursor:pointer; font-weight:bold; font-size:0.8em; margin-top:4px;">Ответить</button>
-                </div>
+                ${isAnswered ? `<div class="ticket-answer">✅ Ответ: ${ticket.answer}</div>` : ''}
+                ${!isAnswered && isAdmin ? `
+                    <div class="admin-panel show" style="margin-top:6px; padding:6px; background:#1a2a1a;">
+                        <input type="text" placeholder="Напиши ответ..." class="admin-answer-input" style="width:100%; padding:4px 8px; border-radius:6px; border:1px solid #333; background:#1a1a1a; color:#ccc;">
+                        <button class="admin-answer-btn" style="background:#ffaa00; color:#0d0d0d; border:none; padding:2px 12px; border-radius:12px; cursor:pointer; font-weight:bold; margin-top:4px;">Ответить</button>
+                    </div>
+                ` : ''}
             `;
-            const answerInput = div.querySelector('.answer-input');
-            const answerBtn = div.querySelector('.answer-btn');
-            answerBtn.addEventListener('click', function() {
-                const answerText = answerInput.value.trim();
-                if (!answerText) return alert('Напиши ответ!');
-                const idx = tickets.findIndex(t => t.id === ticket.id);
-                if (idx !== -1) {
-                    tickets[idx].answer = answerText;
-                    setStorage('tickets', tickets);
-                    renderTickets();
-                }
-            });
+
+            if (!isAnswered && isAdmin) {
+                const answerInput = div.querySelector('.admin-answer-input');
+                const answerBtn = div.querySelector('.admin-answer-btn');
+                answerBtn.addEventListener('click', function() {
+                    const answerText = answerInput.value.trim();
+                    if (!answerText) return alert('Напиши ответ!');
+                    const idx = tickets.findIndex(t => t.id === ticket.id);
+                    if (idx !== -1) {
+                        tickets[idx].answer = answerText;
+                        setStorage('tickets', tickets);
+                        renderTickets();
+                    }
+                });
+                answerInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') answerBtn.click();
+                });
+            }
+
             list.appendChild(div);
         });
     }
@@ -463,7 +529,33 @@
     }
 
     // ============================================================
-    // 4. ПОЛЬЗОВАТЕЛЬСКИЕ МОДЫ
+    // 4. АДМИН-ПАНЕЛЬ
+    // ============================================================
+    function checkAdminPassword() {
+        const input = document.getElementById('adminPassword');
+        if (input.value === ADMIN_PASSWORD) {
+            isAdmin = true;
+            setStorage('isAdmin', true);
+            document.getElementById('adminStatus').textContent = '✅ Вы вошли как администратор!';
+            document.getElementById('adminStatus').style.color = '#66ff66';
+            renderTickets();
+            input.value = '';
+        } else {
+            document.getElementById('adminStatus').textContent = '❌ Неверный пароль!';
+            document.getElementById('adminStatus').style.color = '#ff4444';
+        }
+    }
+
+    function hideAdminPanel() {
+        isAdmin = false;
+        setStorage('isAdmin', false);
+        document.getElementById('adminStatus').textContent = 'Вы вышли из режима администратора.';
+        document.getElementById('adminStatus').style.color = '#ffaa00';
+        renderTickets();
+    }
+
+    // ============================================================
+    // 5. ПОЛЬЗОВАТЕЛЬСКИЕ МОДЫ
     // ============================================================
     function addUserMod() {
         const name = document.getElementById('userModName').value.trim();
@@ -495,7 +587,7 @@
     }
 
     // ============================================================
-    // 5. ОТРИСОВКА КАРТОЧКИ
+    // 6. ОТРИСОВКА КАРТОЧКИ
     // ============================================================
     function createModCard(mod, isUserMod = false) {
         const card = document.createElement('div');
@@ -590,7 +682,7 @@
     }
 
     // ============================================================
-    // 6. РУЛЕТКА
+    // 7. РУЛЕТКА
     // ============================================================
     function spinRoulette() {
         const count = parseInt(document.getElementById('rouletteCount').value) || 3;
@@ -617,7 +709,7 @@
     }
 
     // ============================================================
-    // 7. ОТРИСОВКА ВСЕХ РАЗДЕЛОВ
+    // 8. ОТРИСОВКА ВСЕХ РАЗДЕЛОВ
     // ============================================================
     function renderAll() {
         renderCategory('cheatsGrid', mods.cheats, 'cheatsCount');
@@ -639,7 +731,7 @@
     }
 
     // ============================================================
-    // 8. ПОИСК
+    // 9. ПОИСК
     // ============================================================
     document.getElementById('searchInput').addEventListener('input', function() {
         const query = this.value.toLowerCase().trim();
@@ -656,11 +748,18 @@
     document.getElementById('userSearchInput').addEventListener('input', renderUserMods);
 
     // ============================================================
-    // 9. ЗАПУСК
+    // 10. ЗАПУСК
     // ============================================================
     window.onload = function() {
         renderAll();
         renderTickets();
+
+        if (isAdmin) {
+            document.getElementById('adminStatus').textContent = '✅ Вы авторизованы как администратор.';
+            document.getElementById('adminStatus').style.color = '#66ff66';
+            document.getElementById('adminPanel').classList.add('show');
+        }
+
         document.getElementById('userModName').addEventListener('keydown', e => {
             if (e.key === 'Enter') document.getElementById('userModLink').focus();
         });
