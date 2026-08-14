@@ -42,6 +42,7 @@
         .bg-aurora { background: linear-gradient(135deg, #001a0a, #00331a 25%, #006633 50%, #00331a 75%, #001a0a); }
         .bg-sakura { background: linear-gradient(180deg, #ffe8f0 0%, #ffcce0 40%, #ff99cc 60%, #ff6699 80%, #cc3377 100%); }
         .bg-dungeon { background: radial-gradient(ellipse at 50% 50%, #1a1a1a, #0a0a0a 50%, #000 100%); }
+        .bg-blackhole { background: radial-gradient(ellipse at 50% 50%, #0a0010 0%, #150025 20%, #0a0015 40%, #000000 70%, #000000 100%); }
 
         .stars-layer { position:fixed; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none; opacity:0; transition: opacity 1s; }
         .stars-layer.active { opacity:1; }
@@ -50,7 +51,7 @@
 
         .container { max-width:1400px; margin:0 auto; padding:0 16px; position:relative; z-index:3; }
 
-        .theme-panel { position:fixed; bottom:14px; right:14px; z-index:200; display:grid; grid-template-columns:repeat(3,1fr); gap:5px; background:rgba(10,10,18,.9); padding:8px; border-radius:14px; border:1px solid rgba(255,170,0,.3); }
+        .theme-panel { position:fixed; bottom:14px; right:14px; z-index:200; display:grid; grid-template-columns:repeat(4,1fr); gap:5px; background:rgba(10,10,18,.9); padding:8px; border-radius:14px; border:1px solid rgba(255,170,0,.3); }
         .theme-panel button { width:34px; height:34px; border-radius:50%; border:2px solid rgba(255,255,255,.3); cursor:pointer; font-size:.9em; transition:.3s; background:rgba(20,20,30,.8); }
         .theme-panel button:hover { transform:scale(1.15); border-color:#ffaa00; }
         .theme-panel button.active-theme { border-color:#ffaa00; box-shadow:0 0 12px rgba(255,170,0,.6); }
@@ -101,12 +102,10 @@
         .category-other { background:rgba(15,15,20,.85); border:2px solid #999; }
         .category-other .cat-title { color:#aaa; }
 
-        /* Шейдеры */
         .category-shaders { background:rgba(3,15,30,.85); border:2px solid #44aaff; }
         .category-shaders .cat-title { color:#55bbff; }
         .category-shaders .cat-icon { color:#44aaff; }
 
-        /* Ресурс-паки */
         .category-resourcepacks { background:rgba(15,20,3,.85); border:2px solid #aaff44; }
         .category-resourcepacks .cat-title { color:#bbff55; }
         .category-resourcepacks .cat-icon { color:#aaff44; }
@@ -149,7 +148,7 @@
 
         @media(max-width:768px) {
             .mod-grid { grid-template-columns:1fr; }
-            .theme-panel { bottom:6px; right:6px; grid-template-columns:repeat(5,1fr); }
+            .theme-panel { bottom:6px; right:6px; grid-template-columns:repeat(4,1fr); }
             .theme-panel button { width:28px; height:28px; font-size:.75em; }
             .filter-group { min-width:120px; }
         }
@@ -173,6 +172,7 @@
 <div class="bg-layer bg-aurora" id="bgAurora"></div>
 <div class="bg-layer bg-sakura" id="bgSakura"></div>
 <div class="bg-layer bg-dungeon" id="bgDungeon"></div>
+<div class="bg-layer bg-blackhole" id="bgBlackhole"></div>
 <div class="stars-layer" id="starsLayer"></div>
 
 <!-- ТЕМЫ -->
@@ -192,6 +192,7 @@
     <button onclick="setTheme('aurora')">🌠</button>
     <button onclick="setTheme('sakura')">🌸</button>
     <button onclick="setTheme('dungeon')">🏰</button>
+    <button onclick="setTheme('blackhole')">🕳️</button>
 </div>
 
 <div class="container">
@@ -477,7 +478,7 @@
     // ============ ВСЕ КАТЕГОРИИ ============
     const allMods = { cheats:[], visuals:[], shaders:[], resourcepacks:[], optimization:[], horror:[], builds:[], tech:[], magic:[], adventure:[], utility:[], other:[] };
 
-    // Реальные моды (из прошлой версии)
+    // Реальные моды
     const realModsData = {
         cheats: [["Wurst","Alexander","1.20.4","200+ функций","free",8],["Meteor","Meteor Dev","1.20.4","Fabric чит","free",9],["Rise Client","RiseTeam","1.20.4","Платный","paid",10],["Pouch Client","PouchTeam","1.21.0","Crystal PvP","paid",10],["Novoline","NovolineTeam","1.20.4","AntiBot","paid",9],["LiquidBounce","CCBlueX","1.20.4","Forge чит","free",9],["Impact","ImpactClient","1.19.2","AutoCrystal","free",8],["Aristois","Aristois Team","1.20.4","Лаунчер","free",7],["Exhibition","ExhibitionTeam","1.20.4","Анархия","paid",9],["Moon Client","MoonTeam","1.20.4","Визуал","paid",8],["ZeroDay","ZeroDayTeam","1.20.4","Скрытный","free",7],["Wolfram","WolframDev","1.20.4","Crystal PvP","free",8],["Raven B+","RavenTeam","1.20.4","Открытый","free",8],["Sigma","SigmaTeam","1.20.4","Классика","free",7],["Kuro","KuroDev","1.20.4","Лёгкий","free",7],["Inertia","Inertia Team","1.20.4","Современный","free",8],["CatLean","Frozen_soft","1.21.4","Детект","free",8],["Vega","VegaTeam","1.20.4","UI","free",7],["Explicit","ExplicitDev","1.20.4","KillAura","free",7],["FDP Client","FDPTeam","1.20.4","AutoCrystal","paid",9]],
         visuals: [["Complementary Shaders","EminGT","1.21.0","Реализм","free",10],["BSL Shaders","CaptTatsu","1.21.0","Яркие","free",9],["OptiFine","sp614x","1.20.1","Шейдеры","free",9],["Fresh Animations","FreshLX","1.21.0","Мобы","free",8],["Rival Visual","winvi","1.21.4","PvP","free",8],["Destra Visual","DestraTeam","1.21.0","Платный","paid",10],["Loly Visual","LolyTeam","1.21.0","PvP","paid",9],["SelectVisuals","SelectTeam","1.21.0","UI","free",7]],
@@ -491,7 +492,6 @@
         other: [["Biomes O' Plenty","Adubbz","1.20.1","Биомы","free",9],["Quark","Vazkii","1.20.1","Улучшения","free",8],["Tinkers' Construct","TCTeam","1.20.1","Инструменты","free",9],["Waystones","WSTeam","1.20.1","Телепорты","free",8],["Iron Chests","ICTeam","1.20.1","Сундуки","free",8]]
     };
 
-    // Добавляем реальные моды
     for (const cat in realModsData) {
         realModsData[cat].forEach(m => {
             const [name, author, ver, desc, price, rating] = m;
@@ -499,76 +499,51 @@
         });
     }
 
-    // Добавляем шейдеры
     realShaders.forEach(s => {
         const [name, author, ver, desc, price, rating, link] = s;
         allMods.shaders.push({ name, author, ver, desc, price, rating, downloads: Math.floor(Math.random()*500000)+10000, link });
     });
 
-    // Добавляем ресурс-паки
     realResourcePacks.forEach(rp => {
         const [name, author, ver, desc, price, rating, link] = rp;
         allMods.resourcepacks.push({ name, author, ver, desc, price, rating, downloads: Math.floor(Math.random()*800000)+10000, link });
     });
 
-    // Генерируем дополнительные шейдеры до 500+
-    const shaderPrefixes = ['Aurora','Blaze','Crystal','Dream','Ember','Frost','Golden','Harmony','Ivory','Jade','Lunar','Mystic','Nebula','Opal','Pearl','Quartz','Ruby','Sapphire','Twilight','Umber','Violet','Willow','Zenith','Astral','Breeze','Coral','Dawn','Echo','Flare','Glimmer','Halo','Iris','Jewel','Karma','Lumen','Mirage','Nova','Orbit','Prism','Ripple','Shine','Spark','Terra','Ultra','Vivid','Wave','Xenon','Yield','Zion'];
-    const shaderSuffixes = ['Shader','Shaders','Graphics','Visuals','Light','Glow','Effects','Render','FX','Pack','Style','Vision','View','Atmosphere','Mood','Tone','Hue','Shade','Beam','Ray'];
-
-    while (allMods.shaders.length < 550) {
-        const prefix = shaderPrefixes[Math.floor(Math.random()*shaderPrefixes.length)];
-        const suffix = shaderSuffixes[Math.floor(Math.random()*shaderSuffixes.length)];
-        const name = `${prefix} ${suffix} ${allMods.shaders.length}`;
-        const author = authors[Math.floor(Math.random()*authors.length)];
-        const ver = allVersions[Math.floor(Math.random()*allVersions.length)];
-        const desc = descriptions[Math.floor(Math.random()*descriptions.length)];
-        const price = Math.random() > 0.7 ? 'paid' : 'free';
-        const rating = Math.floor(Math.random()*4)+7;
-        const downloads = Math.floor(Math.random()*2000000)+5000;
-        allMods.shaders.push({ name, author, ver, desc, price, rating, downloads, link: `https://www.curseforge.com/minecraft/search?search=${encodeURIComponent(name)}` });
-    }
-
-    // Генерируем дополнительные ресурс-паки
-    const rpPrefixes = ['Alpine','Bamboo','Cedar','Dahlia','Elm','Fern','Garden','Holly','Ivy','Juniper','Lavender','Maple','Nettle','Orchid','Palm','Rose','Sage','Thistle','Violet','Wisteria','Yarrow','Zinnia','Aster','Begonia','Camellia','Daffodil','Edelweiss','Foxglove','Geranium','Hibiscus'];
-    const rpSuffixes = ['Pack','Texture','Resource','HD','Realistic','Stylized','Medieval','Modern','Fantasy','Minimal','Detailed','Clean','Warm','Cool','Vibrant','Soft','Sharp','Classic','Retro','Future'];
-
-    while (allMods.resourcepacks.length < 100) {
-        const prefix = rpPrefixes[Math.floor(Math.random()*rpPrefixes.length)];
-        const suffix = rpSuffixes[Math.floor(Math.random()*rpSuffixes.length)];
-        const name = `${prefix} ${suffix} ${allMods.resourcepacks.length}`;
-        const author = authors[Math.floor(Math.random()*authors.length)];
-        const ver = allVersions[Math.floor(Math.random()*allVersions.length)];
-        const desc = descriptions[Math.floor(Math.random()*descriptions.length)];
-        const price = Math.random() > 0.8 ? 'paid' : 'free';
-        const rating = Math.floor(Math.random()*4)+7;
-        const downloads = Math.floor(Math.random()*1000000)+5000;
-        allMods.resourcepacks.push({ name, author, ver, desc, price, rating, downloads, link: `https://www.curseforge.com/minecraft/search?search=${encodeURIComponent(name)}` });
-    }
-
-    // Заполняем селектор версий
-    const versionSelect = document.getElementById('versionFilter');
-    allVersions.forEach(v => {
-        const opt = document.createElement('option');
-        opt.value = v;
-        opt.textContent = v;
-        versionSelect.appendChild(opt);
-    });
-
     // ============ ТЕМЫ ============
-    const themeMap = { quasar:'bgQuasar', beach:'bgBeach', cave:'bgCave', space:'bgSpace', city:'bgCity', forest:'bgForest', neon:'bgNeon', sunset:'bgSunset', arctic:'bgArctic', desert:'bgDesert', ocean:'bgOcean', volcano:'bgVolcano', aurora:'bgAurora', sakura:'bgSakura', dungeon:'bgDungeon' };
+    const themeMap = {
+        quasar: 'bgQuasar',
+        beach: 'bgBeach',
+        cave: 'bgCave',
+        space: 'bgSpace',
+        city: 'bgCity',
+        forest: 'bgForest',
+        neon: 'bgNeon',
+        sunset: 'bgSunset',
+        arctic: 'bgArctic',
+        desert: 'bgDesert',
+        ocean: 'bgOcean',
+        volcano: 'bgVolcano',
+        aurora: 'bgAurora',
+        sakura: 'bgSakura',
+        dungeon: 'bgDungeon',
+        blackhole: 'bgBlackhole'
+    };
     const themeList = Object.keys(themeMap);
 
     function setTheme(theme) {
         document.querySelectorAll('.bg-layer').forEach(el => el.classList.remove('active'));
-        document.getElementById(themeMap[theme]).classList.add('active');
+        const target = document.getElementById(themeMap[theme]);
+        if (target) {
+            target.classList.add('active');
+        }
         const starsEl = document.getElementById('starsLayer');
-        if (['space','quasar','city','neon','aurora','dungeon'].includes(theme)) {
+        if (['space','quasar','city','neon','aurora','dungeon','blackhole'].includes(theme)) {
             starsEl.classList.add('active');
         } else {
             starsEl.classList.remove('active');
         }
         document.querySelectorAll('.theme-panel button').forEach((btn, i) => {
-            btn.classList.toggle('active-theme', i === themeList.indexOf(theme));
+            btn.classList.toggle('active-theme', btn.getAttribute('onclick') === `setTheme('${theme}')`);
         });
     }
 
@@ -576,7 +551,7 @@
     function createStars() {
         const container = document.getElementById('starsLayer');
         const frag = document.createDocumentFragment();
-        for (let i = 0; i < 300; i++) {
+        for (let i = 0; i < 400; i++) {
             const star = document.createElement('div');
             star.className = 'star-dot';
             star.style.width = Math.random()*2+1+'px';
@@ -584,6 +559,7 @@
             star.style.left = Math.random()*100+'%';
             star.style.top = Math.random()*100+'%';
             star.style.animationDuration = Math.random()*4+2+'s';
+            star.style.opacity = Math.random()*0.8+0.2;
             frag.appendChild(star);
         }
         container.appendChild(frag);
@@ -648,6 +624,7 @@
         
         for (const cat in allMods) {
             const catEl = document.getElementById(`cat-${cat}`);
+            if (!catEl) continue;
             const grid = document.getElementById(`${cat}Grid`);
             const countEl = document.getElementById(`${cat}Count`);
             
@@ -690,7 +667,11 @@
     }
 
     // ============ ФУНКЦИИ ============
-    function scrollToId(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+    function scrollToId(id) { 
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' }); 
+    }
+    
     function spinRoulette() {
         const count = Math.min(parseInt(document.getElementById('rouletteCount').value) || 3, 20);
         const all = Object.values(allMods).flat();
@@ -699,7 +680,9 @@
         container.innerHTML = '';
         selected.forEach(m => container.appendChild(createModCard(m)));
     }
+    
     function clearRoulette() { document.getElementById('rouletteResults').innerHTML = ''; }
+    
     function addUserMod() {
         const name = document.getElementById('userModName').value.trim();
         if (!name) return;
@@ -710,6 +693,7 @@
         grid.appendChild(card);
         document.getElementById('userModName').value = '';
     }
+    
     function sendAI() {
         const input = document.getElementById('aiInput');
         const chat = document.getElementById('aiChat');
@@ -727,6 +711,7 @@
         input.value = '';
         chat.scrollTop = chat.scrollHeight;
     }
+    
     function toggleAllMods() {
         const cards = document.querySelectorAll('.mod-card');
         const allVis = Array.from(cards).every(c => c.style.display !== 'none');
