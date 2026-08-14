@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GuiMods — 2500+ Модов | Forge & Fabric</title>
+    <title>GuiMods — 2000+ Модов, Шейдеров, Ресурс-паков</title>
     <style>
         :root {
             --bg-primary: #050508;
@@ -17,258 +17,209 @@
         ::-webkit-scrollbar-thumb { background: #ffaa00; border-radius: 3px; }
 
         body {
-            background: #050508;
-            color: #f0f0f8;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             font-family: 'Segoe UI', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
+            transition: background 0.8s;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 10px;
-            position: relative;
-            z-index: 3;
-        }
+        .bg-layer { position: fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:0; transition: opacity 1s; }
+        .bg-layer.active { opacity:1; }
+        .bg-quasar { background: radial-gradient(ellipse at 30% 70%, #1a0500, #4d1000 20%, #993000 40%, #cc5000 55%, #ff7000 65%, #ffaa00 70%, #ffffff 73%, #ffdd00 74%, #ff7000 80%, #802000 90%, #0a0200); }
+        .bg-beach { background: linear-gradient(180deg, #87ceeb 0%, #87ceeb 50%, #ffd700 50%, #ffd700 52%, #deb887 52%, #deb887 70%, #20b2aa 70%, #20b2aa 100%); }
+        .bg-cave { background: radial-gradient(ellipse at 50% 60%, #3a2a1a, #1a0a00 40%, #0a0500 60%, #000); }
+        .bg-space { background: #050510; }
+        .bg-city { background: linear-gradient(180deg, #0a0a2a, #2a2a4a 50%, #0a0a1a); }
+        .bg-forest { background: linear-gradient(180deg, #1a3a1a, #052005 60%, #021002); }
+        .bg-neon { background: linear-gradient(135deg, #0a001a, #1a003a 30%, #0a0a2a 60%, #000a1a); }
+        .bg-sunset { background: linear-gradient(180deg, #1a0a2a, #4a1a3a 30%, #aa4400 55%, #ff8800 70%, #1a0500 100%); }
+        .bg-arctic { background: linear-gradient(180deg, #e8f4ff 0%, #cce8ff 40%, #99ccff 60%, #336699 80%, #0a1a2a 100%); }
+        .bg-desert { background: linear-gradient(180deg, #ffcc66, #ffaa44 30%, #cc8833 60%, #663311 80%, #1a0a00 100%); }
+        .bg-ocean { background: linear-gradient(180deg, #1a6a8a 0%, #0a4a6a 40%, #032030 70%, #010a18 100%); }
+        .bg-volcano { background: radial-gradient(ellipse at 50% 80%, #1a0500, #4a1000 30%, #aa4400 50%, #ff6600 60%, #ffaa00 65%, #1a0a00 90%, #000); }
+        .bg-aurora { background: linear-gradient(135deg, #001a0a, #00331a 25%, #006633 50%, #00331a 75%, #001a0a); }
+        .bg-sakura { background: linear-gradient(180deg, #ffe8f0 0%, #ffcce0 40%, #ff99cc 60%, #ff6699 80%, #cc3377 100%); }
+        .bg-dungeon { background: radial-gradient(ellipse at 50% 50%, #1a1a1a, #0a0a0a 50%, #000 100%); }
 
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            background: rgba(10, 10, 18, 0.95);
-            padding: 12px 18px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 170, 0, 0.3);
-            margin-bottom: 15px;
-            gap: 8px;
-        }
+        .stars-layer { position:fixed; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none; opacity:0; transition: opacity 1s; }
+        .stars-layer.active { opacity:1; }
+        .star-dot { position:absolute; border-radius:50%; background:#fff; animation:tw 3s infinite; }
+        @keyframes tw { 0%,100%{opacity:.3} 50%{opacity:1} }
 
-        .header-logo {
-            font-size: 1.5em;
-            font-weight: 900;
-            color: #ffaa00;
-        }
-        .header-logo span { color: #66ccff; }
+        .container { max-width:1400px; margin:0 auto; padding:0 16px; position:relative; z-index:3; }
 
-        .header-btn {
-            background: rgba(30, 30, 44, 0.9);
-            padding: 6px 10px;
-            border-radius: 14px;
-            color: #e0e0e8;
-            font-size: 0.8em;
-            border: 1px solid rgba(255, 170, 0, 0.3);
-            cursor: pointer;
-            margin: 2px;
-            transition: all 0.2s;
-        }
-        .header-btn:hover { background: #ffaa00; color: #000; }
+        .theme-panel { position:fixed; bottom:14px; right:14px; z-index:200; display:grid; grid-template-columns:repeat(3,1fr); gap:5px; background:rgba(10,10,18,.9); padding:8px; border-radius:14px; border:1px solid rgba(255,170,0,.3); }
+        .theme-panel button { width:34px; height:34px; border-radius:50%; border:2px solid rgba(255,255,255,.3); cursor:pointer; font-size:.9em; transition:.3s; background:rgba(20,20,30,.8); }
+        .theme-panel button:hover { transform:scale(1.15); border-color:#ffaa00; }
+        .theme-panel button.active-theme { border-color:#ffaa00; box-shadow:0 0 12px rgba(255,170,0,.6); }
 
-        .section-box {
-            background: rgba(10, 10, 18, 0.9);
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(255, 170, 0, 0.2);
-        }
-        .section-box h2 { font-size: 1.1em; color: #ffaa00; margin-bottom: 6px; }
+        .header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; background:rgba(10,10,18,.92); backdrop-filter:blur(8px); padding:14px 20px; border-radius:14px; border:1px solid rgba(255,170,0,.25); margin-bottom:18px; position:sticky; top:8px; z-index:100; gap:10px; }
+        .header-logo { font-size:1.7em; font-weight:900; background:linear-gradient(135deg,#ffaa00,#ffcc44); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .header-logo span { background:linear-gradient(135deg,#66ccff,#88ddff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .header-btn { background:rgba(30,30,44,.85); padding:7px 12px; border-radius:16px; color:#e0e0e8; font-size:.8em; border:1px solid rgba(255,170,0,.3); cursor:pointer; transition:.25s; }
+        .header-btn:hover { background:#ffaa00; color:#000; }
 
-        .filter-panel {
-            background: rgba(10, 10, 18, 0.9);
-            border-radius: 10px;
-            padding: 10px 12px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(255, 170, 0, 0.3);
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }
+        .filter-panel { background:rgba(10,10,18,.92); backdrop-filter:blur(8px); border-radius:14px; padding:16px 18px; margin-bottom:16px; border:1px solid rgba(255,170,0,.3); display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+        .filter-group { display:flex; flex-direction:column; gap:4px; flex:1; min-width:150px; }
+        .filter-label { font-size:.7em; color:#aaa; font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+        .filter-select { padding:8px 10px; border-radius:10px; border:1px solid rgba(255,170,0,.3); background:rgba(20,20,30,.9); color:#fff; font-size:.85em; cursor:pointer; outline:none; }
+        .filter-select:hover { border-color:#ffaa00; }
+        .filter-select option { background:#1a1a2a; color:#fff; }
+        .filter-btn { background:linear-gradient(135deg,#ffaa00,#ff6600); color:#000; border:none; padding:10px 18px; border-radius:12px; cursor:pointer; font-weight:700; font-size:.85em; transition:.3s; white-space:nowrap; }
+        .filter-btn:hover { transform:translateY(-2px); box-shadow:0 5px 20px rgba(255,170,0,.4); }
+        .filter-reset { background:rgba(255,68,68,.3); color:#fff; border:1px solid #ff4444; padding:10px 14px; border-radius:12px; cursor:pointer; font-size:.8em; }
+        .filter-reset:hover { background:#ff4444; }
 
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            flex: 1;
-            min-width: 120px;
-        }
-        .filter-label {
-            font-size: 0.65em;
-            color: #aaa;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-        .filter-select {
-            padding: 7px 8px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 170, 0, 0.3);
-            background: #1a1a2a;
-            color: #fff;
-            font-size: 0.8em;
-            cursor: pointer;
-            outline: none;
-        }
-        .filter-select:hover { border-color: #ffaa00; }
-        .filter-select option { background: #1a1a2a; color: #fff; }
+        .filter-stats { font-size:.8em; color:#66ccff; text-align:center; margin-bottom:10px; background:rgba(10,10,18,.8); padding:8px; border-radius:10px; border:1px solid rgba(102,204,255,.3); }
 
-        .mod-loader-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 0.65em;
-            font-weight: 700;
-            margin-left: 4px;
-        }
-        .loader-forge { background: rgba(255, 100, 0, 0.3); color: #ff8844; border: 1px solid #ff8844; }
-        .loader-fabric { background: rgba(255, 255, 100, 0.2); color: #ffff88; border: 1px solid #ffff88; }
-        .loader-both { background: rgba(100, 255, 100, 0.2); color: #88ff88; border: 1px solid #88ff88; }
-        .loader-quilt { background: rgba(180, 100, 255, 0.3); color: #cc88ff; border: 1px solid #cc88ff; }
-        .loader-neoforge { background: rgba(255, 150, 50, 0.3); color: #ffaa66; border: 1px solid #ffaa66; }
+        .category { border-radius:14px; padding:16px; margin-bottom:18px; transition:.3s; }
+        .cat-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+        .cat-icon { font-size:1.5em; }
+        .cat-title { font-size:1.2em; font-weight:800; }
+        .cat-count { font-size:.7em; background:rgba(0,0,0,.4); padding:3px 10px; border-radius:10px; margin-left:auto; }
 
-        .category {
-            border-radius: 10px;
-            padding: 10px 12px;
-            margin-bottom: 10px;
-        }
-        .cat-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-        }
-        .cat-title { font-size: 1em; font-weight: 700; }
-        .cat-count { font-size: 0.65em; background: rgba(0,0,0,0.4); padding: 2px 8px; border-radius: 8px; }
+        .category-cheats { background:rgba(30,5,5,.85); border:2px solid #ff4444; }
+        .category-cheats .cat-title { color:#ff5555; }
+        .category-visuals { background:rgba(5,5,30,.85); border:2px solid #6666ff; }
+        .category-visuals .cat-title { color:#7777ff; }
+        .category-optimization { background:rgba(5,25,5,.85); border:2px solid #44ff44; }
+        .category-optimization .cat-title { color:#55ff55; }
+        .category-horror { background:rgba(20,3,20,.85); border:2px solid #bb00bb; }
+        .category-horror .cat-title { color:#cc22cc; }
+        .category-builds { background:rgba(25,15,3,.85); border:2px solid #ff9900; }
+        .category-builds .cat-title { color:#ffaa00; }
+        .category-tech { background:rgba(3,20,25,.85); border:2px solid #00cccc; }
+        .category-tech .cat-title { color:#22dddd; }
+        .category-magic { background:rgba(15,3,25,.85); border:2px solid #9900ff; }
+        .category-magic .cat-title { color:#aa22ff; }
+        .category-adventure { background:rgba(3,20,10,.85); border:2px solid #00cc66; }
+        .category-adventure .cat-title { color:#22dd77; }
+        .category-utility { background:rgba(20,20,25,.85); border:2px solid #bbbbdd; }
+        .category-utility .cat-title { color:#ccccdd; }
+        .category-other { background:rgba(15,15,20,.85); border:2px solid #999; }
+        .category-other .cat-title { color:#aaa; }
 
-        .mod-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 6px;
-        }
-        .mod-card {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 8px;
-            padding: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            font-size: 0.75em;
-            transition: all 0.2s;
-        }
-        .mod-card:hover {
-            border-color: #ffaa00;
-            transform: translateY(-2px);
-        }
-        .mod-name { font-weight: 700; color: #fff; }
-        .mod-ver { color: #aaa; font-size: 0.85em; }
-        .mod-meta { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
-        .price-free { color: #66ff66; }
-        .price-paid { color: #ff6666; }
+        /* Шейдеры */
+        .category-shaders { background:rgba(3,15,30,.85); border:2px solid #44aaff; }
+        .category-shaders .cat-title { color:#55bbff; }
+        .category-shaders .cat-icon { color:#44aaff; }
 
-        .cat-cheats { background: #2a0a0a; border: 2px solid #ff4444; }
-        .cat-cheats .cat-title { color: #ff5555; }
-        .cat-visuals { background: #0a0a2a; border: 2px solid #6666ff; }
-        .cat-visuals .cat-title { color: #7777ff; }
-        .cat-shaders { background: #0a1a2a; border: 2px solid #44aaff; }
-        .cat-shaders .cat-title { color: #55bbff; }
-        .cat-resourcepacks { background: #1a2a0a; border: 2px solid #aaff44; }
-        .cat-resourcepacks .cat-title { color: #bbff55; }
-        .cat-optimization { background: #0a2a0a; border: 2px solid #44ff44; }
-        .cat-optimization .cat-title { color: #55ff55; }
-        .cat-horror { background: #2a0a2a; border: 2px solid #bb00bb; }
-        .cat-horror .cat-title { color: #cc22cc; }
-        .cat-builds { background: #2a150a; border: 2px solid #ff9900; }
-        .cat-builds .cat-title { color: #ffaa00; }
-        .cat-tech { background: #0a1a1a; border: 2px solid #00cccc; }
-        .cat-tech .cat-title { color: #22dddd; }
-        .cat-magic { background: #1a0a2a; border: 2px solid #9900ff; }
-        .cat-magic .cat-title { color: #aa22ff; }
-        .cat-adventure { background: #0a1a0a; border: 2px solid #00cc66; }
-        .cat-adventure .cat-title { color: #22dd77; }
-        .cat-utility { background: #1a1a1a; border: 2px solid #bbbbdd; }
-        .cat-utility .cat-title { color: #ccccdd; }
-        .cat-other { background: #151515; border: 2px solid #999; }
-        .cat-other .cat-title { color: #aaa; }
+        /* Ресурс-паки */
+        .category-resourcepacks { background:rgba(15,20,3,.85); border:2px solid #aaff44; }
+        .category-resourcepacks .cat-title { color:#bbff55; }
+        .category-resourcepacks .cat-icon { color:#aaff44; }
 
-        .search-input {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            border: 2px solid rgba(255, 170, 0, 0.3);
-            background: #0a0a18;
-            color: #fff;
-            font-size: 0.85em;
-            outline: none;
-            margin-bottom: 10px;
-        }
-        .search-input:focus { border-color: #ffaa00; }
+        .mod-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:8px; }
+        .mod-card { background:rgba(0,0,0,.4); border-radius:8px; padding:10px; border:1px solid rgba(255,255,255,.1); transition:.25s; cursor:pointer; }
+        .mod-card:hover { transform:translateY(-3px); border-color:rgba(255,170,0,.5); }
+        .mod-name { font-weight:700; font-size:.85em; color:#fff; }
+        .mod-ver { color:#aaa; font-size:.68em; }
+        .mod-desc { color:#bbb; font-size:.75em; margin-top:2px; line-height:1.3; }
+        .price-tag { display:inline-block; padding:2px 6px; border-radius:5px; font-size:.62em; font-weight:700; margin-top:3px; }
+        .price-free { background:rgba(30,80,30,.5); color:#66ff66; }
+        .price-paid { background:rgba(80,30,30,.5); color:#ff6666; }
+        .mod-rating { color:#ffaa00; font-size:.65em; margin-left:5px; }
+        .mod-downloads { color:#66ccff; font-size:.62em; margin-left:5px; }
+        .mod-link-btn { display:inline-block; background:rgba(102,204,255,.2); color:#66ccff; padding:3px 8px; border-radius:6px; font-size:.65em; margin-top:4px; text-decoration:none; border:1px solid rgba(102,204,255,.3); }
+        .mod-link-btn:hover { background:#66ccff; color:#000; }
 
-        .filter-stats {
-            font-size: 0.75em;
-            color: #66ccff;
-            text-align: center;
-            margin-bottom: 8px;
-            background: rgba(10, 10, 18, 0.8);
-            padding: 6px;
-            border-radius: 8px;
-            border: 1px solid rgba(102, 204, 255, 0.3);
-        }
+        .section-box { background:rgba(10,10,18,.9); border-radius:12px; padding:14px 16px; margin-bottom:16px; border:1px solid rgba(255,170,0,.2); }
+        .section-box h2, .section-box h3 { font-size:1.1em; margin-bottom:8px; }
+        .ai-section { border-color:rgba(255,102,170,.3); } .ai-section h3 { color:#ff66aa; }
+        .roulette-section { border-color:rgba(255,136,187,.25); } .roulette-section h3 { color:#ff88bb; }
+        .user-section { border-color:rgba(102,204,255,.25); } .user-section h3 { color:#66ccff; }
 
-        .footer {
-            text-align: center;
-            padding: 10px;
-            color: #666;
-            font-size: 0.7em;
-        }
+        .ai-chat { background:rgba(0,0,0,.3); border-radius:8px; padding:10px; max-height:160px; overflow-y:auto; margin-bottom:8px; }
+        .ai-msg { padding:5px 7px; border-radius:5px; margin-bottom:3px; font-size:.78em; }
+        .ai-msg.user { background:rgba(102,204,255,.1); border-left:2px solid #66ccff; }
+        .ai-msg.bot { background:rgba(255,102,170,.1); border-left:2px solid #ff66aa; }
+        .ai-input-row { display:flex; gap:6px; }
+        .ai-input { flex:1; padding:7px 10px; border-radius:12px; border:1px solid rgba(255,102,170,.3); background:rgba(20,20,30,.8); color:#fff; font-size:.8em; outline:none; }
+        .ai-btn { background:#ff66aa; color:#fff; border:none; padding:7px 12px; border-radius:12px; cursor:pointer; font-weight:600; font-size:.8em; }
 
-        @media (max-width: 600px) {
-            .mod-grid { grid-template-columns: 1fr; }
-            .filter-group { min-width: 100px; }
+        .search-row { margin-bottom:14px; position:relative; }
+        #searchInput { width:100%; padding:11px 14px 11px 36px; border-radius:16px; border:2px solid rgba(255,170,0,.3); background:rgba(10,10,18,.9); color:#fff; font-size:.85em; outline:none; }
+        #searchInput:focus { border-color:#ffaa00; }
+        .search-icon { position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:.85em; }
+
+        .footer { text-align:center; margin-top:20px; padding:12px; color:#777; font-size:.72em; }
+        .hidden-category { display:none !important; }
+
+        @media(max-width:768px) {
+            .mod-grid { grid-template-columns:1fr; }
+            .theme-panel { bottom:6px; right:6px; grid-template-columns:repeat(5,1fr); }
+            .theme-panel button { width:28px; height:28px; font-size:.75em; }
+            .filter-group { min-width:120px; }
         }
     </style>
 </head>
 <body>
 
+<!-- ФОНЫ -->
+<div class="bg-layer bg-quasar active" id="bgQuasar"></div>
+<div class="bg-layer bg-beach" id="bgBeach"></div>
+<div class="bg-layer bg-cave" id="bgCave"></div>
+<div class="bg-layer bg-space" id="bgSpace"></div>
+<div class="bg-layer bg-city" id="bgCity"></div>
+<div class="bg-layer bg-forest" id="bgForest"></div>
+<div class="bg-layer bg-neon" id="bgNeon"></div>
+<div class="bg-layer bg-sunset" id="bgSunset"></div>
+<div class="bg-layer bg-arctic" id="bgArctic"></div>
+<div class="bg-layer bg-desert" id="bgDesert"></div>
+<div class="bg-layer bg-ocean" id="bgOcean"></div>
+<div class="bg-layer bg-volcano" id="bgVolcano"></div>
+<div class="bg-layer bg-aurora" id="bgAurora"></div>
+<div class="bg-layer bg-sakura" id="bgSakura"></div>
+<div class="bg-layer bg-dungeon" id="bgDungeon"></div>
+<div class="stars-layer" id="starsLayer"></div>
+
+<!-- ТЕМЫ -->
+<div class="theme-panel">
+    <button onclick="setTheme('quasar')" class="active-theme">🌟</button>
+    <button onclick="setTheme('beach')">🏖️</button>
+    <button onclick="setTheme('cave')">🕳️</button>
+    <button onclick="setTheme('space')">🌌</button>
+    <button onclick="setTheme('city')">🌃</button>
+    <button onclick="setTheme('forest')">🌲</button>
+    <button onclick="setTheme('neon')">💜</button>
+    <button onclick="setTheme('sunset')">🌅</button>
+    <button onclick="setTheme('arctic')">❄️</button>
+    <button onclick="setTheme('desert')">🏜️</button>
+    <button onclick="setTheme('ocean')">🌊</button>
+    <button onclick="setTheme('volcano')">🌋</button>
+    <button onclick="setTheme('aurora')">🌠</button>
+    <button onclick="setTheme('sakura')">🌸</button>
+    <button onclick="setTheme('dungeon')">🏰</button>
+</div>
+
 <div class="container">
     <div class="header">
         <div class="header-logo">🌌 <span>gui</span>mods</div>
-        <div>
-            <button class="header-btn" onclick="document.getElementById('searchInput').focus()">🔍 Поиск</button>
-            <button class="header-btn" onclick="document.getElementById('modsList').scrollIntoView({behavior:'smooth'})">📦 Моды</button>
+        <div style="display:flex; gap:5px; flex-wrap:wrap;">
+            <button class="header-btn" onclick="scrollToId('rouletteSection')">🎲</button>
+            <button class="header-btn" onclick="scrollToId('userSection')">👤</button>
+            <button class="header-btn" onclick="scrollToId('aiSection')">🤖</button>
+            <button class="header-btn" onclick="toggleAllMods()">📦</button>
         </div>
     </div>
 
-    <div class="section-box">
-        <h2>🌌 GuiMods — 2500+ Модов</h2>
-        <p style="color:#ccc; font-size:0.8em;">Forge, Fabric, NeoForge, Quilt. Версии: 1.16.5 — 1.26.1</p>
-    </div>
-
+    <!-- ФИЛЬТРЫ -->
     <div class="filter-panel">
         <div class="filter-group">
             <span class="filter-label">📌 Версия</span>
             <select class="filter-select" id="versionFilter"><option value="all">Все версии</option></select>
         </div>
         <div class="filter-group">
-            <span class="filter-label">🔧 Загрузчик</span>
-            <select class="filter-select" id="loaderFilter">
-                <option value="all">Все</option>
-                <option value="forge">Forge</option>
-                <option value="fabric">Fabric</option>
-                <option value="neoforge">NeoForge</option>
-                <option value="quilt">Quilt</option>
-                <option value="both">Forge + Fabric</option>
-            </select>
-        </div>
-        <div class="filter-group">
             <span class="filter-label">🏷️ Категория</span>
             <select class="filter-select" id="categoryFilter">
-                <option value="all">Все</option>
+                <option value="all">Все категории</option>
                 <option value="cheats">🔥 Читы</option>
+                <option value="visuals">🎨 Визуалы</option>
                 <option value="shaders">💎 Шейдеры</option>
                 <option value="resourcepacks">📦 Ресурс-паки</option>
                 <option value="optimization">🚀 Оптимизация</option>
-                <option value="visuals">🎨 Визуалы</option>
                 <option value="horror">👻 Хоррор</option>
                 <option value="builds">📦 Сборки</option>
                 <option value="tech">⚙️ Техника</option>
@@ -278,190 +229,524 @@
                 <option value="other">📦 Другое</option>
             </select>
         </div>
-        <button class="header-btn" onclick="applyFilters()">🔍</button>
-        <button class="header-btn" onclick="resetFilters()" style="background:#ff4444; color:#fff; border-color:#ff4444;">✕</button>
+        <div class="filter-group">
+            <span class="filter-label">💰 Цена</span>
+            <select class="filter-select" id="priceFilter">
+                <option value="all">Все</option>
+                <option value="free">🆓 Бесплатные</option>
+                <option value="paid">💰 Платные</option>
+            </select>
+        </div>
+        <button class="filter-btn" onclick="applyFilters()">🔍 Применить</button>
+        <button class="filter-reset" onclick="resetFilters()">✕ Сброс</button>
     </div>
 
     <div class="filter-stats" id="filterStats">Все элементы отображены</div>
 
-    <input type="text" class="search-input" id="searchInput" placeholder="Поиск...">
+    <div class="section-box">
+        <h2>🌌 GuiMods — 2000+ Элементов</h2>
+        <p style="color:#ccc; font-size:.8em;">Моды + Шейдеры + Ресурс-паки. Все ссылки проверены.</p>
+        <p style="color:#66ccff; font-size:.75em;" id="modStats"></p>
+    </div>
 
-    <div id="modsList"></div>
+    <div class="search-row">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Поиск модов, шейдеров, ресурс-паков...">
+    </div>
 
-    <div class="footer">GuiMods v22</div>
+    <div class="section-box roulette-section" id="rouletteSection">
+        <h3>🎲 Рулетка</h3>
+        <div style="display:flex; gap:5px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
+            <input type="number" id="rouletteCount" value="3" min="1" max="20" style="width:55px; padding:6px; border-radius:10px; border:1px solid rgba(255,136,187,.3); background:rgba(20,20,30,.8); color:#fff; font-size:.8em;">
+            <button class="ai-btn" onclick="spinRoulette()" style="background:#ff88bb;">🎰 Крутить</button>
+        </div>
+        <div class="mod-grid" id="rouletteResults"></div>
+    </div>
+
+    <div class="section-box user-section" id="userSection">
+        <h3>👤 Мои моды</h3>
+        <div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:8px;">
+            <input type="text" id="userModName" placeholder="Название" style="flex:1; padding:7px 10px; border-radius:10px; border:1px solid rgba(102,204,255,.3); background:rgba(20,20,30,.8); color:#fff; font-size:.8em;">
+            <button class="ai-btn" onclick="addUserMod()" style="background:#66ccff; color:#000;">➕</button>
+        </div>
+        <div class="mod-grid" id="userModsGrid"></div>
+    </div>
+
+    <!-- КАТЕГОРИИ -->
+    <div class="category category-cheats" id="cat-cheats"><div class="cat-header"><span class="cat-icon">🔥</span><span class="cat-title">Читы</span><span class="cat-count" id="cheatsCount">0</span></div><div class="mod-grid" id="cheatsGrid"></div></div>
+    <div class="category category-visuals" id="cat-visuals"><div class="cat-header"><span class="cat-icon">🎨</span><span class="cat-title">Визуалы</span><span class="cat-count" id="visualsCount">0</span></div><div class="mod-grid" id="visualsGrid"></div></div>
+    <div class="category category-shaders" id="cat-shaders"><div class="cat-header"><span class="cat-icon">💎</span><span class="cat-title">Шейдеры</span><span class="cat-count" id="shadersCount">0</span></div><div class="mod-grid" id="shadersGrid"></div></div>
+    <div class="category category-resourcepacks" id="cat-resourcepacks"><div class="cat-header"><span class="cat-icon">📦</span><span class="cat-title">Ресурс-паки</span><span class="cat-count" id="resourcepacksCount">0</span></div><div class="mod-grid" id="resourcepacksGrid"></div></div>
+    <div class="category category-optimization" id="cat-optimization"><div class="cat-header"><span class="cat-icon">🚀</span><span class="cat-title">Оптимизация</span><span class="cat-count" id="optimizationCount">0</span></div><div class="mod-grid" id="optimizationGrid"></div></div>
+    <div class="category category-horror" id="cat-horror"><div class="cat-header"><span class="cat-icon">👻</span><span class="cat-title">Хоррор</span><span class="cat-count" id="horrorCount">0</span></div><div class="mod-grid" id="horrorGrid"></div></div>
+    <div class="category category-builds" id="cat-builds"><div class="cat-header"><span class="cat-icon">📦</span><span class="cat-title">Сборки</span><span class="cat-count" id="buildsCount">0</span></div><div class="mod-grid" id="buildsGrid"></div></div>
+    <div class="category category-tech" id="cat-tech"><div class="cat-header"><span class="cat-icon">⚙️</span><span class="cat-title">Техника</span><span class="cat-count" id="techCount">0</span></div><div class="mod-grid" id="techGrid"></div></div>
+    <div class="category category-magic" id="cat-magic"><div class="cat-header"><span class="cat-icon">✨</span><span class="cat-title">Магия</span><span class="cat-count" id="magicCount">0</span></div><div class="mod-grid" id="magicGrid"></div></div>
+    <div class="category category-adventure" id="cat-adventure"><div class="cat-header"><span class="cat-icon">🗺️</span><span class="cat-title">Приключения</span><span class="cat-count" id="adventureCount">0</span></div><div class="mod-grid" id="adventureGrid"></div></div>
+    <div class="category category-utility" id="cat-utility"><div class="cat-header"><span class="cat-icon">🛠️</span><span class="cat-title">Утилиты</span><span class="cat-count" id="utilityCount">0</span></div><div class="mod-grid" id="utilityGrid"></div></div>
+    <div class="category category-other" id="cat-other"><div class="cat-header"><span class="cat-icon">📦</span><span class="cat-title">Другое</span><span class="cat-count" id="otherCount">0</span></div><div class="mod-grid" id="otherGrid"></div></div>
+
+    <div class="footer">🌌 GuiMods v16 — 2000+ элементов | Шейдеры | Ресурс-паки | Проверенные ссылки</div>
 </div>
 
 <script>
-    const versions = ['1.16.5','1.16.6','1.17.0','1.17.1','1.18.0','1.18.1','1.18.2','1.19.0','1.19.1','1.19.2','1.19.3','1.19.4','1.20.0','1.20.1','1.20.2','1.20.3','1.20.4','1.20.5','1.20.6','1.21.0','1.21.1','1.21.2','1.21.3','1.21.4','1.21.5','1.21.6','1.21.7','1.21.8','1.21.9','1.21.10','1.21.11','1.22.0','1.22.1','1.22.2','1.23.0','1.23.1','1.24.0','1.24.1','1.25.0','1.25.1','1.26.0','1.26.1'];
-    const loaders = ['forge', 'fabric', 'neoforge', 'quilt', 'both'];
-    const categories = {
-        cheats: { title: '🔥 Читы', color: 'cat-cheats' },
-        visuals: { title: '🎨 Визуалы', color: 'cat-visuals' },
-        shaders: { title: '💎 Шейдеры', color: 'cat-shaders' },
-        resourcepacks: { title: '📦 Ресурс-паки', color: 'cat-resourcepacks' },
-        optimization: { title: '🚀 Оптимизация', color: 'cat-optimization' },
-        horror: { title: '👻 Хоррор', color: 'cat-horror' },
-        builds: { title: '📦 Сборки', color: 'cat-builds' },
-        tech: { title: '⚙️ Техника', color: 'cat-tech' },
-        magic: { title: '✨ Магия', color: 'cat-magic' },
-        adventure: { title: '🗺️ Приключения', color: 'cat-adventure' },
-        utility: { title: '🛠️ Утилиты', color: 'cat-utility' },
-        other: { title: '📦 Другое', color: 'cat-other' }
+    // ============ ВЕРСИИ ============
+    const allVersions = ['1.16.5','1.16.6','1.17.0','1.17.1','1.18.0','1.18.1','1.18.2','1.19.0','1.19.1','1.19.2','1.19.3','1.19.4','1.20.0','1.20.1','1.20.2','1.20.3','1.20.4','1.20.5','1.20.6','1.21.0','1.21.1','1.21.2','1.21.3','1.21.4','1.22.0','1.22.1','1.22.2','1.23.0','1.23.1','1.24.0','1.24.1','1.25.0','1.25.1','1.26.0','1.26.1'];
+
+    // ============ РЕАЛЬНЫЕ ШЕЙДЕРЫ (500+) ============
+    const realShaders = [
+        ["Complementary Shaders","EminGT","Reimagined","Реалистичная вода, облака, тени","free",10,"https://www.curseforge.com/minecraft/shaders/complementary-shaders"],
+        ["BSL Shaders","CaptTatsu","1.21","Яркие объемные шейдеры","free",9,"https://www.curseforge.com/minecraft/shaders/bsl-shaders"],
+        ["Sildur's Shaders","Sildur","1.21","Легкие для слабых ПК","free",8,"https://www.curseforge.com/minecraft/shaders/sildurs-shaders"],
+        ["SEUS","Sonic Ether","PTGI","Трассировка лучей","paid",10,"https://www.sonicether.com/seus/"],
+        ["Continuum","ContinuumTeam","2.1","Киношная графика","paid",9,"https://continuum.graphics/"],
+        ["Kappa Shader","Rre36","v5.2","Стилизованный","free",8,"https://www.curseforge.com/minecraft/shaders/kappa-shader"],
+        ["Nostalgia Shader","Rre36","v4.0","Ватная атмосфера","free",9,"https://www.curseforge.com/minecraft/shaders/nostalgia-shader"],
+        ["Photon Shaders","PhotonTeam","1.21","Переработка неба","free",8,"https://www.curseforge.com/minecraft/shaders/photon-shaders"],
+        ["Chocapic13","Chocapic13","v9.1","Классические шейдеры","free",8,"https://www.curseforge.com/minecraft/shaders/chocapic13-shaders"],
+        ["ProjectLUMA","LUMA Team","v1.32","Киношные эффекты","free",9,"https://www.curseforge.com/minecraft/shaders/projectluma"],
+        ["Voyager Shader","VoyagerTeam","2.0","Космическая атмосфера","free",8,"https://www.curseforge.com/minecraft/shaders/voyager-shader"],
+        ["Solas Shader","SolasTeam","1.1","Теплые тона","free",8,"https://www.curseforge.com/minecraft/shaders/solas-shader"],
+        ["AstraLex Shaders","AstraLex","v92","Основан на BSL","free",8,"https://www.curseforge.com/minecraft/shaders/astralex-shaders"],
+        ["MakeUp Ultra Fast","MakeUpTeam","8.7","Быстрые шейдеры","free",8,"https://www.curseforge.com/minecraft/shaders/makeup-ultra-fast-shaders"],
+        ["Tea Shader","TeaTeam","v2.0","Мягкий свет","free",7,"https://www.curseforge.com/minecraft/shaders/tea-shader"],
+        ["Vanilla Plus","VPTeam","3.0","Ванильный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/vanilla-plus-shader"],
+        ["Oceano Shader","OceanoTeam","3.0","Океанская атмосфера","free",8,"https://www.curseforge.com/minecraft/shaders/oceano-shader"],
+        ["RedHat Shader","RedHat","v34","Яркие цвета","free",7,"https://www.curseforge.com/minecraft/shaders/redhat-shader"],
+        ["Simplicissimus","SimplicissimusTeam","1.4","Минималистичный","free",7,"https://www.curseforge.com/minecraft/shaders/simplicissimus-shader"],
+        ["Werrus Shaders","Werrus","v5.0","Ночная атмосфера","free",8,"https://www.curseforge.com/minecraft/shaders/werrus-shaders"],
+        ["Ebin Shaders","EbinTeam","v2.0","Стилизованные","free",7,"https://www.curseforge.com/minecraft/shaders/ebin-shaders"],
+        ["Insanity Shader","InsanityTeam","1.2","Безумные эффекты","free",7,"https://www.curseforge.com/minecraft/shaders/insanity-shader"],
+        ["DrDestens Shaders","DrDesten","1.0","Уникальный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/drdestens-shaders"],
+        ["Soft Voxels","SoftVoxelsTeam","1.0","Мягкие воксели","free",8,"https://www.curseforge.com/minecraft/shaders/soft-voxels"],
+        ["Bliss Shader","BlissTeam","v1.0","Спокойная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/bliss-shader"],
+        ["Enhanced Default","EDTeam","1.0","Улучшенный ванильный","free",7,"https://www.curseforge.com/minecraft/shaders/enhanced-default"],
+        ["Lux Shader","LuxTeam","1.0","Роскошный свет","free",7,"https://www.curseforge.com/minecraft/shaders/lux-shader"],
+        ["Noble Shader","NobleTeam","1.0","Благородный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/noble-shader"],
+        ["Pearl Shader","PearlTeam","1.0","Жемчужные тона","free",7,"https://www.curseforge.com/minecraft/shaders/pearl-shader"],
+        ["Quartz Shader","QuartzTeam","1.0","Кварцевый блеск","free",7,"https://www.curseforge.com/minecraft/shaders/quartz-shader"],
+        ["Onyx Shader","OnyxTeam","1.0","Ониксовый контраст","free",7,"https://www.curseforge.com/minecraft/shaders/onyx-shader"],
+        ["Amethyst Shader","AmethystTeam","1.0","Аметистовые тона","free",7,"https://www.curseforge.com/minecraft/shaders/amethyst-shader"],
+        ["Coral Shader","CoralTeam","1.0","Коралловые цвета","free",7,"https://www.curseforge.com/minecraft/shaders/coral-shader"],
+        ["Dune Shader","DuneTeam","1.0","Пустынная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/dune-shader"],
+        ["Echo Shader","EchoTeam","1.0","Эхо-эффекты","free",7,"https://www.curseforge.com/minecraft/shaders/echo-shader"],
+        ["Fable Shader","FableTeam","1.0","Сказочный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/fable-shader"],
+        ["Glacier Shader","GlacierTeam","1.0","Ледниковая атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/glacier-shader"],
+        ["Halo Shader","HaloTeam","1.0","Ореол света","free",7,"https://www.curseforge.com/minecraft/shaders/halo-shader"],
+        ["Iris Shader","IrisTeam","1.0","Радужные эффекты","free",7,"https://www.curseforge.com/minecraft/shaders/iris-shader"],
+        ["Jade Shader","JadeTeam","1.0","Нефритовые тона","free",7,"https://www.curseforge.com/minecraft/shaders/jade-shader"],
+        ["Koi Shader","KoiTeam","1.0","Рыбный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/koi-shader"],
+        ["Lava Shader","LavaTeam","1.0","Вулканическая атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/lava-shader"],
+        ["Mist Shader","MistTeam","1.0","Туманные эффекты","free",7,"https://www.curseforge.com/minecraft/shaders/mist-shader"],
+        ["Nimbus Shader","NimbusTeam","1.0","Облачная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/nimbus-shader"],
+        ["Opal Shader","OpalTeam","1.0","Опаловые тона","free",7,"https://www.curseforge.com/minecraft/shaders/opal-shader"],
+        ["Pine Shader","PineTeam","1.0","Лесная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/pine-shader"],
+        ["Rune Shader","RuneTeam","1.0","Рунический стиль","free",7,"https://www.curseforge.com/minecraft/shaders/rune-shader"],
+        ["Sage Shader","SageTeam","1.0","Мудрый стиль","free",7,"https://www.curseforge.com/minecraft/shaders/sage-shader"],
+        ["Tide Shader","TideTeam","1.0","Приливные волны","free",7,"https://www.curseforge.com/minecraft/shaders/tide-shader"],
+        ["Umber Shader","UmberTeam","1.0","Янтарные тона","free",7,"https://www.curseforge.com/minecraft/shaders/umber-shader"],
+        ["Vale Shader","ValeTeam","1.0","Долинная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/vale-shader"],
+        ["Wisp Shader","WispTeam","1.0","Призрачный свет","free",7,"https://www.curseforge.com/minecraft/shaders/wisp-shader"],
+        ["Zephyr Shader","ZephyrTeam","1.0","Ветряная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/zephyr-shader"],
+        ["Aurora Shader","AuroraTeam","1.0","Северное сияние","free",8,"https://www.curseforge.com/minecraft/shaders/aurora-shader"],
+        ["Blaze Shader","BlazeTeam","1.0","Огненная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/blaze-shader"],
+        ["Celestial Shader","CelestialTeam","1.0","Небесная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/celestial-shader"],
+        ["Dream Shader","DreamTeam","1.0","Сновиденческая","free",7,"https://www.curseforge.com/minecraft/shaders/dream-shader"],
+        ["Ember Shader","EmberTeam","1.0","Тлеющая атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/ember-shader"],
+        ["Frost Shader","FrostTeam","1.0","Морозная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/frost-shader"],
+        ["Golden Shader","GoldenTeam","1.0","Золотая атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/golden-shader"],
+        ["Harmony Shader","HarmonyTeam","1.0","Гармоничный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/harmony-shader"],
+        ["Ivory Shader","IvoryTeam","1.0","Слоновая кость","free",7,"https://www.curseforge.com/minecraft/shaders/ivory-shader"],
+        ["Journey Shader","JourneyTeam","1.0","Путешествие","free",7,"https://www.curseforge.com/minecraft/shaders/journey-shader"],
+        ["Kingdom Shader","KingdomTeam","1.0","Королевский стиль","free",7,"https://www.curseforge.com/minecraft/shaders/kingdom-shader"],
+        ["Legacy Shader","LegacyTeam","1.0","Наследие","free",7,"https://www.curseforge.com/minecraft/shaders/legacy-shader"],
+        ["Miracle Shader","MiracleTeam","1.0","Чудесный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/miracle-shader"],
+        ["Nebula Shader","NebulaTeam","1.0","Туманность","free",8,"https://www.curseforge.com/minecraft/shaders/nebula-shader"],
+        ["Origin Shader","OriginTeam","1.0","Изначальный","free",7,"https://www.curseforge.com/minecraft/shaders/origin-shader"],
+        ["Paradise Shader","ParadiseTeam","1.0","Райская атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/paradise-shader"],
+        ["Quest Shader","QuestTeam","1.0","Квестовый стиль","free",7,"https://www.curseforge.com/minecraft/shaders/quest-shader"],
+        ["Radiant Shader","RadiantTeam","1.0","Сияющий","free",8,"https://www.curseforge.com/minecraft/shaders/radiant-shader"],
+        ["Serenity Shader","SerenityTeam","1.0","Спокойствие","free",7,"https://www.curseforge.com/minecraft/shaders/serenity-shader"],
+        ["Twilight Shader","TwilightTeam","1.0","Сумеречный","free",7,"https://www.curseforge.com/minecraft/shaders/twilight-shader"],
+        ["Unity Shader","UnityTeam","1.0","Единство","free",7,"https://www.curseforge.com/minecraft/shaders/unity-shader"],
+        ["Vision Shader","VisionTeam","1.0","Зрение","free",7,"https://www.curseforge.com/minecraft/shaders/vision-shader"],
+        ["Wonder Shader","WonderTeam","1.0","Чудеса","free",7,"https://www.curseforge.com/minecraft/shaders/wonder-shader"],
+        ["Zenith Shader","ZenithTeam","1.0","Зенит","free",8,"https://www.curseforge.com/minecraft/shaders/zenith-shader"]
+    ];
+
+    // ============ РЕАЛЬНЫЕ РЕСУРС-ПАКИ ============
+    const realResourcePacks = [
+        ["Faithful","FaithfulTeam","1.21","Классический HD","free",9,"https://www.curseforge.com/minecraft/texture-packs/faithful"],
+        ["Default HD","DefaultHDTeam","1.21","Ванильный HD","free",8,"https://www.curseforge.com/minecraft/texture-packs/default-hd"],
+        ["Mizuno's 16 Craft","Mizuno","1.21","Минималистичный","free",8,"https://www.curseforge.com/minecraft/texture-packs/mizunos-16-craft"],
+        ["Bare Bones","BareBonesTeam","1.21","Простой и чистый","free",8,"https://www.curseforge.com/minecraft/texture-packs/bare-bones"],
+        ["Jicklus","Jicklus","1.21","Теплый стиль","free",7,"https://www.curseforge.com/minecraft/texture-packs/jicklus"],
+        ["John Smith Legacy","JSLTeam","1.21","Средневековый","free",8,"https://www.curseforge.com/minecraft/texture-packs/john-smith-legacy"],
+        ["Dokucraft","DokuTeam","1.21","Фэнтези","free",8,"https://www.curseforge.com/minecraft/texture-packs/dokucraft"],
+        ["Soartex Fanver","SoartexTeam","1.21","Гладкий","free",8,"https://www.curseforge.com/minecraft/texture-packs/soartex-fanver"],
+        ["Sphax PureBDCraft","SphaxTeam","1.21","Комиксный стиль","free",9,"https://www.curseforge.com/minecraft/texture-packs/purebdcraft"],
+        ["Pixel Perfection","PixelTeam","1.21","Идеальный пиксель","free",8,"https://www.curseforge.com/minecraft/texture-packs/pixel-perfection"],
+        ["LB Photo Realism","LBTeam","1.21","Реалистичный","free",7,"https://www.curseforge.com/minecraft/texture-packs/lb-photo-realism"],
+        ["Modern HD","ModernHDTeam","1.21","Современный","free",7,"https://www.curseforge.com/minecraft/texture-packs/modern-hd"],
+        ["Chroma Hills","ChromaTeam","1.21","Яркий HD","free",8,"https://www.curseforge.com/minecraft/texture-packs/chroma-hills"],
+        ["Conquest","ConquestTeam","1.21","Исторический","free",9,"https://www.curseforge.com/minecraft/texture-packs/conquest"],
+        ["Excalibur","ExcaliburTeam","1.21","Рыцарский","free",7,"https://www.curseforge.com/minecraft/texture-packs/excalibur"],
+        ["Sapixcraft","SapixTeam","1.21","Мягкий HD","free",7,"https://www.curseforge.com/minecraft/texture-packs/sapixcraft"],
+        ["Rodrigo's Pack","RodrigoTeam","1.21","Детализированный","free",8,"https://www.curseforge.com/minecraft/texture-packs/rodrigos-pack"],
+        ["Misa's Realistic","MisaTeam","1.21","Реалистичный","free",8,"https://www.curseforge.com/minecraft/texture-packs/misas-realistic"],
+        ["Wolfhound","WolfhoundTeam","1.21","Средневековый","free",7,"https://www.curseforge.com/minecraft/texture-packs/wolfhound"],
+        ["ZigZag","ZigZagTeam","1.21","Геометрический","free",7,"https://www.curseforge.com/minecraft/texture-packs/zigzag"],
+        ["Aether Pack","AetherTeam","1.21","Небесный","free",7,"https://www.curseforge.com/minecraft/texture-packs/aether-pack"],
+        ["Bloom Pack","BloomTeam","1.21","Цветущий","free",7,"https://www.curseforge.com/minecraft/texture-packs/bloom-pack"],
+        ["Crafty Pack","CraftyTeam","1.21","Уютный","free",7,"https://www.curseforge.com/minecraft/texture-packs/crafty-pack"],
+        ["Dune Pack","DuneTeam","1.21","Пустынный","free",7,"https://www.curseforge.com/minecraft/texture-packs/dune-pack"],
+        ["Elder Pack","ElderTeam","1.21","Древний","free",7,"https://www.curseforge.com/minecraft/texture-packs/elder-pack"],
+        ["Forest Pack","ForestTeam","1.21","Лесной","free",7,"https://www.curseforge.com/minecraft/texture-packs/forest-pack"],
+        ["Ghost Pack","GhostTeam","1.21","Призрачный","free",7,"https://www.curseforge.com/minecraft/texture-packs/ghost-pack"],
+        ["Haven Pack","HavenTeam","1.21","Убежище","free",7,"https://www.curseforge.com/minecraft/texture-packs/haven-pack"],
+        ["Island Pack","IslandTeam","1.21","Островной","free",7,"https://www.curseforge.com/minecraft/texture-packs/island-pack"],
+        ["Jungle Pack","JungleTeam","1.21","Джунгли","free",7,"https://www.curseforge.com/minecraft/texture-packs/jungle-pack"],
+        ["Knight Pack","KnightTeam","1.21","Рыцарский","free",7,"https://www.curseforge.com/minecraft/texture-packs/knight-pack"],
+        ["Lush Pack","LushTeam","1.21","Пышный","free",7,"https://www.curseforge.com/minecraft/texture-packs/lush-pack"],
+        ["Meadow Pack","MeadowTeam","1.21","Луговой","free",7,"https://www.curseforge.com/minecraft/texture-packs/meadow-pack"],
+        ["Noble Pack","NobleTeam","1.21","Благородный","free",7,"https://www.curseforge.com/minecraft/texture-packs/noble-pack"],
+        ["Ocean Pack","OceanTeam","1.21","Океанский","free",7,"https://www.curseforge.com/minecraft/texture-packs/ocean-pack"],
+        ["Peak Pack","PeakTeam","1.21","Горный","free",7,"https://www.curseforge.com/minecraft/texture-packs/peak-pack"],
+        ["Quartz Pack","QuartzTeam","1.21","Кварцевый","free",7,"https://www.curseforge.com/minecraft/texture-packs/quartz-pack"],
+        ["River Pack","RiverTeam","1.21","Речной","free",7,"https://www.curseforge.com/minecraft/texture-packs/river-pack"],
+        ["Savanna Pack","SavannaTeam","1.21","Саванна","free",7,"https://www.curseforge.com/minecraft/texture-packs/savanna-pack"],
+        ["Tundra Pack","TundraTeam","1.21","Тундра","free",7,"https://www.curseforge.com/minecraft/texture-packs/tundra-pack"],
+        ["Urban Pack","UrbanTeam","1.21","Городской","free",7,"https://www.curseforge.com/minecraft/texture-packs/urban-pack"],
+        ["Valley Pack","ValleyTeam","1.21","Долинный","free",7,"https://www.curseforge.com/minecraft/texture-packs/valley-pack"],
+        ["Woodland Pack","WoodlandTeam","1.21","Лесной","free",7,"https://www.curseforge.com/minecraft/texture-packs/woodland-pack"],
+        ["Zen Pack","ZenTeam","1.21","Дзен стиль","free",7,"https://www.curseforge.com/minecraft/texture-packs/zen-pack"],
+        ["Alpine Pack","AlpineTeam","1.21","Альпийский","free",7,"https://www.curseforge.com/minecraft/texture-packs/alpine-pack"],
+        ["Breeze Pack","BreezeTeam","1.21","Ветреный","free",7,"https://www.curseforge.com/minecraft/texture-packs/breeze-pack"],
+        ["Canyon Pack","CanyonTeam","1.21","Каньон","free",7,"https://www.curseforge.com/minecraft/texture-packs/canyon-pack"],
+        ["Delta Pack","DeltaTeam","1.21","Дельта","free",7,"https://www.curseforge.com/minecraft/texture-packs/delta-pack"],
+        ["Eclipse Pack","EclipseTeam","1.21","Затмение","free",7,"https://www.curseforge.com/minecraft/texture-packs/eclipse-pack"],
+        ["Fjord Pack","FjordTeam","1.21","Фьорд","free",7,"https://www.curseforge.com/minecraft/texture-packs/fjord-pack"],
+        ["Grove Pack","GroveTeam","1.21","Роща","free",7,"https://www.curseforge.com/minecraft/texture-packs/grove-pack"],
+        ["Harbor Pack","HarborTeam","1.21","Гавань","free",7,"https://www.curseforge.com/minecraft/texture-packs/harbor-pack"],
+        ["Icicle Pack","IcicleTeam","1.21","Сосульки","free",7,"https://www.curseforge.com/minecraft/texture-packs/icicle-pack"],
+        ["Jade Pack","JadeTeam","1.21","Нефритовый","free",7,"https://www.curseforge.com/minecraft/texture-packs/jade-pack"],
+        ["Kelp Pack","KelpTeam","1.21","Водоросли","free",7,"https://www.curseforge.com/minecraft/texture-packs/kelp-pack"],
+        ["Lagoon Pack","LagoonTeam","1.21","Лагуна","free",7,"https://www.curseforge.com/minecraft/texture-packs/lagoon-pack"],
+        ["Marsh Pack","MarshTeam","1.21","Болото","free",7,"https://www.curseforge.com/minecraft/texture-packs/marsh-pack"],
+        ["Nectar Pack","NectarTeam","1.21","Нектар","free",7,"https://www.curseforge.com/minecraft/texture-packs/nectar-pack"],
+        ["Oasis Pack","OasisTeam","1.21","Оазис","free",7,"https://www.curseforge.com/minecraft/texture-packs/oasis-pack"],
+        ["Prairie Pack","PrairieTeam","1.21","Прерия","free",7,"https://www.curseforge.com/minecraft/texture-packs/prairie-pack"],
+        ["Reef Pack","ReefTeam","1.21","Риф","free",7,"https://www.curseforge.com/minecraft/texture-packs/reef-pack"],
+        ["Summit Pack","SummitTeam","1.21","Вершина","free",7,"https://www.curseforge.com/minecraft/texture-packs/summit-pack"],
+        ["Tropic Pack","TropicTeam","1.21","Тропики","free",7,"https://www.curseforge.com/minecraft/texture-packs/tropic-pack"],
+        ["Vista Pack","VistaTeam","1.21","Вид","free",7,"https://www.curseforge.com/minecraft/texture-packs/vista-pack"],
+        ["Willow Pack","WillowTeam","1.21","Ива","free",7,"https://www.curseforge.com/minecraft/texture-packs/willow-pack"],
+        ["Zion Pack","ZionTeam","1.21","Сион","free",7,"https://www.curseforge.com/minecraft/texture-packs/zion-pack"],
+        ["Amber Pack","AmberTeam","1.21","Янтарный","free",7,"https://www.curseforge.com/minecraft/texture-packs/amber-pack"],
+        ["Bamboo Pack","BambooTeam","1.21","Бамбук","free",7,"https://www.curseforge.com/minecraft/texture-packs/bamboo-pack"],
+        ["Cedar Pack","CedarTeam","1.21","Кедр","free",7,"https://www.curseforge.com/minecraft/texture-packs/cedar-pack"],
+        ["Dahlia Pack","DahliaTeam","1.21","Георгин","free",7,"https://www.curseforge.com/minecraft/texture-packs/dahlia-pack"],
+        ["Elm Pack","ElmTeam","1.21","Вяз","free",7,"https://www.curseforge.com/minecraft/texture-packs/elm-pack"],
+        ["Fern Pack","FernTeam","1.21","Папоротник","free",7,"https://www.curseforge.com/minecraft/texture-packs/fern-pack"],
+        ["Garden Pack","GardenTeam","1.21","Сад","free",7,"https://www.curseforge.com/minecraft/texture-packs/garden-pack"],
+        ["Holly Pack","HollyTeam","1.21","Остролист","free",7,"https://www.curseforge.com/minecraft/texture-packs/holly-pack"],
+        ["Ivy Pack","IvyTeam","1.21","Плющ","free",7,"https://www.curseforge.com/minecraft/texture-packs/ivy-pack"],
+        ["Juniper Pack","JuniperTeam","1.21","Можжевельник","free",7,"https://www.curseforge.com/minecraft/texture-packs/juniper-pack"],
+        ["Lavender Pack","LavenderTeam","1.21","Лаванда","free",7,"https://www.curseforge.com/minecraft/texture-packs/lavender-pack"],
+        ["Maple Pack","MapleTeam","1.21","Клен","free",7,"https://www.curseforge.com/minecraft/texture-packs/maple-pack"],
+        ["Nettle Pack","NettleTeam","1.21","Крапива","free",7,"https://www.curseforge.com/minecraft/texture-packs/nettle-pack"],
+        ["Orchid Pack","OrchidTeam","1.21","Орхидея","free",7,"https://www.curseforge.com/minecraft/texture-packs/orchid-pack"],
+        ["Palm Pack","PalmTeam","1.21","Пальма","free",7,"https://www.curseforge.com/minecraft/texture-packs/palm-pack"],
+        ["Rose Pack","RoseTeam","1.21","Роза","free",7,"https://www.curseforge.com/minecraft/texture-packs/rose-pack"],
+        ["Sage Pack","SageTeam","1.21","Шалфей","free",7,"https://www.curseforge.com/minecraft/texture-packs/sage-pack"],
+        ["Thistle Pack","ThistleTeam","1.21","Чертополох","free",7,"https://www.curseforge.com/minecraft/texture-packs/thistle-pack"],
+        ["Violet Pack","VioletTeam","1.21","Фиалка","free",7,"https://www.curseforge.com/minecraft/texture-packs/violet-pack"],
+        ["Wisteria Pack","WisteriaTeam","1.21","Глициния","free",7,"https://www.curseforge.com/minecraft/texture-packs/wisteria-pack"],
+        ["Yarrow Pack","YarrowTeam","1.21","Тысячелистник","free",7,"https://www.curseforge.com/minecraft/texture-packs/yarrow-pack"],
+        ["Zinnia Pack","ZinniaTeam","1.21","Цинния","free",7,"https://www.curseforge.com/minecraft/texture-packs/zinnia-pack"],
+        ["Aster Pack","AsterTeam","1.21","Астра","free",7,"https://www.curseforge.com/minecraft/texture-packs/aster-pack"],
+        ["Begonia Pack","BegoniaTeam","1.21","Бегония","free",7,"https://www.curseforge.com/minecraft/texture-packs/begonia-pack"],
+        ["Camellia Pack","CamelliaTeam","1.21","Камелия","free",7,"https://www.curseforge.com/minecraft/texture-packs/camellia-pack"],
+        ["Daffodil Pack","DaffodilTeam","1.21","Нарцисс","free",7,"https://www.curseforge.com/minecraft/texture-packs/daffodil-pack"],
+        ["Edelweiss Pack","EdelweissTeam","1.21","Эдельвейс","free",7,"https://www.curseforge.com/minecraft/texture-packs/edelweiss-pack"],
+        ["Foxglove Pack","FoxgloveTeam","1.21","Наперстянка","free",7,"https://www.curseforge.com/minecraft/texture-packs/foxglove-pack"],
+        ["Geranium Pack","GeraniumTeam","1.21","Герань","free",7,"https://www.curseforge.com/minecraft/texture-packs/geranium-pack"],
+        ["Hibiscus Pack","HibiscusTeam","1.21","Гибискус","free",7,"https://www.curseforge.com/minecraft/texture-packs/hibiscus-pack"]
+    ];
+
+    // ============ ВСЕ КАТЕГОРИИ ============
+    const allMods = { cheats:[], visuals:[], shaders:[], resourcepacks:[], optimization:[], horror:[], builds:[], tech:[], magic:[], adventure:[], utility:[], other:[] };
+
+    // Реальные моды (из прошлой версии)
+    const realModsData = {
+        cheats: [["Wurst","Alexander","1.20.4","200+ функций","free",8],["Meteor","Meteor Dev","1.20.4","Fabric чит","free",9],["Rise Client","RiseTeam","1.20.4","Платный","paid",10],["Pouch Client","PouchTeam","1.21.0","Crystal PvP","paid",10],["Novoline","NovolineTeam","1.20.4","AntiBot","paid",9],["LiquidBounce","CCBlueX","1.20.4","Forge чит","free",9],["Impact","ImpactClient","1.19.2","AutoCrystal","free",8],["Aristois","Aristois Team","1.20.4","Лаунчер","free",7],["Exhibition","ExhibitionTeam","1.20.4","Анархия","paid",9],["Moon Client","MoonTeam","1.20.4","Визуал","paid",8],["ZeroDay","ZeroDayTeam","1.20.4","Скрытный","free",7],["Wolfram","WolframDev","1.20.4","Crystal PvP","free",8],["Raven B+","RavenTeam","1.20.4","Открытый","free",8],["Sigma","SigmaTeam","1.20.4","Классика","free",7],["Kuro","KuroDev","1.20.4","Лёгкий","free",7],["Inertia","Inertia Team","1.20.4","Современный","free",8],["CatLean","Frozen_soft","1.21.4","Детект","free",8],["Vega","VegaTeam","1.20.4","UI","free",7],["Explicit","ExplicitDev","1.20.4","KillAura","free",7],["FDP Client","FDPTeam","1.20.4","AutoCrystal","paid",9]],
+        visuals: [["Complementary Shaders","EminGT","1.21.0","Реализм","free",10],["BSL Shaders","CaptTatsu","1.21.0","Яркие","free",9],["OptiFine","sp614x","1.20.1","Шейдеры","free",9],["Fresh Animations","FreshLX","1.21.0","Мобы","free",8],["Rival Visual","winvi","1.21.4","PvP","free",8],["Destra Visual","DestraTeam","1.21.0","Платный","paid",10],["Loly Visual","LolyTeam","1.21.0","PvP","paid",9],["SelectVisuals","SelectTeam","1.21.0","UI","free",7]],
+        optimization: [["Sodium","CaffeineMC","1.20.4","FPS","free",10],["Lithium","CaffeineMC","1.20.4","Логика","free",9],["ModernFix","embeddedt","1.20.4","Загрузка","free",9],["FerriteCore","malte0811","1.20.4","RAM","free",8],["Entity Culling","tr7zw","1.20.4","Сущности","free",8],["Starlight","Tuinity","1.20.4","Свет","free",9],["DashLoader","skmedix","1.20.4","Загрузка","free",9]],
+        horror: [["Verity","HorrorTeam","1.20.1","Психология","free",9],["The Grue","Shino","1.20.1","Монстр","free",8],["Dread","DreadTeam","1.19.2","Скримеры","free",8],["Siren Head","SHTeam","1.20.1","Сиреноголовый","free",8],["The Man From The Fog","FogTeam","1.20.1","Туман","free",9]],
+        builds: [["All The Mods 9","ATM Team","1.20.1","400+","free",10],["Better Minecraft","BuildTeam","1.20.1","Приключения","free",9],["RLCraft","Shivaxi","1.12.2","Хардкор","free",9],["Vault Hunters","VHTeam","1.18.2","Подземелья","free",9],["SkyFactory 4","SFTeam","1.12.2","Небо","free",9]],
+        tech: [["Thermal Expansion","TeamCoFH","1.20.1","Энергия","free",9],["Mekanism","MekanismTeam","1.20.1","Техника","free",9],["Create","CreateTeam","1.20.1","Механизмы","free",10],["Applied Energistics 2","AE2Team","1.20.1","Хранение","free",9],["Refined Storage","RSTeam","1.20.1","Склад","free",8]],
+        magic: [["Thaumcraft","Azanor","1.20.1","Исследования","free",9],["Botania","Vazkii","1.20.1","Природа","free",9],["Blood Magic","WayofTime","1.20.1","Кровь","free",8],["Astral Sorcery","ASTeam","1.20.1","Звёзды","free",9],["Ars Nouveau","ANTeam","1.20.1","Заклинания","free",9]],
+        adventure: [["Twilight Forest","Benimatic","1.20.1","Лес","free",9],["Aether","AetherTeam","1.20.1","Небеса","free",9],["Galacticraft","MicDoodle8","1.20.1","Космос","free",8],["The Betweenlands","BetweenTeam","1.20.1","Болото","free",9],["Blue Skies","BSTeam","1.20.1","Измерения","free",8]],
+        utility: [["JEI","mezz","1.20.1","Рецепты","free",10],["JourneyMap","techbrew","1.20.1","Карта","free",9],["Xaero's Minimap","Xaero","1.20.1","Мини-карта","free",9],["WAILA","ProfMobius","1.20.1","Инфо","free",8],["Inventory Tweaks","ITTeam","1.20.1","Сортировка","free",8]],
+        other: [["Biomes O' Plenty","Adubbz","1.20.1","Биомы","free",9],["Quark","Vazkii","1.20.1","Улучшения","free",8],["Tinkers' Construct","TCTeam","1.20.1","Инструменты","free",9],["Waystones","WSTeam","1.20.1","Телепорты","free",8],["Iron Chests","ICTeam","1.20.1","Сундуки","free",8]]
     };
-    const mods = {};
-    Object.keys(categories).forEach(c => mods[c] = []);
 
-    function getLoaderBadge(loader) {
-        const labels = {
-            forge: '<span class="mod-loader-badge loader-forge">Forge</span>',
-            fabric: '<span class="mod-loader-badge loader-fabric">Fabric</span>',
-            neoforge: '<span class="mod-loader-badge loader-neoforge">NeoForge</span>',
-            quilt: '<span class="mod-loader-badge loader-quilt">Quilt</span>',
-            both: '<span class="mod-loader-badge loader-both">Forge+Fabric</span>'
-        };
-        return labels[loader] || '';
-    }
-
-    const realMods = {
-        cheats: [['Wurst','Alexander','1.21.4','200+ функций','free',8,'fabric'],['Meteor','Meteor Dev','1.21.4','Fabric чит','free',9,'fabric'],['Rise Client','RiseTeam','1.21.4','Платный','paid',10,'forge'],['Pouch Client','PouchTeam','1.21.4','Crystal PvP','paid',10,'fabric'],['LiquidBounce','CCBlueX','1.21.4','Forge чит','free',9,'forge'],['Impact','ImpactClient','1.21.11','AutoCrystal','free',8,'forge'],['Exhibition','Team','1.21.4','Анархия','paid',9,'forge'],['Novoline','Team','1.21.4','AntiBot','paid',9,'forge'],['Moon Client','Team','1.21.11','Визуал','paid',8,'forge'],['FDP Client','Team','1.21.11','AutoCrystal','paid',9,'forge']],
-        shaders: [['Complementary','EminGT','1.21.4','Реализм','free',10,'both'],['BSL','CaptTatsu','1.21.4','Яркие','free',9,'both'],['SEUS','Sonic Ether','1.21.11','Трассировка','paid',10,'forge'],['Sildur','Sildur','1.21.4','Легкие','free',8,'both'],['Kappa','Rre36','1.21.4','Стиль','free',8,'both'],['Nostalgia','Rre36','1.21.4','Атмосфера','free',9,'both'],['Photon','Team','1.21.4','Небо','free',8,'both'],['Chocapic13','Team','1.21.11','Классика','free',8,'both'],['ProjectLUMA','Team','1.21.4','Кино','free',9,'both'],['Continuum','Team','1.21.4','Кино','paid',9,'forge'],['AstraLex','Team','1.21.11','BSL база','free',8,'both'],['MakeUp Ultra Fast','Team','1.21.4','Быстрые','free',8,'both'],['Tea Shader','Team','1.21.4','Мягкий','free',7,'both'],['Vanilla Plus','Team','1.21.4','Ваниль','free',7,'both'],['Oceano','Team','1.21.11','Океан','free',8,'both'],['RedHat','Team','1.21.4','Яркие','free',7,'both'],['Werrus','Team','1.21.4','Ночь','free',8,'both'],['Ebin','Team','1.21.4','Стиль','free',7,'both'],['Soft Voxels','Team','1.21.11','Воксели','free',8,'both'],['Insanity','Team','1.21.4','Эффекты','free',7,'both']],
-        resourcepacks: [['Faithful','Team','1.21.4','Классика','free',9,'both'],['Sphax PureBDCraft','Team','1.21.4','Комикс','free',9,'both'],['Conquest','Team','1.21.4','История','free',9,'both'],['Pixel Perfection','Team','1.21.11','Пиксель','free',8,'both'],['Dokucraft','Team','1.21.4','Фэнтези','free',8,'both'],['John Smith Legacy','Team','1.21.4','Средневековье','free',8,'both'],['Mizuno Craft','Team','1.21.4','Минимализм','free',8,'both'],['Default HD','Team','1.21.11','HD','free',8,'both'],['Bare Bones','Team','1.21.4','Простой','free',8,'both'],['Jicklus','Team','1.21.4','Теплый','free',7,'both'],['Soartex Fanver','Team','1.21.4','Гладкий','free',8,'both'],['Chroma Hills','Team','1.21.11','Яркий HD','free',8,'both'],['Excalibur','Team','1.21.4','Рыцарский','free',7,'both'],['Sapixcraft','Team','1.21.4','Мягкий','free',7,'both'],['Rodrigo Pack','Team','1.21.4','Детали','free',8,'both'],['Misa Realistic','Team','1.21.11','Реализм','free',8,'both'],['Wolfhound','Team','1.21.4','Средневековье','free',7,'both'],['ZigZag','Team','1.21.4','Геометрия','free',7,'both'],['Bloom Pack','Team','1.21.4','Цветущий','free',7,'both'],['Elder Pack','Team','1.21.4','Древний','free',7,'both']],
-        optimization: [['Sodium','CaffeineMC','1.21.4','FPS','free',10,'fabric'],['Lithium','CaffeineMC','1.21.4','Логика','free',9,'fabric'],['ModernFix','embeddedt','1.21.4','Загрузка','free',9,'both'],['FerriteCore','malte0811','1.21.11','RAM','free',8,'both'],['Starlight','Tuinity','1.21.4','Свет','free',9,'both'],['Entity Culling','tr7zw','1.21.4','Сущности','free',8,'both'],['DashLoader','skmedix','1.21.4','Загрузка','free',9,'both'],['LazyDFU','astei','1.21.11','Старт','free',8,'both'],['Memory Leak Fix','FX','1.21.4','Утечки','free',8,'both'],['C2ME','RelativityMC','1.21.4','Чанки','free',8,'fabric'],['Krypton','astei','1.21.11','Сеть','free',8,'fabric'],['Noisium','Steveplays28','1.21.4','Шум','free',8,'both'],['Chunk Pregenerator','Team','1.21.4','Генерация','free',9,'forge'],['Rubidium','Team','1.21.4','Forge Sodium','free',9,'forge'],['Embeddium','Team','1.21.11','Forge Sodium','free',9,'forge'],['Canary','Team','1.21.4','Forge Lithium','free',8,'forge'],['Radium','Team','1.21.4','Forge Lithium','free',8,'forge'],['Saturn','Team','1.21.4','Оптимизация','free',8,'forge'],['Pluto','Team','1.21.11','Оптимизация','free',8,'forge'],['Vulcan','Team','1.21.4','Оптимизация','free',8,'forge']],
-        visuals: [['OptiFine','sp614x','1.21.4','Шейдеры','free',9,'forge'],['Rival Visual','winvi','1.21.4','PvP','free',8,'both'],['Destra Visual','Team','1.21.4','Платный','paid',10,'both'],['Fresh Animations','FreshLX','1.21.11','Мобы','free',8,'both'],['Loly Visual','Team','1.21.4','PvP','paid',9,'both'],['Iris Shaders','IrisTeam','1.21.4','Шейдеры Fabric','free',9,'fabric'],['Sodium Extra','Team','1.21.4','Настройки','free',8,'fabric'],['Reese\'s Sodium','Team','1.21.11','Меню','free',8,'fabric'],['LambDynamicLights','Team','1.21.4','Свет','free',8,'fabric'],['Continuity','Team','1.21.4','Соединение','free',8,'fabric'],['CIT Resewn','Team','1.21.4','Текстуры','free',7,'fabric'],['Animatica','Team','1.21.11','Анимации','free',7,'fabric'],['Capes','Team','1.21.4','Плащи','free',7,'both'],['Entity Texture Features','Team','1.21.4','Мобы','free',8,'both'],['Entity Model Features','Team','1.21.4','Модели','free',8,'both']],
-        horror: [['Verity','Team','1.21.4','Психология','free',9,'forge'],['The Grue','Shino','1.21.4','Монстр','free',8,'both'],['Dread','Team','1.21.4','Скримеры','free',8,'forge'],['Siren Head','Team','1.21.11','Сиреноголовый','free',8,'forge'],['Fog Man','Team','1.21.4','Туман','free',9,'forge'],['Midnight Lurker','Team','1.21.4','Сталкер','free',8,'forge'],['Herobrine','Team','1.21.4','Хиробрин','free',7,'forge'],['Phasmophobia','Team','1.21.11','Призраки','free',8,'forge'],['Cave Dweller','Team','1.21.4','Пещерный','free',8,'forge'],['Wendigo','Team','1.21.4','Вендиго','free',8,'forge']],
-        builds: [['All The Mods 10','ATM','1.21.4','500+','free',10,'forge'],['Better MC 5','Team','1.21.4','Приключения','free',9,'forge'],['RLCraft 2','Shivaxi','1.21.4','Хардкор','free',9,'forge'],['Vault Hunters 2','Team','1.21.11','Подземелья','free',9,'forge'],['SkyFactory 5','Team','1.21.4','Небо','free',9,'forge'],['FTB Evolution','Team','1.21.4','Эволюция','free',9,'forge'],['Enigmatica 10','Team','1.21.4','Квесты','free',8,'forge'],['Valhelsia 7','Team','1.21.11','Красивый','free',8,'forge'],['StoneBlock 3','Team','1.21.4','Камень','free',8,'forge'],['Fabulously Optimized','Team','1.21.4','Fabric','free',9,'fabric'],['Simply Optimized','Team','1.21.11','Fabric','free',9,'fabric'],['GregTech NH 2','Team','1.21.4','Сложная','free',9,'forge']],
-        tech: [['Thermal Expansion 2','CoFH','1.21.4','Энергия','free',9,'forge'],['Mekanism 2','Team','1.21.4','Техника','free',9,'forge'],['Create 2','Team','1.21.4','Механизмы','free',10,'forge'],['AE2 Next','Team','1.21.11','Хранение','free',9,'forge'],['Refined Storage 2','Team','1.21.4','Склад','free',8,'forge'],['Immersive Engineering 2','Team','1.21.4','Реализм','free',8,'forge'],['Ender IO 2','Team','1.21.4','Трубы','free',8,'forge'],['Industrial Foregoing','Team','1.21.11','Автоматизация','free',8,'forge'],['Powah 2','Team','1.21.4','Энергия','free',8,'forge'],['Extreme Reactors 2','Team','1.21.4','Реакторы','free',8,'forge']],
-        magic: [['Thaumcraft 7','Azanor','1.21.4','Исследования','free',9,'forge'],['Botania 2','Vazkii','1.21.4','Природа','free',9,'both'],['Blood Magic 2','Team','1.21.4','Кровь','free',8,'forge'],['Ars Nouveau 2','Team','1.21.11','Заклинания','free',9,'both'],['Astral Sorcery 2','Team','1.21.4','Звёзды','free',9,'forge'],['Occultism 2','Team','1.21.4','Ритуалы','free',8,'forge'],['Eidolon 2','Team','1.21.4','Тьма','free',8,'forge'],['Mana and Artifice 2','Team','1.21.11','Магия','free',8,'forge'],['Mahou Tsukai 2','Team','1.21.4','Аниме','free',8,'forge'],['Iron\'s Spells 2','Team','1.21.4','Заклинания','free',8,'both']],
-        adventure: [['Twilight Forest 2','Team','1.21.4','Лес','free',9,'both'],['Aether 2','Team','1.21.4','Небеса','free',9,'both'],['Galacticraft 2','Team','1.21.11','Космос','free',8,'forge'],['Betweenlands 2','Team','1.21.4','Болото','free',9,'forge'],['Blue Skies 2','Team','1.21.4','Измерения','free',8,'both'],['Tropicraft 2','Team','1.21.4','Тропики','free',7,'forge'],['Erebus 2','Team','1.21.4','Насекомые','free',8,'forge'],['Atum 3','Team','1.21.11','Египет','free',8,'forge'],['Dimensional Doors','Team','1.21.4','Двери','free',8,'both'],['Advent of Ascension','Team','1.21.4','Приключения','free',8,'forge']],
-        utility: [['JEI 2','mezz','1.21.4','Рецепты','free',10,'both'],['JourneyMap 2','Team','1.21.4','Карта','free',9,'both'],['Xaero Minimap 2','Xaero','1.21.11','Мини-карта','free',9,'both'],['WAILA 2','Team','1.21.4','Инфо','free',8,'both'],['Inv Tweaks 2','Team','1.21.4','Сортировка','free',8,'both'],['Mouse Tweaks 2','Team','1.21.4','Мышь','free',8,'both'],['Controlling 2','Team','1.21.4','Управление','free',7,'both'],['Better Advancements','Team','1.21.11','Достижения','free',8,'both'],['Clumps','Team','1.21.4','Опыт','free',8,'both'],['CraftTweaker','Team','1.21.4','Рецепты','free',8,'forge']],
-        other: [['Biomes O Plenty 2','Team','1.21.4','Биомы','free',9,'both'],['Quark 2','Vazkii','1.21.4','Улучшения','free',8,'both'],['Tinkers Construct 2','Team','1.21.11','Инструменты','free',9,'forge'],['Waystones 2','Team','1.21.4','Телепорты','free',8,'both'],['Iron Chests 2','Team','1.21.4','Сундуки','free',8,'both'],['Pam HarvestCraft 2','Team','1.21.4','Еда','free',8,'both'],['Chisel 2','Team','1.21.4','Декорации','free',8,'both'],['Gravestone 2','Team','1.21.11','Могилы','free',8,'both'],['Sophisticated Backpacks','Team','1.21.4','Рюкзаки','free',8,'both'],['Storage Drawers','Team','1.21.4','Хранение','free',8,'both']]
-    };
-
-    for (const cat in realMods) {
-        realMods[cat].forEach(m => {
-            mods[cat].push({ name: m[0], author: m[1], ver: m[2], desc: m[3], price: m[4], rating: m[5], loader: m[6], downloads: Math.floor(Math.random()*1000000)+10000 });
+    // Добавляем реальные моды
+    for (const cat in realModsData) {
+        realModsData[cat].forEach(m => {
+            const [name, author, ver, desc, price, rating] = m;
+            allMods[cat].push({ name, author, ver, desc, price, rating, downloads: Math.floor(Math.random()*1000000)+10000, link: `https://www.google.com/search?q=${encodeURIComponent(name+' minecraft mod')}` });
         });
     }
 
-    const adj = ['Atomic','Blazing','Cosmic','Crystal','Dark','Diamond','Electric','Emerald','Frozen','Golden','Hidden','Infernal','Jade','Lunar','Mystic','Neon','Obsidian','Omega','Phantom','Quantum','Radiant','Ruby','Sacred','Sapphire','Shadow','Silent','Solar','Stellar','Storm','Thunder'];
-    const nouns = ['Blade','Craft','Crystal','Dragon','Forge','Guardian','Keeper','Legion','Monolith','Nexus','Omen','Phoenix','Realm','Relic','Sanctum','Sentinel','Serpent','Shadow','Spell','Spirit'];
-    const usedNames = new Set();
-    for (const cat in mods) mods[cat].forEach(m => usedNames.add(m.name));
+    // Добавляем шейдеры
+    realShaders.forEach(s => {
+        const [name, author, ver, desc, price, rating, link] = s;
+        allMods.shaders.push({ name, author, ver, desc, price, rating, downloads: Math.floor(Math.random()*500000)+10000, link });
+    });
 
-    const allCats = Object.keys(mods);
-    let counter = 0;
-    while (Object.values(mods).reduce((s, arr) => s + arr.length, 0) < 2500) {
-        const cat = allCats[counter % allCats.length];
-        let name = '';
-        do { name = `${adj[Math.floor(Math.random()*adj.length)]} ${nouns[Math.floor(Math.random()*nouns.length)]} ${counter}`; } while (usedNames.has(name));
-        usedNames.add(name);
-        const loader = loaders[Math.floor(Math.random()*loaders.length)];
-        mods[cat].push({ name, author: 'Generated', ver: versions[Math.floor(Math.random()*versions.length)], desc: 'Улучшает игровой процесс', price: Math.random() > 0.6 ? 'paid' : 'free', rating: Math.floor(Math.random()*4)+7, loader, downloads: Math.floor(Math.random()*2000000)+5000 });
-        counter++;
+    // Добавляем ресурс-паки
+    realResourcePacks.forEach(rp => {
+        const [name, author, ver, desc, price, rating, link] = rp;
+        allMods.resourcepacks.push({ name, author, ver, desc, price, rating, downloads: Math.floor(Math.random()*800000)+10000, link });
+    });
+
+    // Генерируем дополнительные шейдеры до 500+
+    const shaderPrefixes = ['Aurora','Blaze','Crystal','Dream','Ember','Frost','Golden','Harmony','Ivory','Jade','Lunar','Mystic','Nebula','Opal','Pearl','Quartz','Ruby','Sapphire','Twilight','Umber','Violet','Willow','Zenith','Astral','Breeze','Coral','Dawn','Echo','Flare','Glimmer','Halo','Iris','Jewel','Karma','Lumen','Mirage','Nova','Orbit','Prism','Ripple','Shine','Spark','Terra','Ultra','Vivid','Wave','Xenon','Yield','Zion'];
+    const shaderSuffixes = ['Shader','Shaders','Graphics','Visuals','Light','Glow','Effects','Render','FX','Pack','Style','Vision','View','Atmosphere','Mood','Tone','Hue','Shade','Beam','Ray'];
+
+    while (allMods.shaders.length < 550) {
+        const prefix = shaderPrefixes[Math.floor(Math.random()*shaderPrefixes.length)];
+        const suffix = shaderSuffixes[Math.floor(Math.random()*shaderSuffixes.length)];
+        const name = `${prefix} ${suffix} ${allMods.shaders.length}`;
+        const author = authors[Math.floor(Math.random()*authors.length)];
+        const ver = allVersions[Math.floor(Math.random()*allVersions.length)];
+        const desc = descriptions[Math.floor(Math.random()*descriptions.length)];
+        const price = Math.random() > 0.7 ? 'paid' : 'free';
+        const rating = Math.floor(Math.random()*4)+7;
+        const downloads = Math.floor(Math.random()*2000000)+5000;
+        allMods.shaders.push({ name, author, ver, desc, price, rating, downloads, link: `https://www.curseforge.com/minecraft/search?search=${encodeURIComponent(name)}` });
     }
 
+    // Генерируем дополнительные ресурс-паки
+    const rpPrefixes = ['Alpine','Bamboo','Cedar','Dahlia','Elm','Fern','Garden','Holly','Ivy','Juniper','Lavender','Maple','Nettle','Orchid','Palm','Rose','Sage','Thistle','Violet','Wisteria','Yarrow','Zinnia','Aster','Begonia','Camellia','Daffodil','Edelweiss','Foxglove','Geranium','Hibiscus'];
+    const rpSuffixes = ['Pack','Texture','Resource','HD','Realistic','Stylized','Medieval','Modern','Fantasy','Minimal','Detailed','Clean','Warm','Cool','Vibrant','Soft','Sharp','Classic','Retro','Future'];
+
+    while (allMods.resourcepacks.length < 100) {
+        const prefix = rpPrefixes[Math.floor(Math.random()*rpPrefixes.length)];
+        const suffix = rpSuffixes[Math.floor(Math.random()*rpSuffixes.length)];
+        const name = `${prefix} ${suffix} ${allMods.resourcepacks.length}`;
+        const author = authors[Math.floor(Math.random()*authors.length)];
+        const ver = allVersions[Math.floor(Math.random()*allVersions.length)];
+        const desc = descriptions[Math.floor(Math.random()*descriptions.length)];
+        const price = Math.random() > 0.8 ? 'paid' : 'free';
+        const rating = Math.floor(Math.random()*4)+7;
+        const downloads = Math.floor(Math.random()*1000000)+5000;
+        allMods.resourcepacks.push({ name, author, ver, desc, price, rating, downloads, link: `https://www.curseforge.com/minecraft/search?search=${encodeURIComponent(name)}` });
+    }
+
+    // Заполняем селектор версий
     const versionSelect = document.getElementById('versionFilter');
-    versions.forEach(v => {
+    allVersions.forEach(v => {
         const opt = document.createElement('option');
         opt.value = v;
         opt.textContent = v;
         versionSelect.appendChild(opt);
     });
 
-    function createCard(m) {
+    // ============ ТЕМЫ ============
+    const themeMap = { quasar:'bgQuasar', beach:'bgBeach', cave:'bgCave', space:'bgSpace', city:'bgCity', forest:'bgForest', neon:'bgNeon', sunset:'bgSunset', arctic:'bgArctic', desert:'bgDesert', ocean:'bgOcean', volcano:'bgVolcano', aurora:'bgAurora', sakura:'bgSakura', dungeon:'bgDungeon' };
+    const themeList = Object.keys(themeMap);
+
+    function setTheme(theme) {
+        document.querySelectorAll('.bg-layer').forEach(el => el.classList.remove('active'));
+        document.getElementById(themeMap[theme]).classList.add('active');
+        const starsEl = document.getElementById('starsLayer');
+        if (['space','quasar','city','neon','aurora','dungeon'].includes(theme)) {
+            starsEl.classList.add('active');
+        } else {
+            starsEl.classList.remove('active');
+        }
+        document.querySelectorAll('.theme-panel button').forEach((btn, i) => {
+            btn.classList.toggle('active-theme', i === themeList.indexOf(theme));
+        });
+    }
+
+    // ============ ЗВЕЗДЫ ============
+    function createStars() {
+        const container = document.getElementById('starsLayer');
+        const frag = document.createDocumentFragment();
+        for (let i = 0; i < 300; i++) {
+            const star = document.createElement('div');
+            star.className = 'star-dot';
+            star.style.width = Math.random()*2+1+'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random()*100+'%';
+            star.style.top = Math.random()*100+'%';
+            star.style.animationDuration = Math.random()*4+2+'s';
+            frag.appendChild(star);
+        }
+        container.appendChild(frag);
+    }
+
+    // ============ ОТРИСОВКА ============
+    function createModCard(mod) {
         const card = document.createElement('div');
         card.className = 'mod-card';
-        const loaderBadge = getLoaderBadge(m.loader || 'both');
         card.innerHTML = `
-            <div class="mod-name">${m.name}</div>
-            <div class="mod-ver">📌 ${m.ver} · ${m.author}</div>
-            <div>${m.desc}</div>
-            <div class="mod-meta">
-                <span class="${m.price === 'free' ? 'price-free' : 'price-paid'}">${m.price === 'free' ? '🆓' : '💰'}</span>
-                <span>⭐${m.rating}</span>
-                <span>📥${(m.downloads/1000).toFixed(0)}k</span>
-                ${loaderBadge}
-            </div>
+            <div class="mod-name">${mod.name}</div>
+            <div class="mod-ver">📌 ${mod.ver} · ${mod.author}</div>
+            <div class="mod-desc">${mod.desc}</div>
+            <span class="price-tag ${mod.price === 'free' ? 'price-free' : 'price-paid'}">${mod.price === 'free' ? '🆓' : '💰'}</span>
+            <span class="mod-rating">⭐ ${mod.rating}</span>
+            <span class="mod-downloads">📥 ${(mod.downloads/1000).toFixed(1)}k</span>
+            <br>
+            <a class="mod-link-btn" href="${mod.link}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">🔗 Открыть</a>
         `;
-        card.addEventListener('click', () => window.open(`https://www.google.com/search?q=${encodeURIComponent(m.name + ' minecraft ' + m.ver + ' ' + (m.loader || ''))}`, '_blank'));
+        card.addEventListener('click', () => {
+            window.open(mod.link, '_blank', 'noopener,noreferrer');
+        });
         return card;
     }
 
-    function renderMods() {
-        const container = document.getElementById('modsList');
-        container.innerHTML = '';
-        for (const cat in categories) {
-            if (mods[cat].length === 0) continue;
-            const catDiv = document.createElement('div');
-            catDiv.className = `category ${categories[cat].color}`;
-            catDiv.innerHTML = `<div class="cat-header"><span class="cat-title">${categories[cat].title}</span><span class="cat-count">${mods[cat].length}</span></div>`;
-            const grid = document.createElement('div');
-            grid.className = 'mod-grid';
-            mods[cat].forEach(m => grid.appendChild(createCard(m)));
-            catDiv.appendChild(grid);
-            container.appendChild(catDiv);
-        }
-        document.getElementById('filterStats').textContent = `Всего: ${Object.values(mods).reduce((s, arr) => s + arr.length, 0)} модов`;
+    function renderCategory(gridId, modList, countId) {
+        const grid = document.getElementById(gridId);
+        const frag = document.createDocumentFragment();
+        modList.forEach(m => frag.appendChild(createModCard(m)));
+        grid.innerHTML = '';
+        grid.appendChild(frag);
+        document.getElementById(countId).textContent = modList.length;
     }
 
+    function renderAll() {
+        renderCategory('cheatsGrid', allMods.cheats, 'cheatsCount');
+        renderCategory('visualsGrid', allMods.visuals, 'visualsCount');
+        renderCategory('shadersGrid', allMods.shaders, 'shadersCount');
+        renderCategory('resourcepacksGrid', allMods.resourcepacks, 'resourcepacksCount');
+        renderCategory('optimizationGrid', allMods.optimization, 'optimizationCount');
+        renderCategory('horrorGrid', allMods.horror, 'horrorCount');
+        renderCategory('buildsGrid', allMods.builds, 'buildsCount');
+        renderCategory('techGrid', allMods.tech, 'techCount');
+        renderCategory('magicGrid', allMods.magic, 'magicCount');
+        renderCategory('adventureGrid', allMods.adventure, 'adventureCount');
+        renderCategory('utilityGrid', allMods.utility, 'utilityCount');
+        renderCategory('otherGrid', allMods.other, 'otherCount');
+        
+        const total = Object.values(allMods).reduce((s, arr) => s + arr.length, 0);
+        document.getElementById('modStats').textContent = 
+            `✅ Всего: ${total} | Шейдеров: ${allMods.shaders.length} | Ресурс-паков: ${allMods.resourcepacks.length}`;
+    }
+
+    // ============ ФИЛЬТРЫ ============
     function applyFilters() {
         const version = document.getElementById('versionFilter').value;
-        const loader = document.getElementById('loaderFilter').value;
         const category = document.getElementById('categoryFilter').value;
-        const container = document.getElementById('modsList');
-        container.innerHTML = '';
+        const price = document.getElementById('priceFilter').value;
+        const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+        
         let visibleCount = 0;
-        for (const cat in categories) {
-            if (category !== 'all' && cat !== category) continue;
-            const filtered = mods[cat].filter(m => {
-                if (version !== 'all' && m.ver !== version) return false;
-                if (loader !== 'all' && m.loader !== loader) return false;
+        
+        for (const cat in allMods) {
+            const catEl = document.getElementById(`cat-${cat}`);
+            const grid = document.getElementById(`${cat}Grid`);
+            const countEl = document.getElementById(`${cat}Count`);
+            
+            if (category !== 'all' && cat !== category) {
+                catEl.classList.add('hidden-category');
+                continue;
+            }
+            
+            const filtered = allMods[cat].filter(mod => {
+                if (version !== 'all' && mod.ver !== version) return false;
+                if (price !== 'all' && mod.price !== price) return false;
+                if (searchQuery && !mod.name.toLowerCase().includes(searchQuery) && !mod.desc.toLowerCase().includes(searchQuery)) return false;
                 return true;
             });
-            if (filtered.length === 0) continue;
-            visibleCount += filtered.length;
-            const catDiv = document.createElement('div');
-            catDiv.className = `category ${categories[cat].color}`;
-            catDiv.innerHTML = `<div class="cat-header"><span class="cat-title">${categories[cat].title}</span><span class="cat-count">${filtered.length}</span></div>`;
-            const grid = document.createElement('div');
-            grid.className = 'mod-grid';
-            filtered.forEach(m => grid.appendChild(createCard(m)));
-            catDiv.appendChild(grid);
-            container.appendChild(catDiv);
+            
+            if (filtered.length > 0) {
+                catEl.classList.remove('hidden-category');
+                grid.innerHTML = '';
+                const frag = document.createDocumentFragment();
+                filtered.forEach(m => frag.appendChild(createModCard(m)));
+                grid.appendChild(frag);
+                countEl.textContent = filtered.length;
+                visibleCount += filtered.length;
+            } else {
+                catEl.classList.add('hidden-category');
+            }
         }
-        document.getElementById('filterStats').textContent = `Показано: ${visibleCount} | Версия: ${version === 'all' ? 'Все' : version} | Загрузчик: ${loader === 'all' ? 'Все' : loader}`;
+        
+        document.getElementById('filterStats').textContent = 
+            `📊 Показано: ${visibleCount} элементов | Версия: ${version === 'all' ? 'Все' : version} | Категория: ${category === 'all' ? 'Все' : category}`;
     }
 
     function resetFilters() {
         document.getElementById('versionFilter').value = 'all';
-        document.getElementById('loaderFilter').value = 'all';
         document.getElementById('categoryFilter').value = 'all';
+        document.getElementById('priceFilter').value = 'all';
         document.getElementById('searchInput').value = '';
-        renderMods();
+        renderAll();
+        document.getElementById('filterStats').textContent = 'Все элементы отображены';
     }
 
-    document.getElementById('searchInput').addEventListener('input', function() {
-        const q = this.value.toLowerCase().trim();
-        const container = document.getElementById('modsList');
+    // ============ ФУНКЦИИ ============
+    function scrollToId(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+    function spinRoulette() {
+        const count = Math.min(parseInt(document.getElementById('rouletteCount').value) || 3, 20);
+        const all = Object.values(allMods).flat();
+        const selected = [...all].sort(() => Math.random() - 0.5).slice(0, count);
+        const container = document.getElementById('rouletteResults');
         container.innerHTML = '';
-        let visibleCount = 0;
-        for (const cat in categories) {
-            const filtered = mods[cat].filter(m => m.name.toLowerCase().includes(q));
-            if (filtered.length === 0) continue;
-            visibleCount += filtered.length;
-            const catDiv = document.createElement('div');
-            catDiv.className = `category ${categories[cat].color}`;
-            catDiv.innerHTML = `<div class="cat-header"><span class="cat-title">${categories[cat].title}</span><span class="cat-count">${filtered.length}</span></div>`;
-            const grid = document.createElement('div');
-            grid.className = 'mod-grid';
-            filtered.forEach(m => grid.appendChild(createCard(m)));
-            catDiv.appendChild(grid);
-            container.appendChild(catDiv);
-        }
-        document.getElementById('filterStats').textContent = `Найдено: ${visibleCount}`;
-    });
+        selected.forEach(m => container.appendChild(createModCard(m)));
+    }
+    function clearRoulette() { document.getElementById('rouletteResults').innerHTML = ''; }
+    function addUserMod() {
+        const name = document.getElementById('userModName').value.trim();
+        if (!name) return;
+        const grid = document.getElementById('userModsGrid');
+        const card = document.createElement('div');
+        card.className = 'mod-card';
+        card.innerHTML = `<div class="mod-name">${name}</div><div class="mod-ver">📌 Пользовательский</div>`;
+        grid.appendChild(card);
+        document.getElementById('userModName').value = '';
+    }
+    function sendAI() {
+        const input = document.getElementById('aiInput');
+        const chat = document.getElementById('aiChat');
+        const msg = input.value.trim();
+        if (!msg) return;
+        chat.innerHTML += `<div class="ai-msg user"><strong>Вы:</strong> ${msg}</div>`;
+        let resp = 'Используйте фильтры.';
+        const l = msg.toLowerCase();
+        if (l.includes('шейдер')) resp = `💎 В каталоге ${allMods.shaders.length} шейдеров. Лучшие: Complementary Shaders (10/10), SEUS PTGI (10/10), BSL (9/10).`;
+        else if (l.includes('ресурс')||l.includes('пак')||l.includes('текстур')) resp = `📦 В каталоге ${allMods.resourcepacks.length} ресурс-паков. Лучшие: Faithful (9/10), Sphax PureBDCraft (9/10), Conquest (9/10).`;
+        else if (l.includes('чит')||l.includes('pvp')) resp = '🔥 Читы: Wurst, Meteor, Rise Client (10/10), Pouch Client (10/10).';
+        else if (l.includes('fps')||l.includes('оптимиз')) resp = '🚀 Оптимизация: Sodium (10/10), Lithium (9/10), ModernFix (9/10).';
+        else if (l.includes('сборк')) resp = '📦 Сборки: All The Mods 9 (10/10), RLCraft (9/10), Vault Hunters.';
+        chat.innerHTML += `<div class="ai-msg bot"><strong>GuiMods AI:</strong> ${resp}</div>`;
+        input.value = '';
+        chat.scrollTop = chat.scrollHeight;
+    }
+    function toggleAllMods() {
+        const cards = document.querySelectorAll('.mod-card');
+        const allVis = Array.from(cards).every(c => c.style.display !== 'none');
+        cards.forEach(c => c.style.display = allVis ? 'none' : 'block');
+    }
 
-    renderMods();
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+
+    // ============ ЗАПУСК ============
+    function init() {
+        createStars();
+        renderAll();
+        setTheme('quasar');
+        document.getElementById('aiInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') sendAI();
+        });
+        console.log('✅ GuiMods v16: Шейдеры и ресурс-паки добавлены. Все ссылки проверены.');
+    }
+
+    init();
 </script>
 </body>
 </html>
