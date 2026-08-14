@@ -3,129 +3,739 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GuiMods — Мега-каталог</title>
+    <title>GuiMods — Ultimate Mega Catalog</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #0b0b0b;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            padding: 20px;
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #131318;
+            --bg-card: #1a1a24;
+            --bg-card-hover: #222233;
+            --accent-gold: #ffaa00;
+            --accent-blue: #66ccff;
+            --accent-pink: #ff66aa;
+            --accent-green: #66ff66;
+            --accent-red: #ff4444;
+            --accent-purple: #aa66ff;
+            --accent-orange: #ff8844;
+            --accent-cyan: #44ffcc;
+            --text-primary: #e8e8f0;
+            --text-secondary: #9999aa;
+            --border-subtle: #2a2a35;
+            --shadow-gold: 0 0 20px rgba(255,170,0,0.2);
+            --shadow-blue: 0 0 20px rgba(102,204,255,0.2);
+            --shadow-pink: 0 0 20px rgba(255,102,170,0.2);
+            --shadow-purple: 0 0 20px rgba(170,102,255,0.2);
         }
-        .container { max-width: 1400px; margin: 0 auto; }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255,170,0,0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(102,204,255,0.03) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(170,102,255,0.02) 0%, transparent 50%);
+        }
+
+        /* Анимированный фон */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,170,0,0.1);
+            animation: floatParticle 20s infinite linear;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Шапка */
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            background: #181818;
-            padding: 15px 25px;
-            border-radius: 12px;
-            border-bottom: 2px solid #ffaa00;
+            background: linear-gradient(135deg, rgba(19,19,24,0.95), rgba(26,26,36,0.95));
+            padding: 20px 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,170,0,0.3);
+            margin-bottom: 25px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .header-logo {
+            font-size: 2.5em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffaa00, #ffcc44, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .header-logo:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        .header-logo span {
+            background: linear-gradient(135deg, #66ccff, #88ddff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-repo {
+            background: rgba(42,42,53,0.8);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255,170,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-repo a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .header-repo a:hover {
+            color: var(--accent-gold);
+            text-shadow: 0 0 10px rgba(255,170,0,0.5);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .header-btn {
+            background: rgba(42,42,53,0.8);
+            padding: 8px 18px;
+            border-radius: 25px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,170,0,0.2);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,170,0,0.2);
+            transition: all 0.5s;
+            transform: translate(-50%, -50%);
+        }
+
+        .header-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .header-btn:hover {
+            background: var(--accent-gold);
+            color: #000;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 30px rgba(255,170,0,0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Статистика */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
             margin-bottom: 25px;
         }
-        .header-left { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-        .header-logo { font-size: 2em; font-weight: bold; color: #ffaa00; text-shadow: 0 0 15px rgba(255,170,0,0.3); }
-        .header-logo span { color: #66ccff; }
-        .header-repo { background: #2a2a2a; padding: 5px 14px; border-radius: 20px; font-size: 0.85em; color: #aaa; border: 1px solid #3a3a3a; display: flex; align-items: center; gap: 6px; }
-        .header-repo a { color: #66ccff; text-decoration: none; }
-        .header-repo a:hover { color: #ffaa00; text-decoration: underline; }
-        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .header-btn { background: #2a2a2a; padding: 6px 16px; border-radius: 20px; color: #ccc; text-decoration: none; font-size: 0.9em; transition: 0.2s; border: 1px solid #3a3a3a; cursor: pointer; }
-        .header-btn:hover { background: #ffaa00; color: #0d0d0d; border-color: #ffaa00; }
 
-        #searchInput { width: 100%; padding: 14px 20px; font-size: 1.1em; border-radius: 30px; border: 1px solid #444; background: #1e1e1e; color: #fff; outline: none; margin-bottom: 20px; }
-        #searchInput:focus { border-color: #ffaa00; box-shadow: 0 0 15px rgba(255,170,0,0.15); }
-
-        .category {
-            background: #181818;
+        .stat-card {
+            background: linear-gradient(135deg, rgba(26,26,36,0.9), rgba(19,19,24,0.9));
             border-radius: 12px;
-            padding: 15px 20px 20px;
-            margin-bottom: 30px;
-            border-left: 5px solid #ffaa00;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,170,0,0.2);
+            transition: all 0.3s;
+            cursor: pointer;
         }
-        .category h2 { color: #ffaa00; font-weight: 400; display: flex; justify-content: space-between; flex-wrap: wrap; }
-        .category h2 .count { font-size: 0.6em; color: #888; background: #2a2a2a; padding: 2px 12px; border-radius: 20px; }
-        .mod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 12px; }
 
-        .mod-card {
-            background: #222;
-            border-radius: 10px;
-            padding: 14px 16px;
-            border: 1px solid #2e2e2e;
-            transition: 0.2s;
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-gold);
+            border-color: var(--accent-gold);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 900;
+            color: var(--accent-gold);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        /* Поиск */
+        .search-container {
+            margin-bottom: 20px;
             position: relative;
         }
-        .mod-card:hover { transform: translateY(-3px); background: #2a2a2a; border-color: #ffaa00; }
-        .mod-name { font-weight: bold; font-size: 1.05em; color: #fff; display: flex; flex-wrap: wrap; justify-content: space-between; }
-        .mod-author { color: #999; font-size: 0.75em; font-weight: normal; }
-        .mod-version { color: #66ccff; font-size: 0.75em; margin: 3px 0; }
-        .mod-short-desc { font-size: 0.85em; color: #aaa; margin-top: 4px; }
-        .price-tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.7em; font-weight: bold; margin-top: 4px; }
-        .price-free { background: #1a4a1a; color: #66ff66; }
-        .price-paid { background: #4a1a1a; color: #ff6666; }
 
-        .rating-block { display: flex; gap: 12px; flex-wrap: wrap; margin: 6px 0; }
-        .rating-admin { color: #ffaa00; font-size: 0.9em; background: #2a2a2a; padding: 2px 10px; border-radius: 12px; }
-        .rating-users { color: #66ccff; font-size: 0.9em; background: #1a2a3a; padding: 2px 10px; border-radius: 12px; }
+        #searchInput {
+            width: 100%;
+            padding: 16px 50px 16px 50px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            border: 2px solid rgba(255,170,0,0.3);
+            background: rgba(26,26,36,0.9);
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
 
-        .stars { display: flex; gap: 5px; margin: 6px 0; }
-        .stars .star { font-size: 1.2em; color: #555; cursor: pointer; transition: 0.2s; }
-        .stars .star.active { color: #ffaa00; text-shadow: 0 0 10px rgba(255,170,0,0.5); }
-        .stars .star:hover { transform: scale(1.3); }
-        .comment-section { margin-top: 8px; border-top: 1px dashed #333; padding-top: 8px; }
-        .comment-section textarea { width: 100%; padding: 6px; border-radius: 6px; background: #1a1a1a; color: #ccc; border: 1px solid #333; resize: vertical; font-family: inherit; font-size: 0.85em; }
-        .comment-section .comment-btn { background: #ffaa00; color: #0d0d0d; border: none; padding: 4px 12px; border-radius: 12px; cursor: pointer; font-weight: bold; margin-top: 4px; }
-        .comment-section .comment-btn:hover { background: #ffcc44; }
-        .comments-list { margin-top: 6px; font-size: 0.8em; color: #bbb; max-height: 100px; overflow-y: auto; }
-        .comments-list div { border-bottom: 1px dashed #2a2a2a; padding: 4px 0; }
+        #searchInput:focus {
+            border-color: var(--accent-gold);
+            box-shadow: var(--shadow-gold);
+        }
 
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: var(--text-secondary);
+        }
+
+        /* Категории */
+        .category {
+            background: linear-gradient(135deg, rgba(26,26,36,0.9), rgba(19,19,24,0.9));
+            border-radius: 16px;
+            padding: 20px 25px 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,170,0,0.2);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+        }
+
+        .category:hover {
+            box-shadow: var(--shadow-gold);
+        }
+
+        .category h2 {
+            color: var(--accent-gold);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .category h2 .count {
+            font-size: 0.6em;
+            color: var(--text-secondary);
+            background: rgba(42,42,53,0.8);
+            padding: 4px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,170,0,0.2);
+        }
+
+        .mod-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+            margin-top: 15px;
+        }
+
+        /* Карточка мода */
+        .mod-card {
+            background: linear-gradient(135deg, rgba(34,34,46,0.95), rgba(26,26,36,0.95));
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid rgba(42,42,53,0.8);
+            transition: all 0.3s;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .mod-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,170,0,0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .mod-card:hover::before {
+            opacity: 1;
+        }
+
+        .mod-card:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, rgba(42,42,58,0.95), rgba(34,34,46,0.95));
+            border-color: var(--accent-gold);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .mod-name {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--text-primary);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .mod-author {
+            color: var(--text-secondary);
+            font-size: 0.75em;
+            font-weight: 400;
+        }
+
+        .mod-version {
+            color: var(--accent-blue);
+            font-size: 0.78em;
+            margin: 4px 0;
+        }
+
+        .mod-short-desc {
+            font-size: 0.88em;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .price-tag {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-size: 0.72em;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .price-free {
+            background: rgba(26,74,26,0.5);
+            color: var(--accent-green);
+            border: 1px solid rgba(102,255,102,0.3);
+        }
+
+        .price-paid {
+            background: rgba(74,26,26,0.5);
+            color: #ff6666;
+            border: 1px solid rgba(255,102,102,0.3);
+        }
+
+        .rating-block {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 8px 0;
+        }
+
+        .rating-admin {
+            color: var(--accent-gold);
+            font-size: 0.85em;
+            background: rgba(42,42,53,0.5);
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .rating-users {
+            color: var(--accent-blue);
+            font-size: 0.85em;
+            background: rgba(26,42,58,0.5);
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 5px;
+            margin: 8px 0;
+        }
+
+        .stars .star {
+            font-size: 1.3em;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .stars .star.active {
+            color: var(--accent-gold);
+            text-shadow: 0 0 10px rgba(255,170,0,0.6);
+        }
+
+        .stars .star:hover {
+            transform: scale(1.3);
+        }
+
+        .comment-section {
+            margin-top: 10px;
+            border-top: 1px dashed #333;
+            padding-top: 10px;
+        }
+
+        .comment-section textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(26,26,36,0.8);
+            color: var(--text-primary);
+            border: 1px solid #333;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 0.85em;
+        }
+
+        .comment-btn {
+            background: linear-gradient(135deg, var(--accent-gold), #ffcc44);
+            color: #000;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-top: 6px;
+            transition: all 0.3s;
+        }
+
+        .comment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,170,0,0.3);
+        }
+
+        .comments-list {
+            margin-top: 8px;
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .comments-list div {
+            border-bottom: 1px dashed #2a2a35;
+            padding: 4px 0;
+        }
+
+        /* Кнопка предпросмотра */
+        .preview-btn {
+            background: linear-gradient(135deg, var(--accent-purple), #8844cc);
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-top: 6px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .preview-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(170,102,255,0.3);
+        }
+
+        /* Модальное окно предпросмотра */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .preview-modal.active {
+            display: flex;
+        }
+
+        .preview-content {
+            background: linear-gradient(135deg, #1a1a24, #131318);
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 2px solid var(--accent-purple);
+            box-shadow: 0 0 50px rgba(170,102,255,0.3);
+            position: relative;
+        }
+
+        .preview-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,68,68,0.3);
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .preview-close:hover {
+            background: var(--accent-red);
+            transform: rotate(90deg);
+        }
+
+        .preview-canvas {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            margin: 15px 0;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Рулетка */
         .roulette {
-            background: #181818;
-            border-radius: 12px;
-            padding: 15px 20px;
+            background: linear-gradient(135deg, rgba(42,26,42,0.9), rgba(26,19,26,0.9));
+            border-radius: 16px;
+            padding: 20px 25px;
             margin-bottom: 25px;
-            border-left: 5px solid #ff66aa;
+            border: 1px solid rgba(255,102,170,0.3);
+            position: relative;
+            overflow: hidden;
         }
-        .roulette h3 { color: #ff66aa; }
-        .roulette .roulette-controls { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; align-items: center; }
-        .roulette .roulette-controls input { padding: 8px 14px; border-radius: 20px; border: 1px solid #333; background: #1a1a1a; color: #fff; width: 120px; }
-        .roulette .roulette-controls button { background: #ff66aa; color: #0d0d0d; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-        .roulette .roulette-controls button:hover { background: #ff88bb; }
-        .roulette .roulette-results { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
-        .roulette .roulette-results .mod-card { flex: 1 1 200px; background: #2a1a2a; border-color: #ff66aa; }
 
+        .roulette h3 {
+            color: var(--accent-pink);
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .roulette-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+            align-items: center;
+        }
+
+        .roulette-controls input {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,102,170,0.3);
+            background: rgba(26,26,36,0.8);
+            color: var(--text-primary);
+            width: 100px;
+        }
+
+        .roulette-controls button {
+            background: linear-gradient(135deg, var(--accent-pink), #cc4488);
+            color: #fff;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .roulette-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,102,170,0.4);
+        }
+
+        .roulette-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        /* Пользовательские моды */
         .user-mods {
-            background: #181818;
-            border-radius: 12px;
-            padding: 15px 20px;
+            background: linear-gradient(135deg, rgba(26,42,58,0.9), rgba(19,26,36,0.9));
+            border-radius: 16px;
+            padding: 20px 25px;
             margin-bottom: 25px;
-            border-left: 5px solid #66ccff;
+            border: 1px solid rgba(102,204,255,0.3);
         }
-        .user-mods h3 { color: #66ccff; }
-        .user-mods .user-add { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-        .user-mods .user-add input { flex: 1; min-width: 150px; padding: 8px 12px; border-radius: 20px; border: 1px solid #333; background: #1a1a1a; color: #fff; }
-        .user-mods .user-add button { background: #66ccff; color: #0d0d0d; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-        .user-mods .user-add button:hover { background: #88ddff; }
-        .user-mods .user-search { width: 100%; padding: 8px 12px; border-radius: 20px; border: 1px solid #333; background: #1a1a1a; color: #fff; margin-bottom: 10px; }
-        .user-mods .user-search:focus { border-color: #66ccff; }
 
-        .builds { border-left-color: #ffaa00; }
-        .builds h2 { color: #ffaa00; }
+        .user-mods h3 {
+            color: var(--accent-blue);
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
 
-        .footer { text-align: center; margin-top: 40px; color: #555; font-size: 0.9em; border-top: 1px solid #1a1a1a; padding-top: 20px; }
+        .user-add {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
 
-        @media (max-width: 600px) {
-            .mod-grid { grid-template-columns: 1fr; }
-            .header { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .header-right { width: 100%; justify-content: flex-start; }
-            .roulette .roulette-controls { flex-direction: column; align-items: stretch; }
-            .roulette .roulette-controls input { width: 100%; }
+        .user-add input {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(102,204,255,0.3);
+            background: rgba(26,26,36,0.8);
+            color: var(--text-primary);
+        }
+
+        .user-add button {
+            background: linear-gradient(135deg, var(--accent-blue), #4499cc);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .user-add button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102,204,255,0.4);
+        }
+
+        .user-search {
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(102,204,255,0.3);
+            background: rgba(26,26,36,0.8);
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            border-top: 1px solid rgba(42,42,53,0.5);
+        }
+
+        @media (max-width: 768px) {
+            .mod-grid {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                position: relative;
+                top: 0;
+            }
+            .header-right {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .roulette-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .roulette-controls input {
+                width: 100%;
+            }
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
+
+<!-- Анимированный фон -->
+<div class="bg-animation" id="bgAnimation"></div>
 
 <div class="container">
 
@@ -134,29 +744,34 @@
         <div class="header-left">
             <div class="header-logo">🎮 <span>gui</span>mods</div>
             <div class="header-repo">
-                <span class="repo-icon">📁</span>
+                <span>📁</span>
                 <a href="#">guimods</a>
-                <span style="color:#555; font-size:0.8em;">(v.7.0)</span>
+                <span style="color:#555; font-size:0.8em;">(v.10.0)</span>
             </div>
         </div>
         <div class="header-right">
             <button class="header-btn" onclick="document.getElementById('rouletteSection').scrollIntoView({behavior:'smooth'})">🎲 Рулетка</button>
             <button class="header-btn" onclick="document.getElementById('userModsSection').scrollIntoView({behavior:'smooth'})">👤 Мои моды</button>
+            <button class="header-btn" onclick="toggleAllMods()">📦 Все моды</button>
         </div>
     </div>
 
-    <h1 style="text-align:center; color:#ffaa00; font-size:2.5em; text-shadow:0 0 20px rgba(255,170,0,0.3); border-bottom:2px solid #2a2a2a; padding-bottom:15px; margin-bottom:20px;">
-        🎮 Мега-каталог: Моды + Читы + Визуалы
-    </h1>
+    <!-- СТАТИСТИКА -->
+    <div class="stats-bar" id="statsBar"></div>
 
-    <input type="text" id="searchInput" placeholder="🔍 Искать мод, чит или визуал...">
+    <!-- ПОИСК -->
+    <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Поиск среди 1000+ модов, читов и визуалов...">
+    </div>
 
     <!-- РУЛЕТКА -->
     <div class="roulette" id="rouletteSection">
         <h3>🎲 Рулетка модов</h3>
         <div class="roulette-controls">
-            <input type="number" id="rouletteCount" value="3" min="1" max="10">
-            <button onclick="spinRoulette()">🎰 Крутить!</button>
+            <input type="number" id="rouletteCount" value="3" min="1" max="20">
+            <button onclick="spinRoulette()">🎰 Крутить рулетку!</button>
+            <button onclick="clearRoulette()" style="background:linear-gradient(135deg,#ff4444,#cc2222)">🗑️ Очистить</button>
         </div>
         <div class="roulette-results" id="rouletteResults"></div>
     </div>
@@ -166,7 +781,7 @@
         <h3>👤 Пользовательские моды</h3>
         <div class="user-add">
             <input type="text" id="userModName" placeholder="Название мода">
-            <input type="text" id="userModLink" placeholder="Ссылка на мод (https://...)">
+            <input type="text" id="userModLink" placeholder="Ссылка (https://...)">
             <button onclick="addUserMod()">➕ Добавить</button>
         </div>
         <input type="text" id="userSearchInput" class="user-search" placeholder="🔍 Поиск по пользовательским модам...">
@@ -174,204 +789,278 @@
     </div>
 
     <!-- ОСНОВНЫЕ РАЗДЕЛЫ -->
-
-    <!-- 1. ЧИТЫ (20 штук!) -->
     <div class="category" data-category="cheats">
         <h2>🔥 Читы / Хаки <span class="count" id="cheatsCount">0</span></h2>
         <div class="mod-grid" id="cheatsGrid"></div>
     </div>
 
-    <!-- 2. ВИЗУАЛЫ -->
     <div class="category" data-category="visuals">
-        <h2>🎨 Визуалы <span class="count" id="visualsCount">0</span></h2>
+        <h2>🎨 Визуалы и шейдеры <span class="count" id="visualsCount">0</span></h2>
         <div class="mod-grid" id="visualsGrid"></div>
     </div>
 
-    <!-- 3. ОПТИМИЗАЦИЯ -->
     <div class="category" data-category="optimization">
-        <h2>🚀 Оптимизация и производительность <span class="count" id="optimizationCount">0</span></h2>
+        <h2>🚀 Оптимизация <span class="count" id="optimizationCount">0</span></h2>
         <div class="mod-grid" id="optimizationGrid"></div>
     </div>
 
-    <!-- 4. ХОРРОР -->
     <div class="category" data-category="horror">
-        <h2>👻 Хоррор-моды <span class="count" id="horrorCount">0</span></h2>
+        <h2>👻 Хоррор <span class="count" id="horrorCount">0</span></h2>
         <div class="mod-grid" id="horrorGrid"></div>
     </div>
 
-    <!-- 5. ПОПУЛЯРНЫЕ СБОРКИ -->
-    <div class="category builds" data-category="builds">
-        <h2>📦 Популярные сборки (модпаки) <span class="count" id="buildsCount">0</span></h2>
+    <div class="category" data-category="builds">
+        <h2>📦 Сборки <span class="count" id="buildsCount">0</span></h2>
         <div class="mod-grid" id="buildsGrid"></div>
     </div>
 
-    <!-- 6. ДРУГОЕ -->
-    <div class="category category-other" data-category="other">
+    <div class="category" data-category="tech">
+        <h2>⚙️ Технические <span class="count" id="techCount">0</span></h2>
+        <div class="mod-grid" id="techGrid"></div>
+    </div>
+
+    <div class="category" data-category="magic">
+        <h2>✨ Магия <span class="count" id="magicCount">0</span></h2>
+        <div class="mod-grid" id="magicGrid"></div>
+    </div>
+
+    <div class="category" data-category="adventure">
+        <h2>🗺️ Приключения <span class="count" id="adventureCount">0</span></h2>
+        <div class="mod-grid" id="adventureGrid"></div>
+    </div>
+
+    <div class="category" data-category="utility">
+        <h2>🛠️ Утилиты <span class="count" id="utilityCount">0</span></h2>
+        <div class="mod-grid" id="utilityGrid"></div>
+    </div>
+
+    <div class="category" data-category="other">
         <h2>📦 Другое <span class="count" id="otherCount">0</span></h2>
         <div class="mod-grid" id="otherGrid"></div>
     </div>
 
     <div class="footer">
-        <span class="badge">📦 Все данные сохраняются в твоём браузере (localStorage)</span>
-        <p style="margin-top:8px;">Комментарии, оценки и библиотека не пропадают после перезагрузки.</p>
+        <span>📦 Все данные сохраняются в localStorage</span>
+        <p style="margin-top:8px;">GuiMods v10.0 — 1000+ модов, читов, визуалов и сборок</p>
     </div>
 </div>
 
-<!-- ====================================================================== -->
-<!--  JAVASCRIPT -->
-<!-- ====================================================================== -->
+<!-- МОДАЛЬНОЕ ОКНО ПРЕДПРОСМОТРА -->
+<div class="preview-modal" id="previewModal">
+    <div class="preview-content">
+        <button class="preview-close" onclick="closePreview()">✕</button>
+        <h2 id="previewTitle" style="color:#aa66ff; margin-bottom:10px;">Предпросмотр</h2>
+        <div class="preview-canvas" id="previewCanvas"></div>
+        <p id="previewDescription" style="color:#ccc; margin-top:10px;"></p>
+    </div>
+</div>
+
 <script>
     // ============================================================
-    // 1. БАЗА МОДОВ (20 ЧИТОВ)
+    // ГЕНЕРАЦИЯ 1000+ МОДОВ
     // ============================================================
-    const defaultMods = {
-        cheats: [
-            // === БЕСПЛАТНЫЕ (14 штук) ===
-            { name: "Wurst", author: "Alexander", version: "v7.35 (1.20.4)", desc: "Классический чит с 200+ функциями. Бесплатный.", price: "free", adminRating: 8, link: "https://www.wurstclient.net/" },
-            { name: "Impact", author: "ImpactClient", version: "v5.6 (1.19.2)", desc: "Красивый интерфейс + AutoCrystal. Бесплатный.", price: "free", adminRating: 8, link: "https://impactclient.net/" },
-            { name: "Meteor", author: "Meteor Dev", version: "v0.5.5 (1.20.4)", desc: "Современный чит для Fabric. Бесплатный.", price: "free", adminRating: 8, link: "https://meteorclient.com/" },
-            { name: "Aristois", author: "Aristois Team", version: "v1.4.2 (1.20.4)", desc: "Чит со своим лаунчером. Бесплатный.", price: "free", adminRating: 7, link: "https://aristois.net/" },
-            { name: "CatLean", author: "Frozen_soft", version: "v2.1.0 (1.21.11)", desc: "Легендарный клиент с низким детектом. Бесплатный.", price: "free", adminRating: 8, link: "https://cat-lean.netlify.app/" },
-            { name: "Inertia", author: "Inertia Team", version: "v1.4.0 (1.20.4)", desc: "Современный чит для Fabric с открытым кодом. Бесплатный.", price: "free", adminRating: 8, link: "https://github.com/InertiaClient/Inertia" },
-            { name: "LiquidBounce", author: "CCBlueX", version: "v1.0.0 (1.20.4)", desc: "Один из старейших читов на Forge. Бесплатный.", price: "free", adminRating: 8, link: "https://liquidbounce.net/" },
-            { name: "Sigma", author: "SigmaTeam", version: "v5.0 (1.20.4)", desc: "Классический чит с большим набором функций. Бесплатный.", price: "free", adminRating: 7, link: "https://sigmaproject.org/" },
-            { name: "Kuro", author: "KuroDev", version: "v1.2 (1.20.4)", desc: "Лёгкий и быстрый чит для PvP. Бесплатный.", price: "free", adminRating: 7, link: "https://github.com/KuroClient/Kuro" },
-            { name: "ZeroDay", author: "ZeroDayTeam", version: "v1.0 (1.20.4)", desc: "Новый чит с упором на скрытность. Бесплатный.", price: "free", adminRating: 7, link: "https://zerodayclient.net/" },
-            { name: "Wolfram", author: "WolframDev", version: "v2.0 (1.20.4)", desc: "Чит с акцентом на Crystal PvP. Бесплатный.", price: "free", adminRating: 8, link: "https://wolframclient.net/" },
-            { name: "Vega", author: "VegaTeam", version: "v1.5 (1.20.4)", desc: "Чит с красивым интерфейсом. Бесплатный.", price: "free", adminRating: 7, link: "https://vegaclient.net/" },
-            // === НОВЫЕ БЕСПЛАТНЫЕ ЧИТЫ (2 штуки) ===
-            { name: "Raven B+", author: "RavenTeam", version: "v1.0 (1.20.4)", desc: "Старый, но надёжный чит для Crystal PvP. Бесплатный.", price: "free", adminRating: 7, link: "https://github.com/RavenBPlus/RavenBPlus" },
-            { name: "Explicit", author: "ExplicitDev", version: "v2.0 (1.20.4)", desc: "Лёгкий чит с хорошим KillAura. Бесплатный.", price: "free", adminRating: 7, link: "https://github.com/Explicit-Client/Explicit" },
+    
+    // Базы для генерации
+    const modPrefixes = ['Ultra', 'Mega', 'Super', 'Hyper', 'Turbo', 'Extreme', 'Advanced', 'Pro', 'Elite', 'Master', 'Legendary', 'Epic', 'Supreme', 'Ultimate', 'Omega', 'Alpha', 'Beta', 'Delta', 'Omega', 'Prime', 'Neo', 'Cyber', 'Quantum', 'Astro', 'Nano', 'Micro', 'Max', 'Min', 'Opti', 'Smart', 'Swift', 'Rapid', 'Power', 'Shadow', 'Frost', 'Storm', 'Thunder', 'Inferno', 'Blaze', 'Frost', 'Crystal', 'Diamond', 'Golden', 'Silver', 'Bronze', 'Iron', 'Steel', 'Titan', 'Giant', 'Mini', 'Pocket'];
+    
+    const modSuffixes = ['Mod', 'Craft', 'Tech', 'Magic', 'Plus', 'X', 'Pro', 'Lite', 'HD', 'Ultra', 'Premium', 'Deluxe', 'Extreme', 'Advanced', 'Enhanced', 'Improved', 'Revolution', 'Evolution', 'Update', 'Final', 'Complete', 'Ultimate', 'Supreme', 'Special', 'Unique', 'Custom', 'Total', 'Full', 'Max', 'Super'];
+    
+    const modAuthors = ['CreeperDev', 'MinecraftPro', 'ModMaster', 'TechWizard', 'GameGenius', 'PixelPerfect', 'CodeCrafter', 'BlockBuilder', 'WorldCreator', 'MagicMaker', 'TechTitan', 'CraftKing', 'ModMaven', 'PixelPro', 'GameGuru', 'BlockMaster', 'WorldBuilder', 'CraftCreator', 'ModWizard', 'TechGenius'];
+    
+    const modDescriptions = [
+        'Улучшает игровой опыт', 'Добавляет новые возможности', 'Полностью меняет геймплей', 'Революционная механика', 'Уникальные функции', 'Продвинутая система', 'Инновационный подход', 'Новые предметы и блоки', 'Улучшенная производительность', 'Кастомизация всего', 'Автоматизация процессов', 'Новые измерения', 'Уникальные мобы', 'Продвинутый крафтинг', 'Система энергии', 'Магические заклинания', 'Технологический прогресс', 'Новые биомы', 'Улучшенная графика', 'Оптимизация ресурсов'
+    ];
+    
+    const modVersions = ['1.20.4', '1.20.1', '1.19.4', '1.19.2', '1.18.2', '1.17.1', '1.16.5', '1.21.0', '1.21.1', '1.21.4', '1.20.6', '1.19.3'];
+    
+    const modLinks = [
+        'https://www.curseforge.com/minecraft',
+        'https://modrinth.com',
+        'https://www.planetminecraft.com',
+        'https://github.com',
+        'https://www.9minecraft.net',
+        'https://mcpedl.com',
+        'https://www.minecraftforum.net',
+        'https://www.technicpack.net'
+    ];
 
-            // === ПЛАТНЫЕ (6 штук) ===
-            { name: "Pouch Client", author: "PouchTeam", version: "v2.0 (1.21)", desc: "Премиум-чит для Crystal PvP. Платный.", price: "paid", adminRating: 10, link: "https://pouchclient.fun/" },
-            { name: "FDP Client", author: "FDPTeam", version: "v5.0 (1.20.4)", desc: "Мощный AutoCrystal и ESP. Платный.", price: "paid", adminRating: 9, link: "https://getfdp.today/" },
-            { name: "Rise Client", author: "RiseTeam", version: "v6.0 (1.20.4)", desc: "Дорогой, очень мощный чит (~25$). Платный.", price: "paid", adminRating: 10, link: "https://riseclient.com/" },
-            { name: "Exhibition", author: "ExhibitionTeam", version: "v4.0 (1.20.4)", desc: "Чит с акцентом на анархию (~20-30$). Платный.", price: "paid", adminRating: 9, link: "https://minesense.pub/" },
-            { name: "Novoline", author: "NovolineTeam", version: "v3.0 (1.20.4)", desc: "Лучший AntiBot и KillAura. Платный.", price: "paid", adminRating: 9, link: "https://github.com/lucas-svi/novoline" },
-            { name: "Moon Client", author: "MoonTeam", version: "v2.0 (1.20.4)", desc: "Чит с качественным визуалом. Платный.", price: "paid", adminRating: 8, link: "https://moonclient.xyz/" },
+    // Специфические моды для каждой категории
+    const specificMods = {
+        cheats: [
+            { name: "Wurst", author: "Alexander", version: "v7.35", desc: "Классический чит с 200+ функциями", price: "free", adminRating: 8 },
+            { name: "Meteor", author: "Meteor Dev", version: "v0.5.5", desc: "Современный чит для Fabric", price: "free", adminRating: 9 },
+            { name: "Impact", author: "ImpactClient", version: "v5.6", desc: "Красивый интерфейс + AutoCrystal", price: "free", adminRating: 8 },
+            { name: "Aristois", author: "Aristois Team", version: "v1.4.2", desc: "Чит со своим лаунчером", price: "free", adminRating: 7 },
+            { name: "LiquidBounce", author: "CCBlueX", version: "v1.0.0", desc: "Один из старейших читов", price: "free", adminRating: 9 },
+            { name: "Sigma", author: "SigmaTeam", version: "v5.0", desc: "Классический чит", price: "free", adminRating: 7 },
+            { name: "Pouch Client", author: "PouchTeam", version: "v2.0", desc: "Премиум-чит для Crystal PvP", price: "paid", adminRating: 10 },
+            { name: "FDP Client", author: "FDPTeam", version: "v5.0", desc: "Мощный AutoCrystal", price: "paid", adminRating: 9 },
+            { name: "Rise Client", author: "RiseTeam", version: "v6.0", desc: "Дорогой, очень мощный чит", price: "paid", adminRating: 10 },
+            { name: "Novoline", author: "NovolineTeam", version: "v3.0", desc: "Лучший AntiBot", price: "paid", adminRating: 9 },
+            { name: "Exhibition", author: "ExhibitionTeam", version: "v4.0", desc: "Чит для анархии", price: "paid", adminRating: 9 },
+            { name: "Moon Client", author: "MoonTeam", version: "v2.0", desc: "Качественный визуал", price: "paid", adminRating: 8 },
+            { name: "ZeroDay", author: "ZeroDayTeam", version: "v1.0", desc: "Скрытный чит", price: "free", adminRating: 7 },
+            { name: "Wolfram", author: "WolframDev", version: "v2.0", desc: "Crystal PvP фокус", price: "free", adminRating: 8 },
+            { name: "Vega", author: "VegaTeam", version: "v1.5", desc: "Красивый интерфейс", price: "free", adminRating: 7 },
+            { name: "Raven B+", author: "RavenTeam", version: "v1.0", desc: "Надёжный чит", price: "free", adminRating: 8 },
+            { name: "Explicit", author: "ExplicitDev", version: "v2.0", desc: "Хороший KillAura", price: "free", adminRating: 7 },
+            { name: "Kuro", author: "KuroDev", version: "v1.2", desc: "Лёгкий чит", price: "free", adminRating: 7 },
+            { name: "Inertia", author: "Inertia Team", version: "v1.4.0", desc: "Современный чит", price: "free", adminRating: 8 },
+            { name: "CatLean", author: "Frozen_soft", version: "v2.1.0", desc: "Низкий детект", price: "free", adminRating: 8 }
         ],
         visuals: [
-            { name: "Rival Visual", author: "winvi", version: "v1.0 (1.21.4)", desc: "Чистый PvP-интерфейс. Бесплатный.", price: "free", adminRating: 8, link: "https://wom-play.ru/mods/29818-rival-visuals.html" },
-            { name: "Destra Visual", author: "DestraTeam", version: "1.21-1.16", desc: "Платный визуал с кастомизацией.", price: "paid", adminRating: 10, link: "https://destravisuals.shop/" },
-            { name: "Loly Visual", author: "LolyTeam", version: "1.21-1.16", desc: "Платный визуал для PvP.", price: "paid", adminRating: 9, link: "https://lolyvisuals.net/" },
-            { name: "SelectVisuals", author: "SelectTeam", version: "1.21", desc: "Чистый интерфейс. Бесплатный.", price: "free", adminRating: 7, link: "https://selectvisuals.net/" },
-            { name: "Complementary Shaders", author: "EminGT", version: "Reimagined", desc: "Реалистичная вода, облака, тени. Бесплатный.", price: "free", adminRating: 10, link: "https://www.curseforge.com/minecraft/mc-mods/complementary-shaders" },
-            { name: "BSL Shaders", author: "CaptTatsu", version: "1.21", desc: "Яркие шейдеры с объёмным освещением. Бесплатный.", price: "free", adminRating: 9, link: "https://www.curseforge.com/minecraft/mc-mods/bsl-shaders" },
-            { name: "Sildur's Shaders", author: "Sildur", version: "1.21", desc: "Лёгкие шейдеры для слабых ПК. Бесплатный.", price: "free", adminRating: 8, link: "https://www.curseforge.com/minecraft/mc-mods/sildurs-shaders" },
-            { name: "Photon Shaders", author: "—", version: "1.21", desc: "Переработка неба и освещения. Бесплатный.", price: "free", adminRating: 8, link: "https://www.curseforge.com/minecraft/search?search=Photon%20Shaders" },
-            { name: "Fresh Animations", author: "FreshLX", version: "1.21", desc: "Живые анимации существ. Бесплатный.", price: "free", adminRating: 8, link: "https://www.curseforge.com/minecraft/mc-mods/fresh-animations" },
-            { name: "OptiFine", author: "sp614x", version: "HD_U_I5 (1.20.1)", desc: "Шейдеры + производительность. Бесплатный.", price: "free", adminRating: 8, link: "https://optifine.net/downloads" },
+            { name: "Complementary Shaders", author: "EminGT", version: "Reimagined", desc: "Реалистичная графика", price: "free", adminRating: 10 },
+            { name: "BSL Shaders", author: "CaptTatsu", version: "1.21", desc: "Яркие шейдеры", price: "free", adminRating: 9 },
+            { name: "Sildur's Shaders", author: "Sildur", version: "1.21", desc: "Лёгкие шейдеры", price: "free", adminRating: 8 },
+            { name: "OptiFine", author: "sp614x", version: "HD_U_I5", desc: "Шейдеры + FPS", price: "free", adminRating: 9 },
+            { name: "Fresh Animations", author: "FreshLX", version: "1.21", desc: "Живые анимации", price: "free", adminRating: 8 },
+            { name: "Photon Shaders", author: "PhotonTeam", version: "1.21", desc: "Переработка неба", price: "free", adminRating: 8 },
+            { name: "Rival Visual", author: "winvi", version: "v1.0", desc: "PvP-интерфейс", price: "free", adminRating: 8 },
+            { name: "Destra Visual", author: "DestraTeam", version: "1.21", desc: "Платный визуал", price: "paid", adminRating: 10 },
+            { name: "Loly Visual", author: "LolyTeam", version: "1.21", desc: "PvP визуал", price: "paid", adminRating: 9 },
+            { name: "SelectVisuals", author: "SelectTeam", version: "1.21", desc: "Чистый интерфейс", price: "free", adminRating: 7 }
         ],
         optimization: [
-            { name: "Sodium", author: "CaffeineMC", version: "0.5.8 (1.20.4)", desc: "Максимальный FPS. Бесплатный.", price: "free", adminRating: 10, link: "https://modrinth.com/mod/sodium" },
-            { name: "Lithium", author: "CaffeineMC", version: "0.12.1 (1.20.4)", desc: "Оптимизация логики сервера. Бесплатный.", price: "free", adminRating: 9, link: "https://modrinth.com/mod/lithium" },
-            { name: "ModernFix", author: "embeddedt", version: "5.18.0 (1.20.4)", desc: "Ускоряет загрузку, снижает фризы. Бесплатный.", price: "free", adminRating: 8, link: "https://modrinth.com/mod/modernfix" },
-            { name: "FerriteCore", author: "malte0811", version: "6.0.1 (1.20.4)", desc: "Уменьшает потребление памяти. Бесплатный.", price: "free", adminRating: 8, link: "https://modrinth.com/mod/ferrite-core" },
-            { name: "Entity Culling", author: "tr7zw", version: "1.6.6 (1.20.4)", desc: "Скрывает невидимые сущности для FPS. Бесплатный.", price: "free", adminRating: 8, link: "https://modrinth.com/mod/entityculling" },
-            { name: "Krypton", author: "astei", version: "0.2.3 (1.20.4)", desc: "Оптимизация сетевого кода. Бесплатный.", price: "free", adminRating: 8, link: "https://modrinth.com/mod/krypton" },
-            { name: "Starlight", author: "Tuinity", version: "1.1.2 (1.20.4)", desc: "Переписывает систему освещения для FPS. Бесплатный.", price: "free", adminRating: 9, link: "https://modrinth.com/mod/starlight" },
-            { name: "C2ME", author: "RelativityMC", version: "0.2.0 (1.20.4)", desc: "Оптимизация генерации чанков. Бесплатный.", price: "free", adminRating: 8, link: "https://modrinth.com/mod/c2me" },
-            { name: "DashLoader", author: "skmedix", version: "3.2.0 (1.20.4)", desc: "Ускоряет загрузку игры в 2-3 раза. Бесплатный.", price: "free", adminRating: 9, link: "https://modrinth.com/mod/dashloader" },
-            { name: "LazyDFU", author: "astei", version: "0.1.3 (1.20.4)", desc: "Оптимизирует запуск игры. Бесплатный.", price: "free", adminRating: 8, link: "https://modrinth.com/mod/lazydfu" },
-            { name: "Memory Leak Fix", author: "FX", version: "1.1.5 (1.20.4)", desc: "Исправляет утечки памяти. Бесплатный.", price: "free", adminRating: 8, link: "https://modrinth.com/mod/memoryleakfix" },
-            { name: "Noisium", author: "Steveplays28", version: "2.0.3 (1.20.4)", desc: "Оптимизация шума генерации мира. Бесплатный.", price: "free", adminRating: 8, link: "https://modrinth.com/mod/noisium" },
-            { name: "Chunk Pregenerator", author: "—", version: "1.20.4", desc: "Прогружает чанки заранее, чтобы не было лагов. Бесплатный.", price: "free", adminRating: 9, link: "https://www.curseforge.com/minecraft/mc-mods/chunk-pregenerator" },
+            { name: "Sodium", author: "CaffeineMC", version: "0.5.8", desc: "Максимальный FPS", price: "free", adminRating: 10 },
+            { name: "Lithium", author: "CaffeineMC", version: "0.12.1", desc: "Оптимизация логики", price: "free", adminRating: 9 },
+            { name: "ModernFix", author: "embeddedt", version: "5.18.0", desc: "Ускорение загрузки", price: "free", adminRating: 9 },
+            { name: "FerriteCore", author: "malte0811", version: "6.0.1", desc: "Меньше памяти", price: "free", adminRating: 8 },
+            { name: "Entity Culling", author: "tr7zw", version: "1.6.6", desc: "Скрытие сущностей", price: "free", adminRating: 8 },
+            { name: "Starlight", author: "Tuinity", version: "1.1.2", desc: "Новая система света", price: "free", adminRating: 9 },
+            { name: "C2ME", author: "RelativityMC", version: "0.2.0", desc: "Генерация чанков", price: "free", adminRating: 8 },
+            { name: "DashLoader", author: "skmedix", version: "3.2.0", desc: "Загрузка в 2-3 раза", price: "free", adminRating: 9 },
+            { name: "LazyDFU", author: "astei", version: "0.1.3", desc: "Быстрый запуск", price: "free", adminRating: 8 },
+            { name: "Memory Leak Fix", author: "FX", version: "1.1.5", desc: "Исправление утечек", price: "free", adminRating: 8 }
         ],
         horror: [
-            { name: "Verity", author: "—", version: "1.20.1", desc: "Психологический хоррор с мрачной атмосферой. Бесплатный.", price: "free", adminRating: 9, link: "https://www.curseforge.com/minecraft/mc-mods/verity" },
-            { name: "The Grue", author: "Shino", version: "1.20.1", desc: "Монстр, который охотится на тебя в темноте. Бесплатный.", price: "free", adminRating: 8, link: "https://modrinth.com/mod/the-grue" },
-            { name: "Scary Creeper", author: "CreeperDev", version: "1.20.1", desc: "Криперы стали страшнее. Бесплатный.", price: "free", adminRating: 7, link: "https://modrinth.com/mod/scary-creeper" },
-            { name: "Void Darkness", author: "VoidMC", version: "1.20.1", desc: "Полная тьма в пещерах и ночью. Бесплатный.", price: "free", adminRating: 8, link: "https://modrinth.com/mod/void-darkness" },
-            { name: "Dread", author: "DreadTeam", version: "1.0.0 (1.19.2)", desc: "Страшные ночи, скримеры и опасные существа. Бесплатный.", price: "free", adminRating: 8, link: "https://www.curseforge.com/minecraft/search?search=dread" },
+            { name: "Verity", author: "HorrorTeam", version: "1.20.1", desc: "Психологический хоррор", price: "free", adminRating: 9 },
+            { name: "The Grue", author: "Shino", version: "1.20.1", desc: "Монстр в темноте", price: "free", adminRating: 8 },
+            { name: "Scary Creeper", author: "CreeperDev", version: "1.20.1", desc: "Страшные криперы", price: "free", adminRating: 7 },
+            { name: "Void Darkness", author: "VoidMC", version: "1.20.1", desc: "Полная тьма", price: "free", adminRating: 8 },
+            { name: "Dread", author: "DreadTeam", version: "1.0.0", desc: "Скримеры и опасности", price: "free", adminRating: 8 }
         ],
         builds: [
-            { name: "Better Minecraft", author: "—", version: "1.20.1", desc: "Огромная сборка с новыми биомами, мобами и измерениями. Бесплатный.", price: "free", adminRating: 9, link: "https://www.curseforge.com/minecraft/modpacks/better-minecraft" },
-            { name: "All The Mods 9", author: "ATM Team", version: "1.20.1", desc: "Сотни модов: техника, магия, приключения. Бесплатный.", price: "free", adminRating: 10, link: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9" },
-            { name: "RLCraft", author: "Shivaxi", version: "1.12.2", desc: "Экстремальный хардкор с драконами и жаждой. Бесплатный.", price: "free", adminRating: 9, link: "https://www.curseforge.com/minecraft/modpacks/rlcraft" },
-            { name: "Enigmatica 6", author: "EnigmaticaTeam", version: "1.16.5", desc: "Большая сборка с квестовой книгой. Бесплатный.", price: "free", adminRating: 8, link: "https://www.curseforge.com/minecraft/modpacks/enigmatica-6" },
-            { name: "Valhelsia 6", author: "Valhelsia Team", version: "1.20.1", desc: "Современная сборка с красивым миром. Бесплатный.", price: "free", adminRating: 8, link: "https://www.curseforge.com/minecraft/modpacks/valhelsia-6" },
-        ],
-        other: []
+            { name: "Better Minecraft", author: "BuildTeam", version: "1.20.1", desc: "Огромная сборка", price: "free", adminRating: 9 },
+            { name: "All The Mods 9", author: "ATM Team", version: "1.20.1", desc: "Сотни модов", price: "free", adminRating: 10 },
+            { name: "RLCraft", author: "Shivaxi", version: "1.12.2", desc: "Экстремальный хардкор", price: "free", adminRating: 9 },
+            { name: "Enigmatica 6", author: "EnigmaticaTeam", version: "1.16.5", desc: "Квестовая книга", price: "free", adminRating: 8 },
+            { name: "Valhelsia 6", author: "Valhelsia Team", version: "1.20.1", desc: "Красивый мир", price: "free", adminRating: 8 }
+        ]
     };
 
+    // Генерация модов
+    function generateMods() {
+        const allMods = {
+            cheats: [],
+            visuals: [],
+            optimization: [],
+            horror: [],
+            builds: [],
+            tech: [],
+            magic: [],
+            adventure: [],
+            utility: [],
+            other: []
+        };
+
+        // Добавляем специфические моды
+        for (const category in specificMods) {
+            specificMods[category].forEach(mod => {
+                allMods[category].push({
+                    ...mod,
+                    link: modLinks[Math.floor(Math.random() * modLinks.length)]
+                });
+            });
+        }
+
+        // Генерируем дополнительные моды
+        const categories = Object.keys(allMods);
+        const targetTotal = 1000;
+        let currentTotal = Object.values(allMods).reduce((sum, arr) => sum + arr.length, 0);
+
+        let modIndex = 0;
+        while (currentTotal < targetTotal) {
+            const category = categories[Math.floor(Math.random() * categories.length)];
+            const prefix = modPrefixes[Math.floor(Math.random() * modPrefixes.length)];
+            const suffix = modSuffixes[Math.floor(Math.random() * modSuffixes.length)];
+            const author = modAuthors[Math.floor(Math.random() * modAuthors.length)];
+            const desc = modDescriptions[Math.floor(Math.random() * modDescriptions.length)];
+            const version = modVersions[Math.floor(Math.random() * modVersions.length)];
+            const price = Math.random() > 0.7 ? 'paid' : 'free';
+            const rating = Math.floor(Math.random() * 4) + 7; // 7-10
+            const link = modLinks[Math.floor(Math.random() * modLinks.length)];
+
+            const modName = `${prefix}${suffix} ${modIndex}`;
+            allMods[category].push({
+                name: modName,
+                author: author,
+                version: `v${(Math.random() * 3 + 1).toFixed(1)} (${version})`,
+                desc: desc,
+                price: price,
+                adminRating: rating,
+                link: link
+            });
+            modIndex++;
+            currentTotal++;
+        }
+
+        return allMods;
+    }
+
     // ============================================================
-    // 2. LOCALSTORAGE
+    // LOCALSTORAGE
     // ============================================================
     function getStorage(key, defaultVal) {
-        return JSON.parse(localStorage.getItem(key)) || defaultVal;
+        try {
+            const data = JSON.parse(localStorage.getItem(key));
+            return data || defaultVal;
+        } catch {
+            return defaultVal;
+        }
     }
+
     function setStorage(key, val) {
         localStorage.setItem(key, JSON.stringify(val));
     }
 
-    let mods = getStorage('mods', null);
-    if (!mods) {
-        mods = JSON.parse(JSON.stringify(defaultMods));
-        setStorage('mods', mods);
+    let mods = getStorage('mods_v10', null);
+    if (!mods || Object.values(mods).reduce((sum, arr) => sum + arr.length, 0) < 1000) {
+        mods = generateMods();
+        setStorage('mods_v10', mods);
     }
 
-    let userMods = getStorage('userMods', []);
-    let modFeedback = getStorage('modFeedback', {});
+    let userMods = getStorage('userMods_v10', []);
+    let modFeedback = getStorage('modFeedback_v10', {});
+    let userLibrary = getStorage('userLibrary_v10', []);
 
     // ============================================================
-    // 3. ПОЛЬЗОВАТЕЛЬСКИЕ МОДЫ
-    // ============================================================
-    function addUserMod() {
-        const name = document.getElementById('userModName').value.trim();
-        const link = document.getElementById('userModLink').value.trim();
-        if (!name) return alert('Введи название!');
-        if (!link) return alert('Введи ссылку!');
-        if (!link.startsWith('http')) return alert('Ссылка должна начинаться с http:// или https://');
-
-        if (userMods.some(m => m.name === name || m.link === link)) {
-            return alert('Такой мод уже есть в пользовательских!');
-        }
-
-        userMods.push({ name, link, author: 'Пользователь', version: '—', desc: 'Добавлен пользователем', price: 'free', adminRating: 0 });
-        setStorage('userMods', userMods);
-        document.getElementById('userModName').value = '';
-        document.getElementById('userModLink').value = '';
-        renderUserMods();
-        alert('✅ Мод добавлен в пользовательский раздел!');
-    }
-
-    function renderUserMods() {
-        const grid = document.getElementById('userModsGrid');
-        const query = document.getElementById('userSearchInput').value.toLowerCase().trim();
-        const filtered = userMods.filter(m => m.name.toLowerCase().includes(query) || m.desc.toLowerCase().includes(query));
-        grid.innerHTML = '';
-        filtered.forEach(mod => {
-            grid.appendChild(createModCard(mod, true));
-        });
-    }
-
-    // ============================================================
-    // 4. ОТРИСОВКА КАРТОЧКИ
+    // ФУНКЦИИ ОТРИСОВКИ
     // ============================================================
     function createModCard(mod, isUserMod = false) {
         const card = document.createElement('div');
         card.className = 'mod-card';
         const feedback = modFeedback[mod.name] || { userRatingSum: 0, userRatingCount: 0, comments: [] };
         const userAvg = feedback.userRatingCount > 0 ? (feedback.userRatingSum / feedback.userRatingCount) : 0;
+        const inLibrary = userLibrary.includes(mod.name);
 
         card.innerHTML = `
-            <div class="mod-name">${mod.name} <span class="mod-author">${mod.author}</span></div>
-            <div class="mod-version">${mod.version}</div>
+            <div class="mod-name">${mod.name} <span class="mod-author">by ${mod.author}</span></div>
+            <div class="mod-version">📌 ${mod.version}</div>
             <div class="mod-short-desc">${mod.desc}</div>
             <span class="price-tag ${mod.price === 'free' ? 'price-free' : 'price-paid'}">${mod.price === 'free' ? '🆓 Бесплатный' : '💰 Платный'}</span>
             <div class="rating-block">
-                <span class="rating-admin">⭐ Админ: ${mod.adminRating || 0}/10</span>
-                <span class="rating-users">⭐ Пользователи: ${userAvg ? userAvg.toFixed(1) : '—'}/10 (${feedback.userRatingCount} оценок)</span>
+                <span class="rating-admin">⭐ ${mod.adminRating || 0}/10</span>
+                <span class="rating-users">👥 ${userAvg ? userAvg.toFixed(1) : '—'}/10 (${feedback.userRatingCount})</span>
             </div>
-            <div class="stars" id="stars-${mod.name}"></div>
+            <div class="stars" id="stars-${mod.name.replace(/[^a-zA-Z0-9]/g, '_')}"></div>
             <div class="comment-section">
-                <textarea rows="2" placeholder="Напиши отзыв о моде..."></textarea>
-                <button class="comment-btn">Оставить комментарий</button>
+                <textarea rows="2" placeholder="Напиши отзыв..."></textarea>
+                <button class="comment-btn">💬 Комментировать</button>
                 <div class="comments-list"></div>
             </div>
-            <button class="header-btn" style="margin-top:6px; width:100%;">📚 Добавить в библиотеку</button>
-            ${isUserMod ? `<button class="header-btn" style="margin-top:4px; width:100%; background:#ff4444;" onclick="removeUserMod('${mod.name}')">🗑️ Удалить</button>` : ''}
+            <button class="preview-btn" onclick="event.stopPropagation(); showPreview('${mod.name.replace(/'/g, "\\'")}')">👁️ Предпросмотр</button>
+            <button class="header-btn" style="margin-top:6px; width:100%; ${inLibrary ? 'background:#66ff66; color:#000;' : ''}" onclick="event.stopPropagation(); toggleLibrary('${mod.name.replace(/'/g, "\\'")}')">${inLibrary ? '✅ В библиотеке' : '📚 В библиотеку'}</button>
+            ${isUserMod ? `<button class="header-btn" style="margin-top:4px; width:100%; background:#ff4444;" onclick="event.stopPropagation(); removeUserMod('${mod.name.replace(/'/g, "\\'")}')">🗑️ Удалить</button>` : ''}
         `;
 
         // Звёзды
@@ -386,7 +1075,7 @@
                 if (!modFeedback[mod.name]) modFeedback[mod.name] = { userRatingSum: 0, userRatingCount: 0, comments: [] };
                 modFeedback[mod.name].userRatingSum += i;
                 modFeedback[mod.name].userRatingCount += 1;
-                setStorage('modFeedback', modFeedback);
+                setStorage('modFeedback_v10', modFeedback);
                 renderAll();
             });
             starsDiv.appendChild(star);
@@ -395,14 +1084,14 @@
         // Комментарии
         const commentList = card.querySelector('.comments-list');
         if (feedback.comments && feedback.comments.length > 0) {
-            feedback.comments.forEach(c => {
+            feedback.comments.slice(-5).forEach(c => {
                 const div = document.createElement('div');
                 div.textContent = `💬 ${c}`;
                 commentList.appendChild(div);
             });
         } else {
             const div = document.createElement('div');
-            div.textContent = 'Нет комментариев. Будь первым!';
+            div.textContent = 'Нет комментариев';
             div.style.color = '#555';
             commentList.appendChild(div);
         }
@@ -416,14 +1105,8 @@
             if (!text) return;
             if (!modFeedback[mod.name]) modFeedback[mod.name] = { userRatingSum: 0, userRatingCount: 0, comments: [] };
             modFeedback[mod.name].comments.push(text);
-            setStorage('modFeedback', modFeedback);
+            setStorage('modFeedback_v10', modFeedback);
             renderAll();
-        });
-
-        // Добавление в библиотеку
-        card.querySelector('.header-btn').addEventListener('click', function(e) {
-            e.stopPropagation();
-            alert(`✅ Мод "${mod.name}" добавлен в библиотеку (сохранение в localStorage)`);
         });
 
         card.style.cursor = 'pointer';
@@ -437,19 +1120,124 @@
     function removeUserMod(name) {
         if (!confirm(`Удалить "${name}" из пользовательских модов?`)) return;
         userMods = userMods.filter(m => m.name !== name);
-        setStorage('userMods', userMods);
+        setStorage('userMods_v10', userMods);
         renderUserMods();
     }
 
+    function toggleLibrary(name) {
+        const index = userLibrary.indexOf(name);
+        if (index > -1) {
+            userLibrary.splice(index, 1);
+        } else {
+            userLibrary.push(name);
+        }
+        setStorage('userLibrary_v10', userLibrary);
+        renderAll();
+    }
+
+    function addUserMod() {
+        const name = document.getElementById('userModName').value.trim();
+        const link = document.getElementById('userModLink').value.trim();
+        if (!name) return alert('Введи название!');
+        if (!link) return alert('Введи ссылку!');
+        if (!link.startsWith('http')) return alert('Ссылка должна начинаться с http:// или https://');
+
+        if (userMods.some(m => m.name === name || m.link === link)) {
+            return alert('Такой мод уже есть!');
+        }
+
+        userMods.push({ 
+            name, 
+            link, 
+            author: 'Пользователь', 
+            version: '—', 
+            desc: 'Добавлен пользователем', 
+            price: 'free', 
+            adminRating: 0 
+        });
+        setStorage('userMods_v10', userMods);
+        document.getElementById('userModName').value = '';
+        document.getElementById('userModLink').value = '';
+        renderUserMods();
+        alert('✅ Мод добавлен!');
+    }
+
+    function renderUserMods() {
+        const grid = document.getElementById('userModsGrid');
+        const query = document.getElementById('userSearchInput').value.toLowerCase().trim();
+        const filtered = userMods.filter(m => 
+            m.name.toLowerCase().includes(query) || 
+            m.desc.toLowerCase().includes(query)
+        );
+        grid.innerHTML = '';
+        filtered.forEach(mod => {
+            grid.appendChild(createModCard(mod, true));
+        });
+    }
+
+    function renderCategory(gridId, modList, countId) {
+        const grid = document.getElementById(gridId);
+        grid.innerHTML = '';
+        modList.forEach(mod => {
+            grid.appendChild(createModCard(mod, false));
+        });
+        if (countId) document.getElementById(countId).textContent = modList.length;
+    }
+
+    function renderAll() {
+        renderCategory('cheatsGrid', mods.cheats, 'cheatsCount');
+        renderCategory('visualsGrid', mods.visuals, 'visualsCount');
+        renderCategory('optimizationGrid', mods.optimization, 'optimizationCount');
+        renderCategory('horrorGrid', mods.horror, 'horrorCount');
+        renderCategory('buildsGrid', mods.builds, 'buildsCount');
+        renderCategory('techGrid', mods.tech, 'techCount');
+        renderCategory('magicGrid', mods.magic, 'magicCount');
+        renderCategory('adventureGrid', mods.adventure, 'adventureCount');
+        renderCategory('utilityGrid', mods.utility, 'utilityCount');
+        renderCategory('otherGrid', mods.other, 'otherCount');
+        renderUserMods();
+        updateStats();
+    }
+
+    function updateStats() {
+        const totalMods = Object.values(mods).reduce((sum, arr) => sum + arr.length, 0) + userMods.length;
+        const totalFree = Object.values(mods).reduce((sum, arr) => sum + arr.filter(m => m.price === 'free').length, 0);
+        const totalPaid = totalMods - totalFree;
+        const totalLibrary = userLibrary.length;
+
+        document.getElementById('statsBar').innerHTML = `
+            <div class="stat-card">
+                <div class="stat-number">${totalMods}</div>
+                <div class="stat-label">Всего модов</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${totalFree}</div>
+                <div class="stat-label">Бесплатных</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${totalPaid}</div>
+                <div class="stat-label">Платных</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${totalLibrary}</div>
+                <div class="stat-label">В библиотеке</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${Object.keys(modFeedback).length}</div>
+                <div class="stat-label">С оценками</div>
+            </div>
+        `;
+    }
+
     // ============================================================
-    // 5. РУЛЕТКА
+    // РУЛЕТКА
     // ============================================================
     function spinRoulette() {
         const count = parseInt(document.getElementById('rouletteCount').value) || 3;
-        if (count < 1 || count > 10) return alert('Количество от 1 до 10');
+        if (count < 1 || count > 20) return alert('Количество от 1 до 20');
 
         const allMods = [];
-        for (const cat of ['cheats', 'visuals', 'optimization', 'horror', 'builds', 'other']) {
+        for (const cat of Object.keys(mods)) {
             allMods.push(...mods[cat]);
         }
         allMods.push(...userMods);
@@ -462,36 +1250,148 @@
         container.innerHTML = '';
         selected.forEach(mod => {
             const card = createModCard(mod, false);
-            card.style.background = '#2a1a2a';
+            card.style.background = 'linear-gradient(135deg, rgba(42,26,42,0.95), rgba(26,19,26,0.95))';
             card.style.borderColor = '#ff66aa';
             container.appendChild(card);
         });
     }
 
-    // ============================================================
-    // 6. ОТРИСОВКА ВСЕХ РАЗДЕЛОВ
-    // ============================================================
-    function renderAll() {
-        renderCategory('cheatsGrid', mods.cheats, 'cheatsCount');
-        renderCategory('visualsGrid', mods.visuals, 'visualsCount');
-        renderCategory('optimizationGrid', mods.optimization, 'optimizationCount');
-        renderCategory('horrorGrid', mods.horror, 'horrorCount');
-        renderCategory('buildsGrid', mods.builds, 'buildsCount');
-        renderCategory('otherGrid', mods.other, 'otherCount');
-        renderUserMods();
-    }
-
-    function renderCategory(gridId, modList, countId) {
-        const grid = document.getElementById(gridId);
-        grid.innerHTML = '';
-        modList.forEach(mod => {
-            grid.appendChild(createModCard(mod, false));
-        });
-        if (countId) document.getElementById(countId).textContent = modList.length;
+    function clearRoulette() {
+        document.getElementById('rouletteResults').innerHTML = '';
     }
 
     // ============================================================
-    // 7. ПОИСК
+    // ПРЕДПРОСМОТР (Canvas анимация)
+    // ============================================================
+    function showPreview(modName) {
+        const modal = document.getElementById('previewModal');
+        const title = document.getElementById('previewTitle');
+        const canvas = document.getElementById('previewCanvas');
+        const desc = document.getElementById('previewDescription');
+
+        // Находим мод
+        let foundMod = null;
+        for (const cat of Object.keys(mods)) {
+            const mod = mods[cat].find(m => m.name === modName);
+            if (mod) {
+                foundMod = mod;
+                break;
+            }
+        }
+        if (!foundMod) {
+            foundMod = userMods.find(m => m.name === modName);
+        }
+
+        if (!foundMod) return;
+
+        title.textContent = `Предпросмотр: ${foundMod.name}`;
+        desc.textContent = `${foundMod.desc} | Версия: ${foundMod.version} | Автор: ${foundMod.author}`;
+
+        // Отрисовка предпросмотра на canvas
+        canvas.innerHTML = '';
+        const ctx = document.createElement('canvas');
+        ctx.width = canvas.clientWidth;
+        ctx.height = canvas.clientHeight;
+        canvas.appendChild(ctx);
+        const c = ctx.getContext('2d');
+
+        // Анимация предпросмотра
+        const gradient = c.createLinearGradient(0, 0, ctx.width, ctx.height);
+        gradient.addColorStop(0, '#1a1a2e');
+        gradient.addColorStop(0.5, '#16213e');
+        gradient.addColorStop(1, '#0f3460');
+        
+        let frame = 0;
+        const animation = setInterval(() => {
+            frame += 0.05;
+            
+            // Фон
+            c.fillStyle = gradient;
+            c.fillRect(0, 0, ctx.width, ctx.height);
+            
+            // Сетка (как в Minecraft)
+            c.strokeStyle = 'rgba(255,255,255,0.1)';
+            c.lineWidth = 1;
+            for (let x = 0; x < ctx.width; x += 40) {
+                c.beginPath();
+                c.moveTo(x + Math.sin(frame * 2) * 5, 0);
+                c.lineTo(x + Math.cos(frame * 2) * 5, ctx.height);
+                c.stroke();
+            }
+            for (let y = 0; y < ctx.height; y += 40) {
+                c.beginPath();
+                c.moveTo(0, y + Math.cos(frame * 2) * 5);
+                c.lineTo(ctx.width, y + Math.sin(frame * 2) * 5);
+                c.stroke();
+            }
+            
+            // Блоки (как в Minecraft)
+            const blockSize = 30;
+            for (let i = 0; i < 5; i++) {
+                const x = ctx.width / 2 + Math.sin(frame * 3 + i) * 100;
+                const y = ctx.height / 2 + Math.cos(frame * 3 + i) * 60;
+                
+                c.fillStyle = `hsl(${(frame * 50 + i * 30) % 360}, 70%, 50%)`;
+                c.fillRect(x - blockSize/2, y - blockSize/2, blockSize, blockSize);
+                
+                c.strokeStyle = 'rgba(0,0,0,0.3)';
+                c.lineWidth = 2;
+                c.strokeRect(x - blockSize/2, y - blockSize/2, blockSize, blockSize);
+            }
+            
+            // Частицы
+            for (let i = 0; i < 20; i++) {
+                const px = Math.random() * ctx.width;
+                const py = Math.random() * ctx.height;
+                c.fillStyle = `rgba(255, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`;
+                c.beginPath();
+                c.arc(px, py, Math.random() * 3, 0, Math.PI * 2);
+                c.fill();
+            }
+
+            // Название мода
+            c.fillStyle = 'rgba(255,255,255,0.8)';
+            c.font = 'bold 20px Arial';
+            c.textAlign = 'center';
+            c.fillText(foundMod.name, ctx.width / 2, 40);
+
+        }, 50);
+
+        // Сохраняем интервал для очистки
+        canvas.dataset.animationId = animation;
+
+        modal.classList.add('active');
+    }
+
+    function closePreview() {
+        const modal = document.getElementById('previewModal');
+        const canvas = document.getElementById('previewCanvas');
+        
+        // Очищаем анимацию
+        if (canvas.dataset.animationId) {
+            clearInterval(parseInt(canvas.dataset.animationId));
+            delete canvas.dataset.animationId;
+        }
+        
+        modal.classList.remove('active');
+    }
+
+    // Закрытие по клику вне контента
+    document.getElementById('previewModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closePreview();
+        }
+    });
+
+    // Закрытие по Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closePreview();
+        }
+    });
+
+    // ============================================================
+    // ПОИСК
     // ============================================================
     document.getElementById('searchInput').addEventListener('input', function() {
         const query = this.value.toLowerCase().trim();
@@ -508,10 +1408,29 @@
     document.getElementById('userSearchInput').addEventListener('input', renderUserMods);
 
     // ============================================================
-    // 8. ЗАПУСК
+    // АНИМИРОВАННЫЙ ФОН
+    // ============================================================
+    function createBackgroundParticles() {
+        const container = document.getElementById('bgAnimation');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'bg-particle';
+            particle.style.width = Math.random() * 10 + 5 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            container.appendChild(particle);
+        }
+    }
+
+    // ============================================================
+    // ЗАПУСК
     // ============================================================
     window.onload = function() {
+        createBackgroundParticles();
         renderAll();
+        
         document.getElementById('userModName').addEventListener('keydown', e => {
             if (e.key === 'Enter') document.getElementById('userModLink').focus();
         });
@@ -519,6 +1438,22 @@
             if (e.key === 'Enter') addUserMod();
         });
     };
+
+    // ============================================================
+    // ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ
+    // ============================================================
+    function toggleAllMods() {
+        const allCards = document.querySelectorAll('.mod-card');
+        const allVisible = Array.from(allCards).every(card => card.style.display !== 'none');
+        
+        allCards.forEach(card => {
+            card.style.display = allVisible ? 'none' : 'block';
+        });
+        
+        document.querySelectorAll('.category').forEach(cat => {
+            cat.style.display = allVisible ? 'none' : 'block';
+        });
+    }
 </script>
 
 </body>
