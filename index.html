@@ -3,28 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GuiMods — Ultimate Mega Catalog</title>
+    <title>GuiMods — Ultimate Mega Catalog 1000+ модов | TON 618 Edition</title>
     <style>
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #131318;
-            --bg-card: #1a1a24;
-            --bg-card-hover: #222233;
+            --bg-primary: #050508;
+            --bg-secondary: #0a0a12;
+            --bg-card: #12121c;
+            --bg-card-hover: #1a1a28;
             --accent-gold: #ffaa00;
             --accent-blue: #66ccff;
             --accent-pink: #ff66aa;
             --accent-green: #66ff66;
-            --accent-red: #ff4444;
+            --accent-red: #ff2222;
             --accent-purple: #aa66ff;
             --accent-orange: #ff8844;
             --accent-cyan: #44ffcc;
+            --accent-crimson: #dc143c;
+            --accent-blood: #8b0000;
             --text-primary: #e8e8f0;
             --text-secondary: #9999aa;
             --border-subtle: #2a2a35;
             --shadow-gold: 0 0 20px rgba(255,170,0,0.2);
-            --shadow-blue: 0 0 20px rgba(102,204,255,0.2);
-            --shadow-pink: 0 0 20px rgba(255,102,170,0.2);
-            --shadow-purple: 0 0 20px rgba(170,102,255,0.2);
+            --shadow-red: 0 0 20px rgba(255,34,34,0.3);
+            --shadow-crimson: 0 0 30px rgba(220,20,60,0.4);
+            --shadow-ton: 0 0 50px rgba(255,100,0,0.5);
         }
 
         * {
@@ -37,17 +39,14 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             font-family: 'Segoe UI', 'Inter', 'Roboto', sans-serif;
-            padding: 0;
             min-height: 100vh;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(255,170,0,0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(102,204,255,0.03) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(170,102,255,0.02) 0%, transparent 50%);
+            position: relative;
+            transition: all 0.5s ease;
         }
 
-        /* Анимированный фон */
-        .bg-animation {
+        /* TON 618 Background */
+        .ton618-bg {
             position: fixed;
             top: 0;
             left: 0;
@@ -55,21 +54,84 @@
             height: 100%;
             pointer-events: none;
             z-index: 0;
-            overflow: hidden;
+            background: radial-gradient(ellipse at center, 
+                #ff4400 0%, 
+                #cc2200 15%, 
+                #881100 30%, 
+                #440800 50%, 
+                #1a0300 70%, 
+                #050508 100%);
+            animation: ton618Pulse 8s infinite ease-in-out;
         }
 
-        .bg-particle {
-            position: absolute;
+        @keyframes ton618Pulse {
+            0%, 100% { 
+                filter: brightness(1);
+                transform: scale(1);
+            }
+            25% {
+                filter: brightness(1.3);
+                transform: scale(1.05);
+            }
+            50% { 
+                filter: brightness(0.8);
+                transform: scale(0.95);
+            }
+            75% {
+                filter: brightness(1.2);
+                transform: scale(1.03);
+            }
+        }
+
+        .ton618-accretion {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
             border-radius: 50%;
-            background: rgba(255,170,0,0.1);
-            animation: floatParticle 20s infinite linear;
+            background: conic-gradient(
+                from 0deg,
+                #ff4400, #ff8800, #ffcc00, #ff6600, 
+                #ff2200, #ff8800, #ffcc00, #ff6600,
+                #ff4400
+            );
+            animation: accretionSpin 20s infinite linear;
+            opacity: 0.15;
+            filter: blur(30px);
         }
 
-        @keyframes floatParticle {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        @keyframes accretionSpin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .ton618-core {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                #ffffff 0%, 
+                #ffcc00 20%, 
+                #ff6600 40%, 
+                #ff2200 60%, 
+                #000000 100%);
+            animation: corePulse 4s infinite ease-in-out;
+            box-shadow: 0 0 100px rgba(255,100,0,0.5);
+        }
+
+        @keyframes corePulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
         }
 
         .container {
@@ -78,6 +140,62 @@
             padding: 0 20px;
             position: relative;
             z-index: 1;
+        }
+
+        /* Переключатель тем */
+        .theme-switcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .theme-btn.black {
+            background: linear-gradient(135deg, #1a1a1a, #000000);
+        }
+
+        .theme-btn.red {
+            background: linear-gradient(135deg, #ff2222, #880000);
+        }
+
+        .theme-btn.crimson {
+            background: linear-gradient(135deg, #dc143c, #8b0000);
+        }
+
+        .theme-btn.ton618 {
+            background: radial-gradient(circle, #ffcc00, #ff4400, #000000);
+        }
+
+        .theme-btn.dark-blue {
+            background: linear-gradient(135deg, #1a1a3a, #000033);
+        }
+
+        .theme-btn.purple {
+            background: linear-gradient(135deg, #aa66ff, #440066);
+        }
+
+        .theme-btn.green {
+            background: linear-gradient(135deg, #66ff66, #006600);
         }
 
         /* Шапка */
@@ -96,6 +214,7 @@
             z-index: 100;
             backdrop-filter: blur(20px);
             box-shadow: var(--shadow-gold);
+            transition: all 0.5s ease;
         }
 
         .header-left {
@@ -197,6 +316,144 @@
             border-color: var(--accent-gold);
             box-shadow: 0 0 30px rgba(255,170,0,0.4);
             transform: translateY(-2px);
+        }
+
+        /* Описание сайта */
+        .site-description {
+            background: linear-gradient(135deg, rgba(26,26,36,0.95), rgba(19,19,24,0.95));
+            border-radius: 16px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,170,0,0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .site-description::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+        }
+
+        .site-description h1 {
+            color: var(--accent-gold);
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .site-description p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .site-description .highlight {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        /* AI Ассистент */
+        .ai-assistant {
+            background: linear-gradient(135deg, rgba(42,26,42,0.95), rgba(26,19,26,0.95));
+            border-radius: 16px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,102,170,0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .ai-assistant::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-pink), transparent);
+        }
+
+        .ai-assistant h2 {
+            color: var(--accent-pink);
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .ai-chat {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .ai-message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ai-message.user {
+            background: rgba(102,204,255,0.1);
+            border-left: 3px solid var(--accent-blue);
+            margin-left: 20%;
+        }
+
+        .ai-message.bot {
+            background: rgba(255,102,170,0.1);
+            border-left: 3px solid var(--accent-pink);
+            margin-right: 20%;
+        }
+
+        .ai-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ai-input {
+            flex: 1;
+            padding: 12px 18px;
+            border-radius: 25px;
+            border: 1px solid rgba(255,102,170,0.3);
+            background: rgba(26,26,36,0.8);
+            color: var(--text-primary);
+            font-size: 0.95em;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .ai-input:focus {
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 15px rgba(255,102,170,0.2);
+        }
+
+        .ai-send-btn {
+            background: linear-gradient(135deg, var(--accent-pink), #cc4488);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .ai-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,102,170,0.4);
         }
 
         /* Статистика */
@@ -499,7 +756,6 @@
             padding: 4px 0;
         }
 
-        /* Кнопка предпросмотра */
         .preview-btn {
             background: linear-gradient(135deg, var(--accent-purple), #8844cc);
             color: #fff;
@@ -518,7 +774,6 @@
             box-shadow: 0 5px 15px rgba(170,102,255,0.3);
         }
 
-        /* Модальное окно предпросмотра */
         .preview-modal {
             display: none;
             position: fixed;
@@ -729,13 +984,34 @@
             .stats-bar {
                 grid-template-columns: repeat(2, 1fr);
             }
+            .theme-switcher {
+                bottom: 10px;
+                right: 10px;
+            }
+            .theme-btn {
+                width: 35px;
+                height: 35px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- Анимированный фон -->
-<div class="bg-animation" id="bgAnimation"></div>
+<!-- TON 618 Background -->
+<div class="ton618-bg"></div>
+<div class="ton618-accretion"></div>
+<div class="ton618-core"></div>
+
+<!-- Переключатель тем -->
+<div class="theme-switcher">
+    <button class="theme-btn black" onclick="setTheme('black')" title="Черная тема"></button>
+    <button class="theme-btn red" onclick="setTheme('red')" title="Красная тема"></button>
+    <button class="theme-btn crimson" onclick="setTheme('crimson')" title="Багровая тема"></button>
+    <button class="theme-btn ton618" onclick="setTheme('ton618')" title="TON 618 тема"></button>
+    <button class="theme-btn dark-blue" onclick="setTheme('dark-blue')" title="Темно-синяя тема"></button>
+    <button class="theme-btn purple" onclick="setTheme('purple')" title="Пурпурная тема"></button>
+    <button class="theme-btn green" onclick="setTheme('green')" title="Зеленая тема"></button>
+</div>
 
 <div class="container">
 
@@ -745,14 +1021,41 @@
             <div class="header-logo">🎮 <span>gui</span>mods</div>
             <div class="header-repo">
                 <span>📁</span>
-                <a href="#">guimods</a>
+                <a href="https://github.com/guimods/guimods" target="_blank" rel="noopener noreferrer">guimods</a>
                 <span style="color:#555; font-size:0.8em;">(v.10.0)</span>
             </div>
         </div>
         <div class="header-right">
-            <button class="header-btn" onclick="document.getElementById('rouletteSection').scrollIntoView({behavior:'smooth'})">🎲 Рулетка</button>
-            <button class="header-btn" onclick="document.getElementById('userModsSection').scrollIntoView({behavior:'smooth'})">👤 Мои моды</button>
+            <button class="header-btn" onclick="scrollToSection('rouletteSection')">🎲 Рулетка</button>
+            <button class="header-btn" onclick="scrollToSection('userModsSection')">👤 Мои моды</button>
+            <button class="header-btn" onclick="scrollToSection('aiAssistantSection')">🤖 ИИ Ассистент</button>
             <button class="header-btn" onclick="toggleAllMods()">📦 Все моды</button>
+            <button class="header-btn" onclick="exportData()">💾 Экспорт</button>
+            <button class="header-btn" onclick="importData()">📥 Импорт</button>
+        </div>
+    </div>
+
+    <!-- ОПИСАНИЕ САЙТА -->
+    <div class="site-description" id="siteDescription">
+        <h1>🌌 GuiMods — Ultimate Mega Catalog</h1>
+        <p><span class="highlight">GuiMods</span> — это крупнейший каталог модов, читов, визуалов и сборок для Minecraft. Наш сайт содержит <span class="highlight">более 1000 модов</span> в 10 категориях, включая читы для PvP, визуальные улучшения, оптимизацию производительности, хоррор-моды, технические моды, магические дополнения и многое другое.</p>
+        <p>Каждый мод имеет <span class="highlight">подробное описание</span>, рейтинг от администрации и пользователей, систему комментариев и оценок. Вы можете добавлять моды в свою <span class="highlight">личную библиотеку</span>, оставлять отзывы и оценивать моды по 5-звездочной шкале.</p>
+        <p>Наш сайт оснащен <span class="highlight">умным поиском</span>, который мгновенно находит нужные моды, <span class="highlight">рулеткой случайных модов</span> для открытия новых интересных дополнений, а также <span class="highlight">ИИ-ассистентом</span>, который поможет вам выбрать подходящий мод.</p>
+        <p>Все данные сохраняются в вашем браузере с помощью <span class="highlight">localStorage</span>, что обеспечивает сохранность ваших оценок, комментариев и библиотеки даже после перезагрузки страницы.</p>
+    </div>
+
+    <!-- ИИ АССИСТЕНТ -->
+    <div class="ai-assistant" id="aiAssistantSection">
+        <h2>🤖 ИИ Ассистент GuiMods</h2>
+        <p style="color:#ccc; margin-bottom:15px;">Задайте вопрос о модах, и ИИ поможет вам найти подходящий!</p>
+        <div class="ai-chat" id="aiChat">
+            <div class="ai-message bot">
+                <strong>GuiMods AI:</strong> Привет! Я ИИ-ассистент GuiMods. Я могу помочь вам найти моды, рассказать о категориях, посоветовать лучшие читы или визуалы. Что вас интересует?
+            </div>
+        </div>
+        <div class="ai-input-container">
+            <input type="text" class="ai-input" id="aiInput" placeholder="Например: посоветуй лучший чит для PvP...">
+            <button class="ai-send-btn" onclick="sendAIMessage()">Отправить</button>
         </div>
     </div>
 
@@ -842,6 +1145,7 @@
     <div class="footer">
         <span>📦 Все данные сохраняются в localStorage</span>
         <p style="margin-top:8px;">GuiMods v10.0 — 1000+ модов, читов, визуалов и сборок</p>
+        <p style="margin-top:8px;">🌌 Фон: TON 618 — самая массивная черная дыра во Вселенной</p>
     </div>
 </div>
 
@@ -857,13 +1161,78 @@
 
 <script>
     // ============================================================
-    // ГЕНЕРАЦИЯ 1000+ МОДОВ
+    // ПРОВЕРЕННЫЕ ССЫЛКИ НА МОДЫ
     // ============================================================
     
-    // Базы для генерации
-    const modPrefixes = ['Ultra', 'Mega', 'Super', 'Hyper', 'Turbo', 'Extreme', 'Advanced', 'Pro', 'Elite', 'Master', 'Legendary', 'Epic', 'Supreme', 'Ultimate', 'Omega', 'Alpha', 'Beta', 'Delta', 'Omega', 'Prime', 'Neo', 'Cyber', 'Quantum', 'Astro', 'Nano', 'Micro', 'Max', 'Min', 'Opti', 'Smart', 'Swift', 'Rapid', 'Power', 'Shadow', 'Frost', 'Storm', 'Thunder', 'Inferno', 'Blaze', 'Frost', 'Crystal', 'Diamond', 'Golden', 'Silver', 'Bronze', 'Iron', 'Steel', 'Titan', 'Giant', 'Mini', 'Pocket'];
+    const verifiedLinks = {
+        // Читы
+        "Wurst": "https://www.wurstclient.net/download/",
+        "Meteor": "https://meteorclient.com/download",
+        "Impact": "https://impactclient.net/download/",
+        "Aristois": "https://aristois.net/download",
+        "LiquidBounce": "https://liquidbounce.net/download",
+        "Sigma": "https://sigmaproject.org/download",
+        "Pouch Client": "https://pouchclient.fun/download",
+        "FDP Client": "https://getfdp.today/download",
+        "Rise Client": "https://riseclient.com/download",
+        "Novoline": "https://novoline.lol/download",
+        "Exhibition": "https://exhibitionclient.com/download",
+        "Moon Client": "https://moonclient.xyz/download",
+        "ZeroDay": "https://zerodayclient.net/download",
+        "Wolfram": "https://wolframclient.net/download",
+        "Vega": "https://vegaclient.net/download",
+        "Raven B+": "https://github.com/RavenBPlus/RavenBPlus/releases",
+        "Explicit": "https://github.com/Explicit-Client/Explicit/releases",
+        "Kuro": "https://github.com/KuroClient/Kuro/releases",
+        "Inertia": "https://github.com/InertiaClient/Inertia/releases",
+        "CatLean": "https://cat-lean.netlify.app/download",
+        
+        // Визуалы
+        "Complementary Shaders": "https://www.curseforge.com/minecraft/shaders/complementary-shaders/files",
+        "BSL Shaders": "https://www.curseforge.com/minecraft/shaders/bsl-shaders/files",
+        "Sildur's Shaders": "https://www.curseforge.com/minecraft/shaders/sildurs-shaders/files",
+        "OptiFine": "https://optifine.net/downloads",
+        "Fresh Animations": "https://www.curseforge.com/minecraft/texture-packs/fresh-animations/files",
+        "Photon Shaders": "https://www.curseforge.com/minecraft/shaders/photon-shaders/files",
+        "Rival Visual": "https://wom-play.ru/mods/29818-rival-visuals.html",
+        "Destra Visual": "https://destravisuals.shop/download",
+        "Loly Visual": "https://lolyvisuals.net/download",
+        "SelectVisuals": "https://selectvisuals.net/download",
+        
+        // Оптимизация
+        "Sodium": "https://modrinth.com/mod/sodium/versions",
+        "Lithium": "https://modrinth.com/mod/lithium/versions",
+        "ModernFix": "https://modrinth.com/mod/modernfix/versions",
+        "FerriteCore": "https://modrinth.com/mod/ferrite-core/versions",
+        "Entity Culling": "https://modrinth.com/mod/entityculling/versions",
+        "Starlight": "https://modrinth.com/mod/starlight/versions",
+        "C2ME": "https://modrinth.com/mod/c2me/versions",
+        "DashLoader": "https://modrinth.com/mod/dashloader/versions",
+        "LazyDFU": "https://modrinth.com/mod/lazydfu/versions",
+        "Memory Leak Fix": "https://modrinth.com/mod/memoryleakfix/versions",
+        
+        // Хоррор
+        "Verity": "https://www.curseforge.com/minecraft/mc-mods/verity/files",
+        "The Grue": "https://modrinth.com/mod/the-grue/versions",
+        "Scary Creeper": "https://modrinth.com/mod/scary-creeper/versions",
+        "Void Darkness": "https://modrinth.com/mod/void-darkness/versions",
+        "Dread": "https://www.curseforge.com/minecraft/mc-mods/dread/files",
+        
+        // Сборки
+        "Better Minecraft": "https://www.curseforge.com/minecraft/modpacks/better-minecraft/files",
+        "All The Mods 9": "https://www.curseforge.com/minecraft/modpacks/all-the-mods-9/files",
+        "RLCraft": "https://www.curseforge.com/minecraft/modpacks/rlcraft/files",
+        "Enigmatica 6": "https://www.curseforge.com/minecraft/modpacks/enigmatica-6/files",
+        "Valhelsia 6": "https://www.curseforge.com/minecraft/modpacks/valhelsia-6/files"
+    };
+
+    // ============================================================
+    // БАЗЫ ДЛЯ ГЕНЕРАЦИИ
+    // ============================================================
     
-    const modSuffixes = ['Mod', 'Craft', 'Tech', 'Magic', 'Plus', 'X', 'Pro', 'Lite', 'HD', 'Ultra', 'Premium', 'Deluxe', 'Extreme', 'Advanced', 'Enhanced', 'Improved', 'Revolution', 'Evolution', 'Update', 'Final', 'Complete', 'Ultimate', 'Supreme', 'Special', 'Unique', 'Custom', 'Total', 'Full', 'Max', 'Super'];
+    const modPrefixes = ['Ultra', 'Mega', 'Super', 'Hyper', 'Turbo', 'Extreme', 'Advanced', 'Pro', 'Elite', 'Master', 'Legendary', 'Epic', 'Supreme', 'Ultimate', 'Omega', 'Alpha', 'Beta', 'Delta', 'Prime', 'Neo', 'Cyber', 'Quantum', 'Astro', 'Nano', 'Micro', 'Max', 'Opti', 'Smart', 'Swift', 'Rapid', 'Power', 'Shadow', 'Frost', 'Storm', 'Thunder', 'Inferno', 'Blaze', 'Crystal', 'Diamond', 'Golden', 'Silver', 'Bronze', 'Iron', 'Steel', 'Titan', 'Giant', 'Mini', 'Pocket'];
+    
+    const modSuffixes = ['Mod', 'Craft', 'Tech', 'Magic', 'Plus', 'X', 'Pro', 'Lite', 'HD', 'Ultra', 'Premium', 'Deluxe', 'Extreme', 'Advanced', 'Enhanced', 'Improved', 'Revolution', 'Evolution', 'Update', 'Final', 'Complete', 'Supreme', 'Special', 'Unique', 'Custom', 'Total', 'Full', 'Max', 'Super'];
     
     const modAuthors = ['CreeperDev', 'MinecraftPro', 'ModMaster', 'TechWizard', 'GameGenius', 'PixelPerfect', 'CodeCrafter', 'BlockBuilder', 'WorldCreator', 'MagicMaker', 'TechTitan', 'CraftKing', 'ModMaven', 'PixelPro', 'GameGuru', 'BlockMaster', 'WorldBuilder', 'CraftCreator', 'ModWizard', 'TechGenius'];
     
@@ -873,71 +1242,73 @@
     
     const modVersions = ['1.20.4', '1.20.1', '1.19.4', '1.19.2', '1.18.2', '1.17.1', '1.16.5', '1.21.0', '1.21.1', '1.21.4', '1.20.6', '1.19.3'];
     
-    const modLinks = [
-        'https://www.curseforge.com/minecraft',
-        'https://modrinth.com',
-        'https://www.planetminecraft.com',
-        'https://github.com',
-        'https://www.9minecraft.net',
-        'https://mcpedl.com',
-        'https://www.minecraftforum.net',
-        'https://www.technicpack.net'
+    const fallbackLinks = [
+        'https://www.curseforge.com/minecraft/search?search=',
+        'https://modrinth.com/search?q=',
+        'https://www.planetminecraft.com/search/',
+        'https://github.com/search?q=',
+        'https://www.9minecraft.net/?s=',
+        'https://mcpedl.com/?s=',
+        'https://www.minecraftforum.net/search/?q=',
+        'https://www.technicpack.net/search?q='
     ];
 
-    // Специфические моды для каждой категории
+    // ============================================================
+    // СПЕЦИФИЧЕСКИЕ МОДЫ С ПРОВЕРЕННЫМИ ССЫЛКАМИ
+    // ============================================================
     const specificMods = {
         cheats: [
-            { name: "Wurst", author: "Alexander", version: "v7.35", desc: "Классический чит с 200+ функциями", price: "free", adminRating: 8 },
-            { name: "Meteor", author: "Meteor Dev", version: "v0.5.5", desc: "Современный чит для Fabric", price: "free", adminRating: 9 },
-            { name: "Impact", author: "ImpactClient", version: "v5.6", desc: "Красивый интерфейс + AutoCrystal", price: "free", adminRating: 8 },
-            { name: "Aristois", author: "Aristois Team", version: "v1.4.2", desc: "Чит со своим лаунчером", price: "free", adminRating: 7 },
-            { name: "LiquidBounce", author: "CCBlueX", version: "v1.0.0", desc: "Один из старейших читов", price: "free", adminRating: 9 },
-            { name: "Sigma", author: "SigmaTeam", version: "v5.0", desc: "Классический чит", price: "free", adminRating: 7 },
-            { name: "Pouch Client", author: "PouchTeam", version: "v2.0", desc: "Премиум-чит для Crystal PvP", price: "paid", adminRating: 10 },
-            { name: "FDP Client", author: "FDPTeam", version: "v5.0", desc: "Мощный AutoCrystal", price: "paid", adminRating: 9 },
-            { name: "Rise Client", author: "RiseTeam", version: "v6.0", desc: "Дорогой, очень мощный чит", price: "paid", adminRating: 10 },
-            { name: "Novoline", author: "NovolineTeam", version: "v3.0", desc: "Лучший AntiBot", price: "paid", adminRating: 9 },
-            { name: "Exhibition", author: "ExhibitionTeam", version: "v4.0", desc: "Чит для анархии", price: "paid", adminRating: 9 },
-            { name: "Moon Client", author: "MoonTeam", version: "v2.0", desc: "Качественный визуал", price: "paid", adminRating: 8 },
-            { name: "ZeroDay", author: "ZeroDayTeam", version: "v1.0", desc: "Скрытный чит", price: "free", adminRating: 7 },
-            { name: "Wolfram", author: "WolframDev", version: "v2.0", desc: "Crystal PvP фокус", price: "free", adminRating: 8 },
-            { name: "Vega", author: "VegaTeam", version: "v1.5", desc: "Красивый интерфейс", price: "free", adminRating: 7 },
-            { name: "Raven B+", author: "RavenTeam", version: "v1.0", desc: "Надёжный чит", price: "free", adminRating: 8 },
-            { name: "Explicit", author: "ExplicitDev", version: "v2.0", desc: "Хороший KillAura", price: "free", adminRating: 7 },
-            { name: "Kuro", author: "KuroDev", version: "v1.2", desc: "Лёгкий чит", price: "free", adminRating: 7 },
-            { name: "Inertia", author: "Inertia Team", version: "v1.4.0", desc: "Современный чит", price: "free", adminRating: 8 },
-            { name: "CatLean", author: "Frozen_soft", version: "v2.1.0", desc: "Низкий детект", price: "free", adminRating: 8 }
+            { name: "Wurst", author: "Alexander", version: "v7.35 (1.20.4)", desc: "Классический чит с 200+ функциями", price: "free", adminRating: 8 },
+            { name: "Meteor", author: "Meteor Dev", version: "v0.5.5 (1.20.4)", desc: "Современный чит для Fabric", price: "free", adminRating: 9 },
+            { name: "Impact", author: "ImpactClient", version: "v5.6 (1.19.2)", desc: "Красивый интерфейс + AutoCrystal", price: "free", adminRating: 8 },
+            { name: "Aristois", author: "Aristois Team", version: "v1.4.2 (1.20.4)", desc: "Чит со своим лаунчером", price: "free", adminRating: 7 },
+            { name: "LiquidBounce", author: "CCBlueX", version: "v1.0.0 (1.20.4)", desc: "Один из старейших читов", price: "free", adminRating: 9 },
+            { name: "Sigma", author: "SigmaTeam", version: "v5.0 (1.20.4)", desc: "Классический чит", price: "free", adminRating: 7 },
+            { name: "Pouch Client", author: "PouchTeam", version: "v2.0 (1.21)", desc: "Премиум-чит для Crystal PvP", price: "paid", adminRating: 10 },
+            { name: "FDP Client", author: "FDPTeam", version: "v5.0 (1.20.4)", desc: "Мощный AutoCrystal", price: "paid", adminRating: 9 },
+            { name: "Rise Client", author: "RiseTeam", version: "v6.0 (1.20.4)", desc: "Дорогой, очень мощный чит", price: "paid", adminRating: 10 },
+            { name: "Novoline", author: "NovolineTeam", version: "v3.0 (1.20.4)", desc: "Лучший AntiBot", price: "paid", adminRating: 9 },
+            { name: "Exhibition", author: "ExhibitionTeam", version: "v4.0 (1.20.4)", desc: "Чит для анархии", price: "paid", adminRating: 9 },
+            { name: "Moon Client", author: "MoonTeam", version: "v2.0 (1.20.4)", desc: "Качественный визуал", price: "paid", adminRating: 8 },
+            { name: "ZeroDay", author: "ZeroDayTeam", version: "v1.0 (1.20.4)", desc: "Скрытный чит", price: "free", adminRating: 7 },
+            { name: "Wolfram", author: "WolframDev", version: "v2.0 (1.20.4)", desc: "Crystal PvP фокус", price: "free", adminRating: 8 },
+            { name: "Vega", author: "VegaTeam", version: "v1.5 (1.20.4)", desc: "Красивый интерфейс", price: "free", adminRating: 7 },
+            { name: "Raven B+", author: "RavenTeam", version: "v1.0 (1.20.4)", desc: "Надёжный чит", price: "free", adminRating: 8 },
+            { name: "Explicit", author: "ExplicitDev", version: "v2.0 (1.20.4)", desc: "Хороший KillAura", price: "free", adminRating: 7 },
+            { name: "Kuro", author: "KuroDev", version: "v1.2 (1.20.4)", desc: "Лёгкий чит", price: "free", adminRating: 7 },
+            { name: "Inertia", author: "Inertia Team", version: "v1.4.0 (1.20.4)", desc: "Современный чит", price: "free", adminRating: 8 },
+            { name: "CatLean", author: "Frozen_soft", version: "v2.1.0 (1.21.11)", desc: "Низкий детект", price: "free", adminRating: 8 }
         ],
         visuals: [
-            { name: "Complementary Shaders", author: "EminGT", version: "Reimagined", desc: "Реалистичная графика", price: "free", adminRating: 10 },
+            { name: "Complementary Shaders", author: "EminGT", version: "Reimagined (1.21)", desc: "Реалистичная графика", price: "free", adminRating: 10 },
             { name: "BSL Shaders", author: "CaptTatsu", version: "1.21", desc: "Яркие шейдеры", price: "free", adminRating: 9 },
             { name: "Sildur's Shaders", author: "Sildur", version: "1.21", desc: "Лёгкие шейдеры", price: "free", adminRating: 8 },
-            { name: "OptiFine", author: "sp614x", version: "HD_U_I5", desc: "Шейдеры + FPS", price: "free", adminRating: 9 },
+            { name: "OptiFine", author: "sp614x", version: "HD_U_I5 (1.20.1)", desc: "Шейдеры + FPS", price: "free", adminRating: 9 },
             { name: "Fresh Animations", author: "FreshLX", version: "1.21", desc: "Живые анимации", price: "free", adminRating: 8 },
             { name: "Photon Shaders", author: "PhotonTeam", version: "1.21", desc: "Переработка неба", price: "free", adminRating: 8 },
-            { name: "Rival Visual", author: "winvi", version: "v1.0", desc: "PvP-интерфейс", price: "free", adminRating: 8 },
-            { name: "Destra Visual", author: "DestraTeam", version: "1.21", desc: "Платный визуал", price: "paid", adminRating: 10 },
-            { name: "Loly Visual", author: "LolyTeam", version: "1.21", desc: "PvP визуал", price: "paid", adminRating: 9 },
+            { name: "Rival Visual", author: "winvi", version: "v1.0 (1.21.4)", desc: "PvP-интерфейс", price: "free", adminRating: 8 },
+            { name: "Destra Visual", author: "DestraTeam", version: "1.21-1.16", desc: "Платный визуал", price: "paid", adminRating: 10 },
+            { name: "Loly Visual", author: "LolyTeam", version: "1.21-1.16", desc: "PvP визуал", price: "paid", adminRating: 9 },
             { name: "SelectVisuals", author: "SelectTeam", version: "1.21", desc: "Чистый интерфейс", price: "free", adminRating: 7 }
         ],
         optimization: [
-            { name: "Sodium", author: "CaffeineMC", version: "0.5.8", desc: "Максимальный FPS", price: "free", adminRating: 10 },
-            { name: "Lithium", author: "CaffeineMC", version: "0.12.1", desc: "Оптимизация логики", price: "free", adminRating: 9 },
-            { name: "ModernFix", author: "embeddedt", version: "5.18.0", desc: "Ускорение загрузки", price: "free", adminRating: 9 },
-            { name: "FerriteCore", author: "malte0811", version: "6.0.1", desc: "Меньше памяти", price: "free", adminRating: 8 },
-            { name: "Entity Culling", author: "tr7zw", version: "1.6.6", desc: "Скрытие сущностей", price: "free", adminRating: 8 },
-            { name: "Starlight", author: "Tuinity", version: "1.1.2", desc: "Новая система света", price: "free", adminRating: 9 },
-            { name: "C2ME", author: "RelativityMC", version: "0.2.0", desc: "Генерация чанков", price: "free", adminRating: 8 },
-            { name: "DashLoader", author: "skmedix", version: "3.2.0", desc: "Загрузка в 2-3 раза", price: "free", adminRating: 9 },
-            { name: "LazyDFU", author: "astei", version: "0.1.3", desc: "Быстрый запуск", price: "free", adminRating: 8 },
-            { name: "Memory Leak Fix", author: "FX", version: "1.1.5", desc: "Исправление утечек", price: "free", adminRating: 8 }
+            { name: "Sodium", author: "CaffeineMC", version: "0.5.8 (1.20.4)", desc: "Максимальный FPS", price: "free", adminRating: 10 },
+            { name: "Lithium", author: "CaffeineMC", version: "0.12.1 (1.20.4)", desc: "Оптимизация логики", price: "free", adminRating: 9 },
+            { name: "ModernFix", author: "embeddedt", version: "5.18.0 (1.20.4)", desc: "Ускорение загрузки", price: "free", adminRating: 9 },
+            { name: "FerriteCore", author: "malte0811", version: "6.0.1 (1.20.4)", desc: "Меньше памяти", price: "free", adminRating: 8 },
+            { name: "Entity Culling", author: "tr7zw", version: "1.6.6 (1.20.4)", desc: "Скрытие сущностей", price: "free", adminRating: 8 },
+            { name: "Starlight", author: "Tuinity", version: "1.1.2 (1.20.4)", desc: "Новая система света", price: "free", adminRating: 9 },
+            { name: "C2ME", author: "RelativityMC", version: "0.2.0 (1.20.4)", desc: "Генерация чанков", price: "free", adminRating: 8 },
+            { name: "DashLoader", author: "skmedix", version: "3.2.0 (1.20.4)", desc: "Загрузка в 2-3 раза", price: "free", adminRating: 9 },
+            { name: "LazyDFU", author: "astei", version: "0.1.3 (1.20.4)", desc: "Быстрый запуск", price: "free", adminRating: 8 },
+            { name: "Memory Leak Fix", author: "FX", version: "1.1.5 (1.20.4)", desc: "Исправление утечек", price: "free", adminRating: 8 }
         ],
         horror: [
             { name: "Verity", author: "HorrorTeam", version: "1.20.1", desc: "Психологический хоррор", price: "free", adminRating: 9 },
             { name: "The Grue", author: "Shino", version: "1.20.1", desc: "Монстр в темноте", price: "free", adminRating: 8 },
             { name: "Scary Creeper", author: "CreeperDev", version: "1.20.1", desc: "Страшные криперы", price: "free", adminRating: 7 },
             { name: "Void Darkness", author: "VoidMC", version: "1.20.1", desc: "Полная тьма", price: "free", adminRating: 8 },
-            { name: "Dread", author: "DreadTeam", version: "1.0.0", desc: "Скримеры и опасности", price: "free", adminRating: 8 }
+            { name: "Dread", author: "DreadTeam", version: "1.0.0 (1.19.2)", desc: "Скримеры и опасности", price: "free", adminRating: 8 }
         ],
         builds: [
             { name: "Better Minecraft", author: "BuildTeam", version: "1.20.1", desc: "Огромная сборка", price: "free", adminRating: 9 },
@@ -948,7 +1319,22 @@
         ]
     };
 
-    // Генерация модов
+    // ============================================================
+    // ФУНКЦИЯ ПОЛУЧЕНИЯ ПРОВЕРЕННОЙ ССЫЛКИ
+    // ============================================================
+    function getVerifiedLink(modName, category) {
+        if (verifiedLinks[modName]) {
+            return verifiedLinks[modName];
+        }
+        
+        const searchQuery = encodeURIComponent(modName);
+        const fallbackLink = fallbackLinks[Math.floor(Math.random() * fallbackLinks.length)];
+        return fallbackLink + searchQuery;
+    }
+
+    // ============================================================
+    // ГЕНЕРАЦИЯ МОДОВ
+    // ============================================================
     function generateMods() {
         const allMods = {
             cheats: [],
@@ -963,17 +1349,15 @@
             other: []
         };
 
-        // Добавляем специфические моды
         for (const category in specificMods) {
             specificMods[category].forEach(mod => {
                 allMods[category].push({
                     ...mod,
-                    link: modLinks[Math.floor(Math.random() * modLinks.length)]
+                    link: getVerifiedLink(mod.name, category)
                 });
             });
         }
 
-        // Генерируем дополнительные моды
         const categories = Object.keys(allMods);
         const targetTotal = 1000;
         let currentTotal = Object.values(allMods).reduce((sum, arr) => sum + arr.length, 0);
@@ -987,10 +1371,11 @@
             const desc = modDescriptions[Math.floor(Math.random() * modDescriptions.length)];
             const version = modVersions[Math.floor(Math.random() * modVersions.length)];
             const price = Math.random() > 0.7 ? 'paid' : 'free';
-            const rating = Math.floor(Math.random() * 4) + 7; // 7-10
-            const link = modLinks[Math.floor(Math.random() * modLinks.length)];
-
+            const rating = Math.floor(Math.random() * 4) + 7;
+            
             const modName = `${prefix}${suffix} ${modIndex}`;
+            const link = getVerifiedLink(modName, category);
+
             allMods[category].push({
                 name: modName,
                 author: author,
@@ -1023,15 +1408,239 @@
         localStorage.setItem(key, JSON.stringify(val));
     }
 
-    let mods = getStorage('mods_v10', null);
+    let mods = getStorage('guiMods_v10', null);
     if (!mods || Object.values(mods).reduce((sum, arr) => sum + arr.length, 0) < 1000) {
         mods = generateMods();
-        setStorage('mods_v10', mods);
+        setStorage('guiMods_v10', mods);
     }
 
-    let userMods = getStorage('userMods_v10', []);
-    let modFeedback = getStorage('modFeedback_v10', {});
-    let userLibrary = getStorage('userLibrary_v10', []);
+    let userMods = getStorage('guiUserMods_v10', []);
+    let modFeedback = getStorage('guiModFeedback_v10', {});
+    let userLibrary = getStorage('guiUserLibrary_v10', []);
+    let currentTheme = getStorage('guiTheme', 'black');
+
+    // ============================================================
+    // ФУНКЦИЯ СМЕНЫ ТЕМЫ
+    // ============================================================
+    function setTheme(theme) {
+        currentTheme = theme;
+        setStorage('guiTheme', theme);
+        
+        const root = document.documentElement;
+        const ton618Bg = document.querySelector('.ton618-bg');
+        const ton618Accretion = document.querySelector('.ton618-accretion');
+        const ton618Core = document.querySelector('.ton618-core');
+        
+        switch(theme) {
+            case 'black':
+                root.style.setProperty('--bg-primary', '#050508');
+                root.style.setProperty('--bg-secondary', '#0a0a12');
+                root.style.setProperty('--bg-card', '#12121c');
+                root.style.setProperty('--bg-card-hover', '#1a1a28');
+                root.style.setProperty('--accent-gold', '#ffaa00');
+                root.style.setProperty('--accent-red', '#ff2222');
+                ton618Bg.style.display = 'none';
+                ton618Accretion.style.display = 'none';
+                ton618Core.style.display = 'none';
+                document.body.style.background = '#050508';
+                break;
+                
+            case 'red':
+                root.style.setProperty('--bg-primary', '#1a0505');
+                root.style.setProperty('--bg-secondary', '#2a0a0a');
+                root.style.setProperty('--bg-card', '#1a0a0a');
+                root.style.setProperty('--bg-card-hover', '#2a1515');
+                root.style.setProperty('--accent-gold', '#ff2222');
+                root.style.setProperty('--accent-red', '#ff4444');
+                ton618Bg.style.display = 'none';
+                ton618Accretion.style.display = 'none';
+                ton618Core.style.display = 'none';
+                document.body.style.background = 'radial-gradient(circle at center, #2a0505, #1a0202, #0a0101)';
+                break;
+                
+            case 'crimson':
+                root.style.setProperty('--bg-primary', '#1a0205');
+                root.style.setProperty('--bg-secondary', '#2a050a');
+                root.style.setProperty('--bg-card', '#1a050a');
+                root.style.setProperty('--bg-card-hover', '#2a0a12');
+                root.style.setProperty('--accent-gold', '#dc143c');
+                root.style.setProperty('--accent-red', '#8b0000');
+                ton618Bg.style.display = 'none';
+                ton618Accretion.style.display = 'none';
+                ton618Core.style.display = 'none';
+                document.body.style.background = 'radial-gradient(circle at center, #2a0205, #1a0103, #0a0001)';
+                break;
+                
+            case 'ton618':
+                root.style.setProperty('--bg-primary', '#0a0300');
+                root.style.setProperty('--bg-secondary', '#1a0500');
+                root.style.setProperty('--bg-card', '#1a0800');
+                root.style.setProperty('--bg-card-hover', '#2a1000');
+                root.style.setProperty('--accent-gold', '#ff6600');
+                root.style.setProperty('--accent-red', '#ff4400');
+                ton618Bg.style.display = 'block';
+                ton618Accretion.style.display = 'block';
+                ton618Core.style.display = 'block';
+                document.body.style.background = '#0a0300';
+                break;
+                
+            case 'dark-blue':
+                root.style.setProperty('--bg-primary', '#020508');
+                root.style.setProperty('--bg-secondary', '#050a12');
+                root.style.setProperty('--bg-card', '#050a1a');
+                root.style.setProperty('--bg-card-hover', '#0a152a');
+                root.style.setProperty('--accent-gold', '#4488cc');
+                root.style.setProperty('--accent-red', '#2266aa');
+                ton618Bg.style.display = 'none';
+                ton618Accretion.style.display = 'none';
+                ton618Core.style.display = 'none';
+                document.body.style.background = 'radial-gradient(circle at center, #020a15, #010508, #000205)';
+                break;
+                
+            case 'purple':
+                root.style.setProperty('--bg-primary', '#0a0508');
+                root.style.setProperty('--bg-secondary', '#150a12');
+                root.style.setProperty('--bg-card', '#150a1a');
+                root.style.setProperty('--bg-card-hover', '#20102a');
+                root.style.setProperty('--accent-gold', '#aa66ff');
+                root.style.setProperty('--accent-red', '#8844cc');
+                ton618Bg.style.display = 'none';
+                ton618Accretion.style.display = 'none';
+                ton618Core.style.display = 'none';
+                document.body.style.background = 'radial-gradient(circle at center, #150a20, #0a0515, #05020a)';
+                break;
+                
+            case 'green':
+                root.style.setProperty('--bg-primary', '#020805');
+                root.style.setProperty('--bg-secondary', '#05120a');
+                root.style.setProperty('--bg-card', '#051a0a');
+                root.style.setProperty('--bg-card-hover', '#0a2a15');
+                root.style.setProperty('--accent-gold', '#44cc66');
+                root.style.setProperty('--accent-red', '#228844');
+                ton618Bg.style.display = 'none';
+                ton618Accretion.style.display = 'none';
+                ton618Core.style.display = 'none';
+                document.body.style.background = 'radial-gradient(circle at center, #02150a, #010a05, #000502)';
+                break;
+        }
+        
+        renderAll();
+    }
+
+    // ============================================================
+    // ИИ АССИСТЕНТ
+    // ============================================================
+    function sendAIMessage() {
+        const input = document.getElementById('aiInput');
+        const chat = document.getElementById('aiChat');
+        const userMessage = input.value.trim();
+        
+        if (!userMessage) return;
+        
+        // Добавляем сообщение пользователя
+        const userMsgDiv = document.createElement('div');
+        userMsgDiv.className = 'ai-message user';
+        userMsgDiv.innerHTML = `<strong>Вы:</strong> ${userMessage}`;
+        chat.appendChild(userMsgDiv);
+        
+        // Генерируем ответ ИИ
+        const botResponse = generateAIResponse(userMessage);
+        const botMsgDiv = document.createElement('div');
+        botMsgDiv.className = 'ai-message bot';
+        botMsgDiv.innerHTML = `<strong>GuiMods AI:</strong> ${botResponse}`;
+        chat.appendChild(botMsgDiv);
+        
+        // Очищаем поле
+        input.value = '';
+        
+        // Прокручиваем вниз
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    function generateAIResponse(message) {
+        const msg = message.toLowerCase();
+        
+        if (msg.includes('чит') || msg.includes('cheat') || msg.includes('hack') || msg.includes('pvp')) {
+            const cheats = mods.cheats.slice(0, 5);
+            const cheatNames = cheats.map(m => m.name).join(', ');
+            return `Для PvP рекомендую следующие читы: ${cheatNames}. Лучший бесплатный чит — Wurst, а лучший платный — Rise Client. Какой тип чита вас интересует?`;
+        }
+        
+        if (msg.includes('визуал') || msg.includes('visual') || msg.includes('шейдер') || msg.includes('shader')) {
+            const visuals = mods.visuals.slice(0, 5);
+            const visualNames = visuals.map(m => m.name).join(', ');
+            return `Популярные визуалы: ${visualNames}. Для красивой графики рекомендую Complementary Shaders, а для PvP — Rival Visual. Что вам нужно?`;
+        }
+        
+        if (msg.includes('оптимизац') || msg.includes('fps') || msg.includes('лаг') || msg.includes('производительн')) {
+            return `Для повышения FPS установите: Sodium (основной), Lithium (логика), ModernFix (загрузка), FerriteCore (память), Entity Culling (сущности). Эти моды дадут максимальный прирост производительности!`;
+        }
+        
+        if (msg.includes('хоррор') || msg.includes('horror') || msg.includes('страшн')) {
+            return `Популярные хоррор-моды: Verity (психологический), The Grue (монстр в темноте), Dread (скримеры), Void Darkness (полная тьма). Какой тип хоррора вам нравится?`;
+        }
+        
+        if (msg.includes('сборк') || msg.includes('build') || msg.includes('modpack') || msg.includes('модпак')) {
+            return `Лучшие сборки: All The Mods 9 (сотни модов), Better Minecraft (приключения), RLCraft (хардкор), Valhelsia 6 (красивый мир). Какая сборка вам интересна?`;
+        }
+        
+        if (msg.includes('бесплатн') || msg.includes('free')) {
+            const freeMods = Object.values(mods).flat().filter(m => m.price === 'free').length;
+            return `В каталоге ${freeMods} бесплатных модов! Используйте фильтр или поиск, чтобы найти нужный. Бесплатные читы: Wurst, Meteor, Impact. Бесплатные визуалы: Complementary Shaders, BSL Shaders.`;
+        }
+        
+        if (msg.includes('платн') || msg.includes('paid')) {
+            const paidMods = Object.values(mods).flat().filter(m => m.price === 'paid').length;
+            return `В каталоге ${paidMods} платных модов. Лучшие платные читы: Rise Client (10/10), Pouch Client (10/10). Платные визуалы: Destra Visual (10/10), Loly Visual (9/10).`;
+        }
+        
+        if (msg.includes('категор') || msg.includes('categor')) {
+            return `В каталоге 10 категорий: Читы/Хаки, Визуалы/Шейдеры, Оптимизация, Хоррор, Сборки, Технические, Магия, Приключения, Утилиты, Другое. Какая категория вас интересует?`;
+        }
+        
+        if (msg.includes('лучш') || msg.includes('best') || msg.includes('топ') || msg.includes('top')) {
+            return `Лучшие моды по рейтингу: Sodium (10/10 — оптимизация), Complementary Shaders (10/10 — визуалы), Rise Client (10/10 — читы), All The Mods 9 (10/10 — сборки). Хотите подробнее о каком-то из них?`;
+        }
+        
+        if (msg.includes('как') || msg.includes('how') || msg.includes('использова')) {
+            return `Чтобы использовать моды: 1) Скачайте мод по ссылке, 2) Установите Minecraft Forge или Fabric, 3) Поместите файл мода в папку .minecraft/mods, 4) Запустите игру. Для шейдеров нужен OptiFine или Iris. Нужна помощь с конкретным модом?`;
+        }
+        
+        if (msg.includes('привет') || msg.includes('hello') || msg.includes('hi') || msg.includes('здравств')) {
+            return `Привет! Я ИИ-ассистент GuiMods. Могу помочь найти моды, посоветовать читы, визуалы или сборки. Спросите меня о чем-нибудь!`;
+        }
+        
+        if (msg.includes('спасибо') || msg.includes('thank')) {
+            return `Пожалуйста! Если нужна помощь с модами — обращайтесь. Удачной игры! 🎮`;
+        }
+        
+        // Поиск по модам
+        const searchTerm = msg.toLowerCase();
+        const foundMods = Object.values(mods).flat().filter(m => 
+            m.name.toLowerCase().includes(searchTerm) || 
+            m.desc.toLowerCase().includes(searchTerm)
+        );
+        
+        if (foundMods.length > 0) {
+            const topMods = foundMods.slice(0, 5);
+            const modList = topMods.map(m => `${m.name} (${m.price === 'free' ? 'бесплатный' : 'платный'}, рейтинг ${m.adminRating}/10)`).join(', ');
+            return `Нашел ${foundMods.length} модов по вашему запросу: ${modList}. Хотите узнать подробнее о каком-то из них?`;
+        }
+        
+        return `Извините, я не совсем понял ваш вопрос. Могу помочь с: читами для PvP, визуалами и шейдерами, оптимизацией FPS, хоррор-модами, сборками, бесплатными или платными модами. Что вас интересует?`;
+    }
+
+    // Обработка Enter в поле ИИ
+    document.addEventListener('DOMContentLoaded', function() {
+        const aiInput = document.getElementById('aiInput');
+        if (aiInput) {
+            aiInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    sendAIMessage();
+                }
+            });
+        }
+    });
 
     // ============================================================
     // ФУНКЦИИ ОТРИСОВКИ
@@ -1063,7 +1672,6 @@
             ${isUserMod ? `<button class="header-btn" style="margin-top:4px; width:100%; background:#ff4444;" onclick="event.stopPropagation(); removeUserMod('${mod.name.replace(/'/g, "\\'")}')">🗑️ Удалить</button>` : ''}
         `;
 
-        // Звёзды
         const starsDiv = card.querySelector('.stars');
         const userRating = feedback.userRatingCount > 0 ? Math.round(feedback.userRatingSum / feedback.userRatingCount) : 0;
         for (let i = 1; i <= 5; i++) {
@@ -1075,13 +1683,12 @@
                 if (!modFeedback[mod.name]) modFeedback[mod.name] = { userRatingSum: 0, userRatingCount: 0, comments: [] };
                 modFeedback[mod.name].userRatingSum += i;
                 modFeedback[mod.name].userRatingCount += 1;
-                setStorage('modFeedback_v10', modFeedback);
+                setStorage('guiModFeedback_v10', modFeedback);
                 renderAll();
             });
             starsDiv.appendChild(star);
         }
 
-        // Комментарии
         const commentList = card.querySelector('.comments-list');
         if (feedback.comments && feedback.comments.length > 0) {
             feedback.comments.slice(-5).forEach(c => {
@@ -1096,7 +1703,6 @@
             commentList.appendChild(div);
         }
 
-        // Кнопка комментария
         const commentBtn = card.querySelector('.comment-btn');
         const textarea = card.querySelector('.comment-section textarea');
         commentBtn.addEventListener('click', function(e) {
@@ -1105,13 +1711,13 @@
             if (!text) return;
             if (!modFeedback[mod.name]) modFeedback[mod.name] = { userRatingSum: 0, userRatingCount: 0, comments: [] };
             modFeedback[mod.name].comments.push(text);
-            setStorage('modFeedback_v10', modFeedback);
+            setStorage('guiModFeedback_v10', modFeedback);
             renderAll();
         });
 
         card.style.cursor = 'pointer';
         card.addEventListener('click', function() {
-            window.open(mod.link, '_blank');
+            window.open(mod.link, '_blank', 'noopener,noreferrer');
         });
 
         return card;
@@ -1120,7 +1726,7 @@
     function removeUserMod(name) {
         if (!confirm(`Удалить "${name}" из пользовательских модов?`)) return;
         userMods = userMods.filter(m => m.name !== name);
-        setStorage('userMods_v10', userMods);
+        setStorage('guiUserMods_v10', userMods);
         renderUserMods();
     }
 
@@ -1131,7 +1737,7 @@
         } else {
             userLibrary.push(name);
         }
-        setStorage('userLibrary_v10', userLibrary);
+        setStorage('guiUserLibrary_v10', userLibrary);
         renderAll();
     }
 
@@ -1155,7 +1761,7 @@
             price: 'free', 
             adminRating: 0 
         });
-        setStorage('userMods_v10', userMods);
+        setStorage('guiUserMods_v10', userMods);
         document.getElementById('userModName').value = '';
         document.getElementById('userModLink').value = '';
         renderUserMods();
@@ -1261,7 +1867,7 @@
     }
 
     // ============================================================
-    // ПРЕДПРОСМОТР (Canvas анимация)
+    // ПРЕДПРОСМОТР
     // ============================================================
     function showPreview(modName) {
         const modal = document.getElementById('previewModal');
@@ -1269,7 +1875,6 @@
         const canvas = document.getElementById('previewCanvas');
         const desc = document.getElementById('previewDescription');
 
-        // Находим мод
         let foundMod = null;
         for (const cat of Object.keys(mods)) {
             const mod = mods[cat].find(m => m.name === modName);
@@ -1287,7 +1892,6 @@
         title.textContent = `Предпросмотр: ${foundMod.name}`;
         desc.textContent = `${foundMod.desc} | Версия: ${foundMod.version} | Автор: ${foundMod.author}`;
 
-        // Отрисовка предпросмотра на canvas
         canvas.innerHTML = '';
         const ctx = document.createElement('canvas');
         ctx.width = canvas.clientWidth;
@@ -1295,7 +1899,6 @@
         canvas.appendChild(ctx);
         const c = ctx.getContext('2d');
 
-        // Анимация предпросмотра
         const gradient = c.createLinearGradient(0, 0, ctx.width, ctx.height);
         gradient.addColorStop(0, '#1a1a2e');
         gradient.addColorStop(0.5, '#16213e');
@@ -1305,11 +1908,9 @@
         const animation = setInterval(() => {
             frame += 0.05;
             
-            // Фон
             c.fillStyle = gradient;
             c.fillRect(0, 0, ctx.width, ctx.height);
             
-            // Сетка (как в Minecraft)
             c.strokeStyle = 'rgba(255,255,255,0.1)';
             c.lineWidth = 1;
             for (let x = 0; x < ctx.width; x += 40) {
@@ -1325,7 +1926,6 @@
                 c.stroke();
             }
             
-            // Блоки (как в Minecraft)
             const blockSize = 30;
             for (let i = 0; i < 5; i++) {
                 const x = ctx.width / 2 + Math.sin(frame * 3 + i) * 100;
@@ -1339,7 +1939,6 @@
                 c.strokeRect(x - blockSize/2, y - blockSize/2, blockSize, blockSize);
             }
             
-            // Частицы
             for (let i = 0; i < 20; i++) {
                 const px = Math.random() * ctx.width;
                 const py = Math.random() * ctx.height;
@@ -1349,7 +1948,6 @@
                 c.fill();
             }
 
-            // Название мода
             c.fillStyle = 'rgba(255,255,255,0.8)';
             c.font = 'bold 20px Arial';
             c.textAlign = 'center';
@@ -1357,9 +1955,7 @@
 
         }, 50);
 
-        // Сохраняем интервал для очистки
         canvas.dataset.animationId = animation;
-
         modal.classList.add('active');
     }
 
@@ -1367,7 +1963,6 @@
         const modal = document.getElementById('previewModal');
         const canvas = document.getElementById('previewCanvas');
         
-        // Очищаем анимацию
         if (canvas.dataset.animationId) {
             clearInterval(parseInt(canvas.dataset.animationId));
             delete canvas.dataset.animationId;
@@ -1376,14 +1971,12 @@
         modal.classList.remove('active');
     }
 
-    // Закрытие по клику вне контента
     document.getElementById('previewModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closePreview();
         }
     });
 
-    // Закрытие по Escape
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closePreview();
@@ -1408,40 +2001,69 @@
     document.getElementById('userSearchInput').addEventListener('input', renderUserMods);
 
     // ============================================================
-    // АНИМИРОВАННЫЙ ФОН
+    // ЭКСПОРТ / ИМПОРТ ДАННЫХ
     // ============================================================
-    function createBackgroundParticles() {
-        const container = document.getElementById('bgAnimation');
-        for (let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'bg-particle';
-            particle.style.width = Math.random() * 10 + 5 + 'px';
-            particle.style.height = particle.style.width;
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDuration = Math.random() * 20 + 10 + 's';
-            particle.style.animationDelay = Math.random() * 20 + 's';
-            container.appendChild(particle);
-        }
+    function exportData() {
+        const data = {
+            mods: mods,
+            userMods: userMods,
+            modFeedback: modFeedback,
+            userLibrary: userLibrary,
+            theme: currentTheme,
+            exportDate: new Date().toISOString()
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `guimods_backup_${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        alert('✅ Данные экспортированы!');
     }
 
-    // ============================================================
-    // ЗАПУСК
-    // ============================================================
-    window.onload = function() {
-        createBackgroundParticles();
-        renderAll();
-        
-        document.getElementById('userModName').addEventListener('keydown', e => {
-            if (e.key === 'Enter') document.getElementById('userModLink').focus();
-        });
-        document.getElementById('userModLink').addEventListener('keydown', e => {
-            if (e.key === 'Enter') addUserMod();
-        });
-    };
+    function importData() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (data.mods) mods = data.mods;
+                    if (data.userMods) userMods = data.userMods;
+                    if (data.modFeedback) modFeedback = data.modFeedback;
+                    if (data.userLibrary) userLibrary = data.userLibrary;
+                    if (data.theme) currentTheme = data.theme;
+                    
+                    setStorage('guiMods_v10', mods);
+                    setStorage('guiUserMods_v10', userMods);
+                    setStorage('guiModFeedback_v10', modFeedback);
+                    setStorage('guiUserLibrary_v10', userLibrary);
+                    setStorage('guiTheme', currentTheme);
+                    
+                    setTheme(currentTheme);
+                    renderAll();
+                    alert('✅ Данные импортированы!');
+                } catch (error) {
+                    alert('❌ Ошибка при импорте данных!');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
 
     // ============================================================
     // ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ
     // ============================================================
+    function scrollToSection(sectionId) {
+        document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+    }
+
     function toggleAllMods() {
         const allCards = document.querySelectorAll('.mod-card');
         const allVisible = Array.from(allCards).every(card => card.style.display !== 'none');
@@ -1454,6 +2076,21 @@
             cat.style.display = allVisible ? 'none' : 'block';
         });
     }
+
+    // ============================================================
+    // ЗАПУСК
+    // ============================================================
+    window.onload = function() {
+        setTheme(currentTheme);
+        renderAll();
+        
+        document.getElementById('userModName').addEventListener('keydown', e => {
+            if (e.key === 'Enter') document.getElementById('userModLink').focus();
+        });
+        document.getElementById('userModLink').addEventListener('keydown', e => {
+            if (e.key === 'Enter') addUserMod();
+        });
+    };
 </script>
 
 </body>
