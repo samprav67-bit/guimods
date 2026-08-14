@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuiMods — Minecraft Mods Catalog</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d0d0d;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            padding: 20px;
+        }
+        .container { max-width: 1300px; margin: 0 auto; }
+
+        /* ===== ШАПКА ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            background: #181818;
+            padding: 15px 25px;
+            border-radius: 12px;
+            border-bottom: 2px solid #ffaa00;
+            margin-bottom: 25px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .header-logo {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffaa00;
+            text-shadow: 0 0 15px rgba(255,170,0,0.3);
+        }
+        .header-logo span {
+            color: #66ccff;
+        }
+        .header-repo {
+            background: #2a2a2a;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: #aaa;
+            border: 1px solid #3a3a3a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .header-repo a {
+            color: #66ccff;
+            text-decoration: none;
+        }
+        .header-repo a:hover {
+            color: #ffaa00;
+            text-decoration: underline;
+        }
+        .header-repo .repo-icon {
+            font-size: 1.1em;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-btn {
+            background: #2a2a2a;
+            padding: 6px 16px;
+            border-radius: 20px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: 0.2s;
+            border: 1px solid #3a3a3a;
+        }
+        .header-btn:hover {
+            background: #ffaa00;
+            color: #0d0d0d;
+            border-color: #ffaa00;
+        }
+        .header-btn.github-btn {
+            background: #24292e;
+            border-color: #444;
+        }
+        .header-btn.github-btn:hover {
+            background: #ffaa00;
+            color: #0d0d0d;
+            border-color: #ffaa00;
+        }
+
+        /* остальные стили */
+        #searchInput {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            border: 1px solid #444;
+            background: #1e1e1e;
+            color: #fff;
+            outline: none;
+            margin-bottom: 30px;
+        }
+        #searchInput:focus { border-color: #ffaa00; box-shadow: 0 0 15px rgba(255,170,0,0.15); }
+        .category {
+            background: #181818;
+            border-radius: 12px;
+            padding: 15px 20px 20px;
+            margin-bottom: 30px;
+            border-left: 5px solid #ffaa00;
+        }
+        .category h2 {
+            color: #ffaa00;
+            font-weight: 400;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .category h2 .count {
+            font-size: 0.6em;
+            color: #888;
+            background: #2a2a2a;
+            padding: 2px 12px;
+            border-radius: 20px;
+        }
+        .mod-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+            margin-top: 12px;
+        }
+        .mod-card {
+            background: #222;
+            border-radius: 10px;
+            padding: 12px 16px;
+            border: 1px solid #2e2e2e;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .mod-card:hover {
+            transform: translateY(-3px);
+            background: #2a2a2a;
+            border-color: #ffaa00;
+        }
+        .mod-name {
+            font-weight: bold;
+            font-size: 1.05em;
+            color: #fff;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .mod-author { color: #999; font-size: 0.75em; font-weight: normal; }
+        .mod-version { color: #66ccff; font-size: 0.75em; margin: 3px 0; }
+        .mod-short-desc { font-size: 0.85em; color: #aaa; margin-top: 4px; }
+        .click-hint { font-size: 0.65em; color: #555; margin-top: 6px; text-align: right; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background: #1a1a1a;
+            max-width: 700px;
+            width: 95%;
+            padding: 30px 35px;
+            border-radius: 16px;
+            border: 1px solid #ffaa00;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-content .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 28px;
+            color: #888;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .modal-content .close-btn:hover { color: #ffaa00; }
+        .modal-content h2 { color: #ffaa00; font-size: 1.8em; margin-bottom: 4px; }
+        .modal-content .meta { color: #999; font-size: 0.9em; margin-bottom: 12px; }
+        .modal-content .meta span { color: #66ccff; }
+        .modal-content .full-desc {
+            color: #ccc;
+            font-size: 0.98em;
+            line-height: 1.5;
+            margin: 12px 0 16px 0;
+            border-top: 1px solid #2a2a2a;
+            padding-top: 14px;
+        }
+        .modal-content .binds, .modal-content .addons {
+            background: #0d0d0d;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 12px 0 16px 0;
+            border-left: 3px solid #ffaa00;
+        }
+        .modal-content .binds h4, .modal-content .addons h4 {
+            color: #ffaa00;
+            font-weight: 400;
+            margin-bottom: 6px;
+        }
+        .modal-content .binds ul, .modal-content .addons ul {
+            list-style: none;
+            padding: 0;
+        }
+        .modal-content .binds ul li, .modal-content .addons ul li {
+            color: #bbb;
+            font-size: 0.9em;
+            padding: 2px 0;
+            border-bottom: 1px dashed #1a1a1a;
+        }
+        .modal-content .binds ul li kbd {
+            background: #2a2a2a;
+            padding: 1px 10px;
+            border-radius: 4px;
+            color: #ffaa00;
+            font-family: monospace;
+        }
+        .modal-content .addons ul li a {
+            color: #66ccff;
+            text-decoration: none;
+        }
+        .modal-content .addons ul li a:hover {
+            color: #ffaa00;
+            text-decoration: underline;
+        }
+        .download-btn {
+            display: inline-block;
+            background: #ffaa00;
+            color: #0d0d0d;
+            padding: 12px 28px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            margin-top: 8px;
+            width: 100%;
+            text-align: center;
+        }
+        .download-btn:hover { background: #ffcc44; transform: scale(1.02); }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #555;
+            font-size: 0.9em;
+            border-top: 1px solid #1a1a1a;
+            padding-top: 20px;
+        }
+        .hidden { display: none !important; }
+        @media (max-width: 600px) {
+            .mod-grid { grid-template-columns: 1fr; }
+            .modal-content { padding: 20px; }
+            .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .header-right { width: 100%; justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ===== ШАПКА ===== -->
+    <div class="header">
+        <div class="header-left">
+            <div class="header-logo">
+                🎮 <span>gui</span>mods
+            </div>
+            <div class="header-repo">
+                <span class="repo-icon">📁</span>
+                <a href="https://github.com/твой-логин/guimods" target="_blank">
+                    guimods
+                </a>
+                <span style="color:#555; font-size:0.8em;">(public)</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="https://github.com/твой-логин/guimods" target="_blank" class="header-btn github-btn">
+                <svg height="16" width="16" viewBox="0 0 16 16" style="display:inline-block; vertical-align:middle; margin-right:4px; fill:currentColor;">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                    0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01
+                    -.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89
+                    -3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18
+                    1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82
+                    1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2
+                    0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+                GitHub
+            </a>
+            <a href="#" class="header-btn" onclick="alert('GuiMods — каталог модов, читов и визуалов для Minecraft. Все ссылки ведут на официальные страницы.')">
+                ℹ️ О проекте
+            </a>
+        </div>
+    </div>
+
+    <h1 style="text-align:center; color:#ffaa00; font-size:2.5em; text-shadow:0 0 20px rgba(255,170,0,0.3); border-bottom:2px solid #2a2a2a; padding-bottom:15px; margin-bottom:20px;">
+        🎮 Мега-каталог: Моды + Читы + Визуалы
+    </h1>
+
+    <input type="text" id="searchInput" placeholder="🔍 Искать мод, чит или визуал...">
+
+    <!-- ====================================================================== -->
+    <!--  РАЗДЕЛ 1: ЧИТЫ -->
+    <!-- ====================================================================== -->
+    <div class="category" data-category="cheats">
+        <h2>🔥 Читы / Хаки <span class="count">6</span></h2>
+        <div class="mod-grid">
+            <div class="mod-card" data-name="Wurst" data-author="Alexander" data-version="v7.35 (1.20.4)" data-desc="Один из самых старых и популярных читов. Содержит более 200 функций: X-Ray, KillAura, ESP, Fly, Nuker и другие." data-binds="RightShift — меню; + — консоль" data-addons="ViaFabric; Baritone" data-link="https://www.wurstclient.net/">
+                <div class="mod-name">Wurst <span class="mod-author">Alexander</span></div>
+                <div class="mod-version">v7.35 (1.20.4)</div>
+                <div class="mod-short-desc">Классический чит с 200+ функциями.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="Impact" data-author="ImpactClient" data-version="v5.6 (1.19.2)" data-desc="Мощный чит с красивым интерфейсом. Включает AutoCrystal, BedAura, Surround, AutoTrap." data-binds="RightShift — меню; F1 — настройки" data-addons="KAMI; Baritone" data-link="https://impactclient.net/">
+                <div class="mod-name">Impact <span class="mod-author">ImpactClient</span></div>
+                <div class="mod-version">v5.6 (1.19.2)</div>
+                <div class="mod-short-desc">Красивый интерфейс + мощные функции.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="Meteor" data-author="Meteor Dev" data-version="v0.5.5 (1.20.4)" data-desc="Современный чит для Fabric. Открытый исходный код, много функций для PvP и строительства." data-binds="F2 — меню; H — помощь" data-addons="Meteor Rejects; Addon Manager" data-link="https://meteorclient.com/">
+                <div class="mod-name">Meteor <span class="mod-author">Meteor Dev</span></div>
+                <div class="mod-version">v0.5.5 (1.20.4)</div>
+                <div class="mod-short-desc">Современный чит для Fabric.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="Aristois" data-author="Aristois Team" data-version="v1.4.2 (1.20.4)" data-desc="Чит со своим лаунчером. Включает ESP, AutoMine, KillAura, Freecam." data-binds="F5 — меню; F6 — консоль" data-addons="Addon Manager" data-link="https://aristois.net/">
+                <div class="mod-name">Aristois <span class="mod-author">Aristois Team</span></div>
+                <div class="mod-version">v1.4.2 (1.20.4)</div>
+                <div class="mod-short-desc">Чит со своим лаунчером.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="KAMI Blue" data-author="KAMI Blue" data-version="v1.1.2 (1.16.5)" data-desc="Ответвление от KAMI. Много функций для кристаллов (AutoCrystal, Surround, AntiTrap)." data-binds="RightShift — меню" data-addons="KAMI; Baritone" data-link="https://github.com/kami-blue">
+                <div class="mod-name">KAMI Blue <span class="mod-author">KAMI Blue</span></div>
+                <div class="mod-version">v1.1.2 (1.16.5)</div>
+                <div class="mod-short-desc">Фокус на кристалловом PvP.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="Phobos" data-author="Phobos Dev" data-version="v2.0 (1.12.2)" data-desc="Один из лучших читов для версии 1.12.2. Мощный AutoCrystal, Anchor, ESP." data-binds="RightShift — меню" data-addons="Baritone" data-link="https://github.com/Phobos-Client">
+                <div class="mod-name">Phobos <span class="mod-author">Phobos Dev</span></div>
+                <div class="mod-version">v2.0 (1.12.2)</div>
+                <div class="mod-short-desc">Лучший чит для 1.12.2 PvP.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!--  РАЗДЕЛ 2: ВИЗУАЛЫ -->
+    <!-- ====================================================================== -->
+    <div class="category" data-category="visuals">
+        <h2>🎨 Визуалы (PvP, интерфейс, анимации, шейдеры) <span class="count">30+</span></h2>
+        <div class="mod-grid">
+            <!-- Rival Visual -->
+            <div class="mod-card" data-name="Rival Visual" data-author="winvi" data-version="v1.0 (1.21.4-1.21.11)" data-desc="Кристально чистый PvP-интерфейс. Минималистичные индикаторы здоровья противников, эффекты зелий и другие элементы HUD. Не влияет на геймплей, только визуальный комфорт." data-binds="RightShift — открыть меню; T (в чате) — настройка" data-addons="Fabric API" data-link="https://wom-play.ru/mods/29818-rival-visuals.html">
+                <div class="mod-name">Rival Visual <span class="mod-author">winvi</span></div>
+                <div class="mod-version">v1.0 (1.21.4-1.21.11)</div>
+                <div class="mod-short-desc">Чистый PvP-интерфейс. RightShift — меню.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <!-- Destra Visual -->
+            <div class="mod-card" data-name="Destra Visual" data-author="DestraTeam" data-version="1.21-1.16" data-desc="Популярный платный визуал с широкими возможностями кастомизации интерфейса и эффектов." data-binds="RightShift — меню" data-addons="—" data-link="https://www.google.com/search?q=Destra+Visual+Minecraft">
+                <div class="mod-name">Destra Visual <span class="mod-author">DestraTeam</span></div>
+                <div class="mod-version">1.21-1.16</div>
+                <div class="mod-short-desc">Платный визуал с кастомизацией.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <!-- Loly Visual -->
+            <div class="mod-card" data-name="Loly Visual" data-author="LolyTeam" data-version="1.21-1.16" data-desc="Ещё один популярный платный визуал с акцентом на эстетику и удобство в PvP." data-binds="RightShift — меню" data-addons="—" data-link="https://www.google.com/search?q=Loly+Visual+Minecraft">
+                <div class="mod-name">Loly Visual <span class="mod-author">LolyTeam</span></div>
+                <div class="mod-version">1.21-1.16</div>
+                <div class="mod-short-desc">Платный визуал для PvP.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <!-- SelectVisuals -->
+            <div class="mod-card" data-name="SelectVisuals" data-author="SelectTeam" data-version="1.21" data-desc="Визуал с упором на чистоту интерфейса и настраиваемые элементы." data-binds="RightShift — меню" data-addons="—" data-link="https://www.google.com/search?q=SelectVisuals+Minecraft">
+                <div class="mod-name">SelectVisuals <span class="mod-author">SelectTeam</span></div>
+                <div class="mod-version">1.21</div>
+                <div class="mod-short-desc">Чистый интерфейс.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <!-- ParadoxVisuals -->
+            <div class="mod-card" data-name="ParadoxVisuals" data-author="ParadoxTeam" data-version="1.21" data-desc="Визуал с нестандартными цветовыми решениями и анимациями." data-binds="RightShift — меню" data-addons="—" data-link="https://www.google.com/search?q=ParadoxVisuals+Minecraft">
+                <div class="mod-name">ParadoxVisuals <span class="mod-author">ParadoxTeam</span></div>
+                <div class="mod-version">1.21</div>
+                <div class="mod-short-desc">Нестандартные цвета и анимации.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <!-- WarpVisuals -->
+            <div class="mod-card" data-name="WarpVisuals" data-author="WarpTeam" data-version="1.21" data-desc="Визуал с фокусом на динамические элементы интерфейса." data-binds="RightShift — меню" data-addons="—" data-link="https://www.google.com/search?q=WarpVisuals+Minecraft">
+                <div class="mod-name">WarpVisuals <span class="mod-author">WarpTeam</span></div>
+                <div class="mod-version">1.21</div>
+                <div class="mod-short-desc">Динамический интерфейс.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <!-- PlasmaClient -->
+            <div class="mod-card" data-name="PlasmaClient" data-author="PlasmaTeam" data-version="1.21" data-desc="Клиент с визуальными улучшениями и дополнительными настройками интерфейса." data-binds="RightShift — меню" data-addons="—" data-link="https://www.google.com/search?q=PlasmaClient+Minecraft">
+                <div class="mod-name">PlasmaClient <span class="mod-author">PlasmaTeam</span></div>
+                <div class="mod-version">1.21</div>
+                <div class="mod-short-desc">Клиент с визуальными улучшениями.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <!-- VegaVisuals -->
+            <div class="mod-card" data-name="VegaVisuals" data-author="VegaTeam" data-version="1.21" data-desc="Визуал с акцентом на читаемость информации в бою." data-binds="RightShift — меню" data-addons="—" data-link="https://www.google.com/search?q=VegaVisuals+Minecraft">
+                <div class="mod-name">VegaVisuals <span class="mod-author">VegaTeam</span></div>
+                <div class="mod-version">1.21</div>
+                <div class="mod-short-desc">Читаемый интерфейс для PvP.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <!-- ZeroVisuals -->
+            <div class="mod-card" data-name="ZeroVisuals" data-author="ZeroTeam" data-version="1.21" data-desc="Минималистичный визуал без лишних деталей." data-binds="RightShift — меню" data-addons="—" data-link="https://www.google.com/search?q=ZeroVisuals+Minecraft">
+                <div class="mod-name">ZeroVisuals <span class="mod-author">ZeroTeam</span></div>
+                <div class="mod-version">1.21</div>
+                <div class="mod-short-desc">Минималистичный интерфейс.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <!-- EclipseVisuals -->
+            <div class="mod-card" data-name="EclipseVisuals" data-author="EclipseTeam" data-version="1.21" data-desc="Визуал с тёмной темой и акцентными цветами." data-binds="RightShift — меню" data-addons="—" data-link="https://www.google.com/search?q=EclipseVisuals+Minecraft">
+                <div class="mod-name">EclipseVisuals <span class="mod-author">EclipseTeam</span></div>
+                <div class="mod-version">1.21</div>
+                <div class="mod-short-desc">Тёмная тема + акценты.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <!-- FlashVisual -->
+            <div class="mod-card" data-name="FlashVisual" data-author="FlashTeam" data-version="1.21" data-desc="Яркий визуал с динамическими элементами интерфейса." data-binds="RightShift — меню" data-addons="—" data-link="https://www.google.com/search?q=FlashVisual+Minecraft">
+                <div class="mod-name">FlashVisual <span class="mod-author">FlashTeam</span></div>
+                <div class="mod-version">1.21</div>
+                <div class="mod-short-desc">Яркий динамический интерфейс.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!--  РАЗДЕЛ 3: ОПТИМИЗАЦИЯ -->
+    <!-- ====================================================================== -->
+    <div class="category" data-category="optimization">
+        <h2>🚀 Оптимизация <span class="count">5</span></h2>
+        <div class="mod-grid">
+            <div class="mod-card" data-name="Sodium" data-author="CaffeineMC" data-version="0.5.8 (1.20.4)" data-desc="Мощный оптимизатор рендеринга. Максимальный FPS на слабых ПК." data-binds="F3 — FPS" data-addons="Iris — шейдеры" data-link="https://modrinth.com/mod/sodium">
+                <div class="mod-name">Sodium <span class="mod-author">CaffeineMC</span></div>
+                <div class="mod-version">0.5.8 (1.20.4)</div>
+                <div class="mod-short-desc">Максимальный FPS и плавность.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="Lithium" data-author="CaffeineMC" data-version="0.12.1 (1.20.4)" data-desc="Оптимизация логики сервера — меньше лагов." data-binds="Нет" data-addons="Sodium — в паре" data-link="https://modrinth.com/mod/lithium">
+                <div class="mod-name">Lithium <span class="mod-author">CaffeineMC</span></div>
+                <div class="mod-version">0.12.1 (1.20.4)</div>
+                <div class="mod-short-desc">Оптимизация логики.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="OptiFine" data-author="sp614x" data-version="HD_U_I5 (1.20.1)" data-desc="Классический оптимизатор. Шейдеры, HD-текстуры." data-binds="Ctrl+Shift+→ — шейдеры" data-addons="—" data-link="https://optifine.net/downloads">
+                <div class="mod-name">OptiFine <span class="mod-author">sp614x</span></div>
+                <div class="mod-version">HD_U_I5 (1.20.1)</div>
+                <div class="mod-short-desc">Шейдеры + производительность.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="ModernFix" data-author="embeddedt" data-version="5.18.0 (1.20.4)" data-desc="Ускоряет загрузку, снижает фризы." data-binds="Нет" data-addons="Sodium — дополняет" data-link="https://modrinth.com/mod/modernfix">
+                <div class="mod-name">ModernFix <span class="mod-author">embeddedt</span></div>
+                <div class="mod-version">5.18.0 (1.20.4)</div>
+                <div class="mod-short-desc">Ускоряет загрузку.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="FerriteCore" data-author="malte0811" data-version="6.0.1 (1.20.4)" data-desc="Уменьшает потребление памяти." data-binds="Нет" data-addons="Sodium, Lithium" data-link="https://modrinth.com/mod/ferrite-core">
+                <div class="mod-name">FerriteCore <span class="mod-author">malte0811</span></div>
+                <div class="mod-version">6.0.1 (1.20.4)</div>
+                <div class="mod-short-desc">Меньше оперативной памяти.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!--  РАЗДЕЛ 4: ТЕХНИЧЕСКИЕ -->
+    <!-- ====================================================================== -->
+    <div class="category" data-category="tech">
+        <h2>⚙️ Технические моды <span class="count">5</span></h2>
+        <div class="mod-grid">
+            <div class="mod-card" data-name="Create" data-author="simibubi" data-version="0.5.1f (1.20.1)" data-desc="Механика, шестерни, конвейеры и автоматизация." data-binds="W — руководство" data-addons="Create Crafts & Additions" data-link="https://www.curseforge.com/minecraft/mc-mods/create">
+                <div class="mod-name">Create <span class="mod-author">simibubi</span></div>
+                <div class="mod-version">0.5.1f (1.20.1)</div>
+                <div class="mod-short-desc">Механика и автоматизация.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="Mekanism" data-author="aidancbrady" data-version="10.4.5 (1.20.1)" data-desc="Многоблочные машины, ядерная энергия." data-binds="H — руководство" data-addons="Mekanism Generators" data-link="https://www.curseforge.com/minecraft/mc-mods/mekanism">
+                <div class="mod-name">Mekanism <span class="mod-author">aidancbrady</span></div>
+                <div class="mod-version">10.4.5 (1.20.1)</div>
+                <div class="mod-short-desc">Многоблочные машины и энергия.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="Thermal Expansion" data-author="CoFH" data-version="10.3.0 (1.20.1)" data-desc="Энергия RF, генераторы, машины." data-binds="Нет" data-addons="Thermal Dynamics" data-link="https://www.curseforge.com/minecraft/mc-mods/thermal-expansion">
+                <div class="mod-name">Thermal Expansion <span class="mod-author">CoFH</span></div>
+                <div class="mod-version">10.3.0 (1.20.1)</div>
+                <div class="mod-short-desc">Энергия RF и машины.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="Immersive Engineering" data-author="BluSunrize" data-version="9.2.4 (1.20.1)" data-desc="Инженерные мультиблоки, реалистичная энергетика." data-binds="Нет" data-addons="Immersive Petroleum" data-link="https://www.curseforge.com/minecraft/mc-mods/immersive-engineering">
+                <div class="mod-name">Immersive Engineering <span class="mod-author">BluSunrize</span></div>
+                <div class="mod-version">9.2.4 (1.20.1)</div>
+                <div class="mod-short-desc">Инженерные мультиблоки.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+            <div class="mod-card" data-name="Applied Energistics 2" data-author="AE2" data-version="15.2.0 (1.20.1)" data-desc="Сетевое хранение, автоматизация крафта." data-binds="Ctrl+G — терминал" data-addons="AE2 Wireless" data-link="https://www.curseforge.com/minecraft/mc-mods/applied-energistics-2">
+                <div class="mod-name">Applied Energistics 2 <span class="mod-author">AE2</span></div>
+                <div class="mod-version">15.2.0 (1.20.1)</div>
+                <div class="mod-short-desc">Сетевое хранение и автоматизация.</div>
+                <div class="click-hint">🖱️ нажми для деталей</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span class="badge">📦 Все ссылки ведут на официальные страницы</span>
+        <p style="margin-top:8px;">Скачивай только с проверенных сайтов: <strong>CurseForge</strong> и <strong>Modrinth</strong>.</p>
+    </div>
+</div>
+
+<!-- ====================================================================== -->
+<!--  МОДАЛЬНОЕ ОКНО -->
+<!-- ====================================================================== -->
+<div class="modal" id="modModal">
+    <div class="modal-content">
+        <button class="close-btn" id="closeModal">&times;</button>
+        <h2 id="modalName">Название</h2>
+        <div class="meta"><span id="modalAuthor">Автор</span> · <span id="modalVersion">Версия</span></div>
+        <div class="full-desc" id="modalDesc">Описание...</div>
+        <div class="binds">
+            <h4>🎮 Бинды (клавиши)</h4>
+            <ul id="modalBinds"><li>нет</li></ul>
+        </div>
+        <div class="addons">
+            <h4>🧩 Дополнения и совместимость</h4>
+            <ul id="modalAddons"><li>нет</li></ul>
+        </div>
+        <a href="#" id="modalLink" class="download-btn" target="_blank">📥 Скачать</a>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // 1. КАРТОЧКИ
+    // ============================================================
+    const cards = document.querySelectorAll('.mod-card');
+    const modal = document.getElementById('modModal');
+    const closeBtn = document.getElementById('closeModal');
+
+    const modalName = document.getElementById('modalName');
+    const modalAuthor = document.getElementById('modalAuthor');
+    const modalVersion = document.getElementById('modalVersion');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalBinds = document.getElementById('modalBinds');
+    const modalAddons = document.getElementById('modalAddons');
+    const modalLink = document.getElementById('modalLink');
+
+    // ============================================================
+    // 2. ОТКРЫТИЕ
+    // ============================================================
+    cards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            const name = this.dataset.name || 'Неизвестно';
+            const author = this.dataset.author || 'Неизвестен';
+            const version = this.dataset.version || '?';
+            const desc = this.dataset.desc || 'Описание отсутствует.';
+            const binds = this.dataset.binds || 'нет';
+            const addons = this.dataset.addons || 'нет';
+            const link = this.dataset.link || '#';
+
+            modalName.textContent = name;
+            modalAuthor.textContent = author;
+            modalVersion.textContent = version;
+            modalDesc.textContent = desc;
+
+            const bindsList = binds.split(';').filter(b => b.trim() !== '');
+            modalBinds.innerHTML = bindsList.length > 0
+                ? bindsList.map(b => `<li>${b.trim()}</li>`).join('')
+                : '<li>нет</li>';
+
+            const addonsList = addons.split(';').filter(a => a.trim() !== '');
+            modalAddons.innerHTML = addonsList.length > 0
+                ? addonsList.map(a => `<li>${a.trim()}</li>`).join('')
+                : '<li>нет</li>';
+
+            modalLink.href = link;
+            modal.classList.add('show');
+        });
+    });
+
+    // ============================================================
+    // 3. ЗАКРЫТИЕ
+    // ============================================================
+    function closeModal() {
+        modal.classList.remove('show');
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    // ============================================================
+    // 4. ПОИСК
+    // ============================================================
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+        cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            card.style.display = (query === '' || text.includes(query)) ? 'block' : 'none';
+        });
+        document.querySelectorAll('.category').forEach(cat => {
+            const visible = cat.querySelectorAll('.mod-card[style*="display: block"]').length > 0;
+            cat.style.display = (query === '' || visible) ? 'block' : 'none';
+        });
+    });
+</script>
+
+</body>
+</html>
