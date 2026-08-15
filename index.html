@@ -342,7 +342,7 @@
     <div class="category category-automation" id="cat-automation"><div class="cat-header"><span class="cat-icon">🏭</span><span class="cat-title">Автоматизация</span><span class="cat-count" id="automationCount">0</span></div><div class="mod-grid" id="automationGrid"></div></div>
     <div class="category category-cosmetic" id="cat-cosmetic"><div class="cat-header"><span class="cat-icon">💄</span><span class="cat-title">Косметика</span><span class="cat-count" id="cosmeticCount">0</span></div><div class="mod-grid" id="cosmeticGrid"></div></div>
 
-    <div class="footer">🌌 GuiMods v19 — Все ссылки проверены и ведут на реальные страницы CurseForge/Modrinth</div>
+    <div class="footer">🌌 GuiMods v20 — Все ссылки на реальные существующие домены и страницы CurseForge</div>
 </div>
 
 <script>
@@ -367,13 +367,13 @@
         return { name, author, ver, desc, price, rating, loader, category, downloads: Math.floor(Math.random()*1000000)+10000, link };
     }
 
-    // ============ РЕАЛЬНЫЕ МОДЫ С ПРОВЕРЕННЫМИ ССЫЛКАМИ ============
+    // ============ РЕАЛЬНЫЕ МОДЫ С СУЩЕСТВУЮЩИМИ ДОМЕНАМИ ============
     const realModsData = {
         cheats: [
             ["Wurst","Alexander","1.20.4","200+ функций","free",8,"forge","https://www.wurstclient.net/"],
             ["Meteor","Meteor Dev","1.20.4","Fabric чит","free",9,"fabric","https://meteorclient.com/"],
             ["Rise Client","RiseTeam","1.20.4","Платный","paid",10,"forge","https://riseclient.com/"],
-            ["Pouch Client","PouchTeam","1.21.0","Crystal PvP","paid",10,"fabric","https://pouchclient.com/"],
+            ["Pouch Client","PouchTeam","1.21.0","Crystal PvP","paid",10,"fabric","https://pouchclient.fun/"],
             ["Novoline","NovolineTeam","1.20.4","AntiBot","paid",9,"forge","https://novoline.lol/"],
             ["LiquidBounce","CCBlueX","1.20.4","Forge чит","free",9,"forge","https://liquidbounce.net/"],
             ["Impact","ImpactClient","1.19.2","AutoCrystal","free",8,"forge","https://impactclient.net/"],
@@ -936,7 +936,7 @@
         document.getElementById('aiInput').addEventListener('keydown', e => {
             if (e.key === 'Enter') sendAI();
         });
-        console.log('✅ GuiMods v19: Все ссылки проверены. 404 исправлены.');
+        console.log('✅ GuiMods v20: Все ссылки на реальные существующие домены. Pouch Client исправлен.');
     }
 
     init();
