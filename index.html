@@ -1,945 +1,1067 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GuiMods — 2000+ Модов, Шейдеров, Ресурс-паков</title>
-    <style>
-        :root {
-            --bg-primary: #050508;
-            --accent-gold: #ffaa00;
-            --text-primary: #f0f0f8;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #ffaa00 #0a0a12; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0a0a12; }
-        ::-webkit-scrollbar-thumb { background: #ffaa00; border-radius: 3px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nimbus — мессенджер для общения</title>
+<style>
+  :root{
+    --bg:#0e1621;
+    --bg-sidebar:#17212b;
+    --bg-chat:#0e1621;
+    --bg-hover:#202b36;
+    --bg-active:#2b5278;
+    --bubble-in:#182533;
+    --bubble-out:#2b5278;
+    --accent:#5288c1;
+    --accent-2:#7ab3ef;
+    --text:#ffffff;
+    --text-dim:#7f91a4;
+    --border:#0b0f14;
+    --input:#242f3d;
+    --shadow:rgba(0,0,0,.35);
+  }
+  body.light{
+    --bg:#ffffff;
+    --bg-sidebar:#f4f6f9;
+    --bg-chat:#e7ebf0;
+    --bg-hover:#e4e9ef;
+    --bg-active:#4f92d6;
+    --bubble-in:#ffffff;
+    --bubble-out:#d6e8fb;
+    --accent:#4f92d6;
+    --accent-2:#2b6cb0;
+    --text:#1c2833;
+    --text-dim:#8a97a5;
+    --border:#dde3ea;
+    --input:#eef2f6;
+    --shadow:rgba(0,0,0,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;}
+  html,body{height:100%;}
+  body{background:var(--bg);color:var(--text);overflow:hidden;transition:background .3s,color .3s;}
 
-        body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: 'Segoe UI', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-            transition: background 0.8s;
-        }
+  #app{display:flex;height:100vh;width:100vw;}
 
-        .bg-layer { position: fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:0; transition: opacity 1s; }
-        .bg-layer.active { opacity:1; }
-        .bg-quasar { background: radial-gradient(ellipse at 30% 70%, #1a0500, #4d1000 20%, #993000 40%, #cc5000 55%, #ff7000 65%, #ffaa00 70%, #ffffff 73%, #ffdd00 74%, #ff7000 80%, #802000 90%, #0a0200); }
-        .bg-beach { background: linear-gradient(180deg, #87ceeb 0%, #87ceeb 50%, #ffd700 50%, #ffd700 52%, #deb887 52%, #deb887 70%, #20b2aa 70%, #20b2aa 100%); }
-        .bg-cave { background: radial-gradient(ellipse at 50% 60%, #3a2a1a, #1a0a00 40%, #0a0500 60%, #000); }
-        .bg-space { background: #050510; }
-        .bg-city { background: linear-gradient(180deg, #0a0a2a, #2a2a4a 50%, #0a0a1a); }
-        .bg-forest { background: linear-gradient(180deg, #1a3a1a, #052005 60%, #021002); }
-        .bg-neon { background: linear-gradient(135deg, #0a001a, #1a003a 30%, #0a0a2a 60%, #000a1a); }
-        .bg-sunset { background: linear-gradient(180deg, #1a0a2a, #4a1a3a 30%, #aa4400 55%, #ff8800 70%, #1a0500 100%); }
-        .bg-arctic { background: linear-gradient(180deg, #e8f4ff 0%, #cce8ff 40%, #99ccff 60%, #336699 80%, #0a1a2a 100%); }
-        .bg-desert { background: linear-gradient(180deg, #ffcc66, #ffaa44 30%, #cc8833 60%, #663311 80%, #1a0a00 100%); }
-        .bg-ocean { background: linear-gradient(180deg, #1a6a8a 0%, #0a4a6a 40%, #032030 70%, #010a18 100%); }
-        .bg-volcano { background: radial-gradient(ellipse at 50% 80%, #1a0500, #4a1000 30%, #aa4400 50%, #ff6600 60%, #ffaa00 65%, #1a0a00 90%, #000); }
-        .bg-aurora { background: linear-gradient(135deg, #001a0a, #00331a 25%, #006633 50%, #00331a 75%, #001a0a); }
-        .bg-sakura { background: linear-gradient(180deg, #ffe8f0 0%, #ffcce0 40%, #ff99cc 60%, #ff6699 80%, #cc3377 100%); }
-        .bg-dungeon { background: radial-gradient(ellipse at 50% 50%, #1a1a1a, #0a0a0a 50%, #000 100%); }
-        .bg-blackhole { background: radial-gradient(ellipse at 50% 50%, #0a0010 0%, #150025 20%, #0a0015 40%, #000000 70%, #000000 100%); }
+  #sidebar{
+    width:340px;min-width:300px;height:100%;
+    background:var(--bg-sidebar);
+    border-right:1px solid var(--border);
+    display:flex;flex-direction:column;
+    transition:transform .3s;
+  }
+  #sidebar .top{
+    padding:12px 14px;display:flex;gap:10px;align-items:center;
+  }
+  .logo{
+    font-weight:700;font-size:18px;white-space:nowrap;
+    background:linear-gradient(90deg,#5288c1,#7ab3ef);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  #search{
+    flex:1;background:var(--input);border:none;outline:none;
+    padding:9px 14px;border-radius:20px;color:var(--text);font-size:14px;
+  }
+  #search::placeholder{color:var(--text-dim);}
+  #themeBtn, #profileBtn{
+    width:38px;height:38px;border:none;border-radius:50%;cursor:pointer;
+    background:var(--input);color:var(--text);font-size:17px;flex-shrink:0;
+    transition:transform .2s;
+  }
+  #themeBtn:hover{transform:rotate(20deg);}
+  #profileBtn:hover{transform:scale(1.1);}
 
-        .stars-layer { position:fixed; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none; opacity:0; transition: opacity 1s; }
-        .stars-layer.active { opacity:1; }
-        .star-dot { position:absolute; border-radius:50%; background:#fff; animation:tw 3s infinite; }
-        @keyframes tw { 0%,100%{opacity:.3} 50%{opacity:1} }
+  #chatList{flex:1;overflow-y:auto;}
+  #chatList::-webkit-scrollbar{width:5px;}
+  #chatList::-webkit-scrollbar-thumb{background:var(--bg-hover);border-radius:3px;}
 
-        .container { max-width:1400px; margin:0 auto; padding:0 16px; position:relative; z-index:3; }
+  .chat-item{
+    display:flex;align-items:center;gap:12px;
+    padding:11px 14px;cursor:pointer;transition:background .15s;
+  }
+  .chat-item:hover{background:var(--bg-hover);}
+  .chat-item.active{background:var(--bg-active);}
+  .chat-item.active .last,.chat-item.active .time{color:rgba(255,255,255,.75);}
+  .chat-item.active .name{color:#fff;}
 
-        .theme-panel { position:fixed; bottom:14px; right:14px; z-index:200; display:grid; grid-template-columns:repeat(4,1fr); gap:5px; background:rgba(10,10,18,.9); padding:8px; border-radius:14px; border:1px solid rgba(255,170,0,.3); }
-        .theme-panel button { width:34px; height:34px; border-radius:50%; border:2px solid rgba(255,255,255,.3); cursor:pointer; font-size:.9em; transition:.3s; background:rgba(20,20,30,.8); }
-        .theme-panel button:hover { transform:scale(1.15); border-color:#ffaa00; }
-        .theme-panel button.active-theme { border-color:#ffaa00; box-shadow:0 0 12px rgba(255,170,0,.6); }
+  .avatar{
+    width:50px;height:50px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:600;font-size:17px;color:#fff;position:relative;
+    background:linear-gradient(135deg,#5288c1,#7ab3ef);
+    overflow:hidden;
+  }
+  .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+  .chat-info{flex:1;min-width:0;}
+  .chat-row1{display:flex;justify-content:space-between;align-items:baseline;}
+  .name{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .time{font-size:12px;color:var(--text-dim);flex-shrink:0;margin-left:8px;}
+  .chat-row2{display:flex;justify-content:space-between;align-items:center;margin-top:3px;}
+  .last{font-size:13.5px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
 
-        .header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; background:rgba(10,10,18,.92); backdrop-filter:blur(8px); padding:14px 20px; border-radius:14px; border:1px solid rgba(255,170,0,.25); margin-bottom:18px; position:sticky; top:8px; z-index:100; gap:10px; }
-        .header-logo { font-size:1.7em; font-weight:900; background:linear-gradient(135deg,#ffaa00,#ffcc44); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-        .header-logo span { background:linear-gradient(135deg,#66ccff,#88ddff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-        .header-btn { background:rgba(30,30,44,.85); padding:7px 12px; border-radius:16px; color:#e0e0e8; font-size:.8em; border:1px solid rgba(255,170,0,.3); cursor:pointer; transition:.25s; }
-        .header-btn:hover { background:#ffaa00; color:#000; }
+  #chatArea{flex:1;display:flex;flex-direction:column;height:100%;position:relative;}
 
-        .filter-panel { background:rgba(10,10,18,.92); backdrop-filter:blur(8px); border-radius:14px; padding:16px 18px; margin-bottom:16px; border:1px solid rgba(255,170,0,.3); display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-        .filter-group { display:flex; flex-direction:column; gap:4px; flex:1; min-width:150px; }
-        .filter-label { font-size:.7em; color:#aaa; font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
-        .filter-select { padding:8px 10px; border-radius:10px; border:1px solid rgba(255,170,0,.3); background:rgba(20,20,30,.9); color:#fff; font-size:.85em; cursor:pointer; outline:none; }
-        .filter-select:hover { border-color:#ffaa00; }
-        .filter-select option { background:#1a1a2a; color:#fff; }
-        .filter-btn { background:linear-gradient(135deg,#ffaa00,#ff6600); color:#000; border:none; padding:10px 18px; border-radius:12px; cursor:pointer; font-weight:700; font-size:.85em; transition:.3s; white-space:nowrap; }
-        .filter-btn:hover { transform:translateY(-2px); box-shadow:0 5px 20px rgba(255,170,0,.4); }
-        .filter-reset { background:rgba(255,68,68,.3); color:#fff; border:1px solid #ff4444; padding:10px 14px; border-radius:12px; cursor:pointer; font-size:.8em; }
-        .filter-reset:hover { background:#ff4444; }
+  #chatHeader{
+    display:flex;align-items:center;gap:12px;padding:10px 16px;
+    background:var(--bg-sidebar);border-bottom:1px solid var(--border);
+  }
+  #backBtn{
+    display:none;width:38px;height:38px;border:none;border-radius:50%;
+    background:transparent;color:var(--text);font-size:20px;cursor:pointer;
+  }
+  #chatHeader .avatar{width:42px;height:42px;font-size:15px;}
+  .h-name{font-weight:600;font-size:15.5px;}
+  .h-status{font-size:13px;color:var(--text-dim);}
+  .h-status.online{color:#43cc5e;}
+  #headerActions{margin-left:auto;display:flex;gap:6px;}
+  #headerActions button{
+    width:38px;height:38px;border:none;border-radius:50%;cursor:pointer;
+    background:transparent;color:var(--text-dim);font-size:17px;transition:background .15s;
+  }
+  #headerActions button:hover{background:var(--bg-hover);}
 
-        .filter-stats { font-size:.8em; color:#66ccff; text-align:center; margin-bottom:10px; background:rgba(10,10,18,.8); padding:8px; border-radius:10px; border:1px solid rgba(102,204,255,.3); }
+  #messages{
+    flex:1;overflow-y:auto;padding:20px 8%;
+    display:flex;flex-direction:column;gap:4px;
+  }
+  #messages::-webkit-scrollbar{width:6px;}
+  #messages::-webkit-scrollbar-thumb{background:var(--bg-hover);border-radius:3px;}
 
-        .category { border-radius:14px; padding:16px; margin-bottom:18px; transition:.3s; }
-        .cat-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
-        .cat-icon { font-size:1.5em; }
-        .cat-title { font-size:1.2em; font-weight:800; }
-        .cat-count { font-size:.7em; background:rgba(0,0,0,.4); padding:3px 10px; border-radius:10px; margin-left:auto; }
+  .date-chip{
+    align-self:center;background:var(--bg-sidebar);color:var(--text-dim);
+    font-size:12.5px;padding:5px 12px;border-radius:14px;margin:10px 0;
+    box-shadow:0 1px 2px var(--shadow);
+  }
+  .msg{
+    max-width:65%;padding:8px 12px;border-radius:14px;
+    font-size:15px;line-height:1.4;position:relative;
+    box-shadow:0 1px 2px var(--shadow);
+    animation:pop .18s ease-out;
+    word-wrap:break-word;
+  }
+  @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.97);}to{opacity:1;transform:none;}}
+  .msg.in{align-self:flex-start;background:var(--bubble-in);border-bottom-left-radius:4px;}
+  .msg.out{align-self:flex-end;background:var(--bubble-out);border-bottom-right-radius:4px;color:#fff;}
+  body.light .msg.out{color:var(--text);}
+  .msg .m-time{
+    font-size:11px;opacity:.6;float:right;margin:8px 0 0 10px;
+    display:inline-flex;align-items:center;gap:3px;
+  }
 
-        .category-cheats { background:rgba(30,5,5,.85); border:2px solid #ff4444; }
-        .category-cheats .cat-title { color:#ff5555; }
-        .category-visuals { background:rgba(5,5,30,.85); border:2px solid #6666ff; }
-        .category-visuals .cat-title { color:#7777ff; }
-        .category-optimization { background:rgba(5,25,5,.85); border:2px solid #44ff44; }
-        .category-optimization .cat-title { color:#55ff55; }
-        .category-horror { background:rgba(20,3,20,.85); border:2px solid #bb00bb; }
-        .category-horror .cat-title { color:#cc22cc; }
-        .category-builds { background:rgba(25,15,3,.85); border:2px solid #ff9900; }
-        .category-builds .cat-title { color:#ffaa00; }
-        .category-tech { background:rgba(3,20,25,.85); border:2px solid #00cccc; }
-        .category-tech .cat-title { color:#22dddd; }
-        .category-magic { background:rgba(15,3,25,.85); border:2px solid #9900ff; }
-        .category-magic .cat-title { color:#aa22ff; }
-        .category-adventure { background:rgba(3,20,10,.85); border:2px solid #00cc66; }
-        .category-adventure .cat-title { color:#22dd77; }
-        .category-utility { background:rgba(20,20,25,.85); border:2px solid #bbbbdd; }
-        .category-utility .cat-title { color:#ccccdd; }
-        .category-other { background:rgba(15,15,20,.85); border:2px solid #999; }
-        .category-other .cat-title { color:#aaa; }
+  #inputBar{
+    display:flex;align-items:flex-end;gap:8px;padding:10px 14px 14px;
+  }
+  .iBtn{
+    width:44px;height:44px;border:none;border-radius:50%;cursor:pointer;
+    background:transparent;color:var(--text-dim);font-size:20px;flex-shrink:0;
+    transition:background .15s,color .15s;
+  }
+  .iBtn:hover{background:var(--bg-hover);color:var(--text);}
+  #msgInput{
+    flex:1;background:var(--input);border:none;outline:none;resize:none;
+    color:var(--text);font-size:15px;padding:12px 16px;border-radius:22px;
+    max-height:120px;line-height:1.35;font-family:inherit;
+  }
+  #msgInput::placeholder{color:var(--text-dim);}
+  #sendBtn{
+    width:44px;height:44px;border:none;border-radius:50%;cursor:pointer;flex-shrink:0;
+    background:var(--accent);color:#fff;font-size:18px;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .15s,background .15s;
+  }
+  #sendBtn:hover{transform:scale(1.08);background:var(--accent-2);}
 
-        .category-shaders { background:rgba(3,15,30,.85); border:2px solid #44aaff; }
-        .category-shaders .cat-title { color:#55bbff; }
-        .category-shaders .cat-icon { color:#44aaff; }
+  #emptyState{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:14px;
+    background:var(--bg-chat);z-index:5;
+  }
+  #emptyState .big{
+    width:110px;height:110px;border-radius:50%;
+    background:linear-gradient(135deg,#5288c1,#7ab3ef);
+    display:flex;align-items:center;justify-content:center;font-size:50px;
+    box-shadow:0 10px 30px var(--shadow);
+  }
+  #emptyState p{color:var(--text-dim);font-size:15px;}
 
-        .category-resourcepacks { background:rgba(15,20,3,.85); border:2px solid #aaff44; }
-        .category-resourcepacks .cat-title { color:#bbff55; }
-        .category-resourcepacks .cat-icon { color:#aaff44; }
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,.6);
+    display:none;align-items:center;justify-content:center;z-index:100;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--bg-sidebar);border-radius:16px;
+    padding:24px;width:90%;max-width:400px;
+    box-shadow:0 10px 40px var(--shadow);
+  }
+  .modal h2{margin-bottom:20px;font-size:20px;text-align:center;}
+  .modal input{
+    width:100%;padding:12px 16px;margin-bottom:12px;
+    background:var(--input);border:none;outline:none;
+    border-radius:10px;color:var(--text);font-size:15px;
+  }
+  .modal button{
+    width:100%;padding:12px;margin-top:8px;
+    background:var(--accent);color:#fff;border:none;
+    border-radius:10px;cursor:pointer;font-size:15px;font-weight:600;
+    transition:background .15s;
+  }
+  .modal button:hover{background:var(--accent-2);}
+  .modal button.secondary{
+    background:transparent;color:var(--text-dim);
+    border:1px solid var(--border);
+  }
+  .modal button.secondary:hover{background:var(--bg-hover);}
 
-        .category-weapons { background:rgba(30,10,5,.85); border:2px solid #ff6600; }
-        .category-weapons .cat-title { color:#ff7700; }
-        .category-transport { background:rgba(10,25,30,.85); border:2px solid #00aaff; }
-        .category-transport .cat-title { color:#22bbff; }
-        .category-dimensions { background:rgba(20,5,30,.85); border:2px solid #cc44ff; }
-        .category-dimensions .cat-title { color:#dd55ff; }
-        .category-food { background:rgba(30,20,5,.85); border:2px solid #ffcc00; }
-        .category-food .cat-title { color:#ffdd22; }
-        .category-biomes { background:rgba(5,30,15,.85); border:2px solid #44dd88; }
-        .category-biomes .cat-title { color:#55ee99; }
-        .category-mobs { background:rgba(30,10,20,.85); border:2px solid #ff4488; }
-        .category-mobs .cat-title { color:#ff5599; }
-        .category-storage { background:rgba(15,15,25,.85); border:2px solid #8888cc; }
-        .category-storage .cat-title { color:#9999dd; }
-        .category-energy { background:rgba(5,30,25,.85); border:2px solid #00cc88; }
-        .category-energy .cat-title { color:#22ddaa; }
-        .category-automation { background:rgba(25,20,5,.85); border:2px solid #ccaa00; }
-        .category-automation .cat-title { color:#ddbb22; }
-        .category-cosmetic { background:rgba(20,5,25,.85); border:2px solid #cc44aa; }
-        .category-cosmetic .cat-title { color:#dd55bb; }
+  #profileSection{
+    margin-top:16px;padding-top:16px;border-top:1px solid var(--border);
+  }
+  #profileSection .avatar{
+    width:80px;height:80px;font-size:28px;margin:0 auto 12px;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+  }
+  #profileSection .avatar:hover{opacity:.8;}
 
-        .mod-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:8px; }
-        .mod-card { background:rgba(0,0,0,.4); border-radius:8px; padding:10px; border:1px solid rgba(255,255,255,.1); transition:.25s; cursor:pointer; position:relative; }
-        .mod-card:hover { transform:translateY(-3px); border-color:rgba(255,170,0,.5); }
-        .mod-name { font-weight:700; font-size:.85em; color:#fff; }
-        .mod-ver { color:#aaa; font-size:.68em; }
-        .mod-desc { color:#bbb; font-size:.75em; margin-top:2px; line-height:1.3; }
-        .mod-loader { display:inline-block; padding:1px 5px; border-radius:3px; font-size:.6em; font-weight:700; margin-top:3px; }
-        .loader-forge { background:rgba(255,170,0,.2); color:#ffaa00; }
-        .loader-fabric { background:rgba(102,204,255,.2); color:#66ccff; }
-        .price-tag { display:inline-block; padding:2px 6px; border-radius:5px; font-size:.62em; font-weight:700; margin-top:3px; }
-        .price-free { background:rgba(30,80,30,.5); color:#66ff66; }
-        .price-paid { background:rgba(80,30,30,.5); color:#ff6666; }
-        .mod-rating { color:#ffaa00; font-size:.65em; margin-left:5px; }
-        .mod-downloads { color:#66ccff; font-size:.62em; margin-left:5px; }
-        .mod-link-btn { display:inline-block; background:rgba(102,204,255,.2); color:#66ccff; padding:3px 8px; border-radius:6px; font-size:.65em; margin-top:4px; text-decoration:none; border:1px solid rgba(102,204,255,.3); }
-        .mod-link-btn:hover { background:#66ccff; color:#000; }
-        .official-badge { position:absolute; top:6px; right:6px; background:rgba(0,200,0,.2); color:#66ff66; padding:2px 5px; border-radius:4px; font-size:.6em; border:1px solid rgba(0,255,0,.3); }
-        .paid-badge { position:absolute; top:6px; right:6px; background:rgba(255,0,80,.2); color:#ff6680; padding:2px 5px; border-radius:4px; font-size:.6em; border:1px solid rgba(255,0,80,.3); }
-        .free-badge { position:absolute; top:6px; right:6px; background:rgba(0,200,0,.2); color:#66ff66; padding:2px 5px; border-radius:4px; font-size:.6em; border:1px solid rgba(0,255,0,.3); }
+  /* Call Modal */
+  #callModal{
+    position:fixed;inset:0;background:rgba(0,0,0,.95);
+    display:none;align-items:center;justify-content:center;z-index:200;
+    flex-direction:column;gap:20px;
+  }
+  #callModal.open{display:flex;}
+  #callModal .call-info{color:white;text-align:center;z-index:2;}
+  #callModal .call-name{font-size:24px;font-weight:600;margin-bottom:10px;}
+  #callModal .call-status{font-size:16px;color:#ccc;}
+  #callModal .call-avatar{
+    width:100px;height:100px;border-radius:50%;
+    background:linear-gradient(135deg,#5288c1,#7ab3ef);
+    display:flex;align-items:center;justify-content:center;
+    font-size:40px;color:white;margin-bottom:20px;overflow:hidden;z-index:2;
+  }
+  #callModal .call-avatar img{width:100%;height:100%;object-fit:cover;}
+  #callModal .call-actions{display:flex;gap:20px;z-index:2;}
+  #callModal .call-btn{
+    width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;
+    font-size:24px;display:flex;align-items:center;justify-content:center;
+    transition:transform .2s;
+  }
+  #callModal .call-btn:hover{transform:scale(1.1);}
+  #callModal .call-btn.end{background:#e74c3c;color:white;}
+  #callModal .call-btn.mute{background:#34495e;color:white;}
+  #callModal .call-btn.mute.active{background:#e67e22;}
+  #callModal .call-btn.video{background:#3498db;color:white;}
 
-        .section-box { background:rgba(10,10,18,.9); border-radius:12px; padding:14px 16px; margin-bottom:16px; border:1px solid rgba(255,170,0,.2); }
-        .section-box h2, .section-box h3 { font-size:1.1em; margin-bottom:8px; }
-        .ai-section { border-color:rgba(255,102,170,.3); } .ai-section h3 { color:#ff66aa; }
-        .roulette-section { border-color:rgba(255,136,187,.25); } .roulette-section h3 { color:#ff88bb; }
-        .user-section { border-color:rgba(102,204,255,.25); } .user-section h3 { color:#66ccff; }
+  #remoteVideo{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    object-fit:cover;display:none;
+  }
+  #localVideo{
+    position:fixed;bottom:20px;right:20px;
+    width:150px;height:112px;border-radius:10px;
+    object-fit:cover;z-index:201;display:none;
+    border:2px solid white;
+  }
 
-        .ai-chat { background:rgba(0,0,0,.3); border-radius:8px; padding:10px; max-height:160px; overflow-y:auto; margin-bottom:8px; }
-        .ai-msg { padding:5px 7px; border-radius:5px; margin-bottom:3px; font-size:.78em; }
-        .ai-msg.user { background:rgba(102,204,255,.1); border-left:2px solid #66ccff; }
-        .ai-msg.bot { background:rgba(255,102,170,.1); border-left:2px solid #ff66aa; }
-        .ai-input-row { display:flex; gap:6px; }
-        .ai-input { flex:1; padding:7px 10px; border-radius:12px; border:1px solid rgba(255,102,170,.3); background:rgba(20,20,30,.8); color:#fff; font-size:.8em; outline:none; }
-        .ai-btn { background:#ff66aa; color:#fff; border:none; padding:7px 12px; border-radius:12px; cursor:pointer; font-weight:600; font-size:.8em; }
+  #incomingCallModal{
+    position:fixed;top:20px;right:20px;
+    background:var(--bg-sidebar);border-radius:16px;
+    padding:20px;box-shadow:0 10px 40px var(--shadow);
+    z-index:300;display:none;animation:slideIn .3s ease-out;
+  }
+  #incomingCallModal.open{display:block;}
+  @keyframes slideIn{
+    from{transform:translateX(100%);opacity:0;}
+    to{transform:translateX(0);opacity:1;}
+  }
+  #incomingCallModal .caller-info{
+    display:flex;align-items:center;gap:15px;margin-bottom:20px;
+  }
+  #incomingCallModal .call-actions{
+    display:flex;gap:10px;justify-content:center;
+  }
+  #incomingCallModal .btn{
+    padding:10px 20px;border-radius:25px;border:none;cursor:pointer;
+    font-size:14px;font-weight:600;transition:transform .2s;
+  }
+  #incomingCallModal .btn:hover{transform:scale(1.05);}
+  #incomingCallModal .btn.accept{background:#27ae60;color:white;}
+  #incomingCallModal .btn.decline{background:#e74c3c;color:white;}
 
-        .search-row { margin-bottom:14px; position:relative; }
-        #searchInput { width:100%; padding:11px 14px 11px 36px; border-radius:16px; border:2px solid rgba(255,170,0,.3); background:rgba(10,10,18,.9); color:#fff; font-size:.85em; outline:none; }
-        #searchInput:focus { border-color:#ffaa00; }
-        .search-icon { position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:.85em; }
-
-        .footer { text-align:center; margin-top:20px; padding:12px; color:#777; font-size:.72em; }
-        .hidden-category { display:none !important; }
-
-        @media(max-width:768px) {
-            .mod-grid { grid-template-columns:1fr; }
-            .theme-panel { bottom:6px; right:6px; grid-template-columns:repeat(4,1fr); }
-            .theme-panel button { width:28px; height:28px; font-size:.75em; }
-            .filter-group { min-width:120px; }
-        }
-    </style>
+  @media(max-width:760px){
+    #sidebar{width:100%;min-width:0;position:absolute;z-index:10;height:100%;}
+    body.in-chat #sidebar{transform:translateX(-100%);}
+    #backBtn{display:flex;align-items:center;justify-content:center;}
+    #messages{padding:16px 4%;}
+    .msg{max-width:82%;}
+    #localVideo{width:100px;height:75px;}
+  }
+</style>
 </head>
 <body>
+<div id="app">
+  <aside id="sidebar">
+    <div class="top">
+      <div class="logo">Nimbus</div>
+      <input id="search" type="text" placeholder="Введите номер друга" autocomplete="off">
+      <button id="themeBtn" title="Сменить тему">🌙</button>
+      <button id="profileBtn" title="Мой профиль">⚙️</button>
+    </div>
+    <div id="chatList"></div>
+  </aside>
 
-<!-- ФОНЫ -->
-<div class="bg-layer bg-quasar active" id="bgQuasar"></div>
-<div class="bg-layer bg-beach" id="bgBeach"></div>
-<div class="bg-layer bg-cave" id="bgCave"></div>
-<div class="bg-layer bg-space" id="bgSpace"></div>
-<div class="bg-layer bg-city" id="bgCity"></div>
-<div class="bg-layer bg-forest" id="bgForest"></div>
-<div class="bg-layer bg-neon" id="bgNeon"></div>
-<div class="bg-layer bg-sunset" id="bgSunset"></div>
-<div class="bg-layer bg-arctic" id="bgArctic"></div>
-<div class="bg-layer bg-desert" id="bgDesert"></div>
-<div class="bg-layer bg-ocean" id="bgOcean"></div>
-<div class="bg-layer bg-volcano" id="bgVolcano"></div>
-<div class="bg-layer bg-aurora" id="bgAurora"></div>
-<div class="bg-layer bg-sakura" id="bgSakura"></div>
-<div class="bg-layer bg-dungeon" id="bgDungeon"></div>
-<div class="bg-layer bg-blackhole" id="bgBlackhole"></div>
-<div class="stars-layer" id="starsLayer"></div>
+  <main id="chatArea">
+    <div id="emptyState">
+      <div class="big">💬</div>
+      <p>Введите номер друга в поиске, чтобы начать чат</p>
+    </div>
 
-<!-- ТЕМЫ -->
-<div class="theme-panel">
-    <button onclick="setTheme('quasar')" class="active-theme">🌟</button>
-    <button onclick="setTheme('beach')">🏖️</button>
-    <button onclick="setTheme('cave')">🕳️</button>
-    <button onclick="setTheme('space')">🌌</button>
-    <button onclick="setTheme('city')">🌃</button>
-    <button onclick="setTheme('forest')">🌲</button>
-    <button onclick="setTheme('neon')">💜</button>
-    <button onclick="setTheme('sunset')">🌅</button>
-    <button onclick="setTheme('arctic')">❄️</button>
-    <button onclick="setTheme('desert')">🏜️</button>
-    <button onclick="setTheme('ocean')">🌊</button>
-    <button onclick="setTheme('volcano')">🌋</button>
-    <button onclick="setTheme('aurora')">🌠</button>
-    <button onclick="setTheme('sakura')">🌸</button>
-    <button onclick="setTheme('dungeon')">🏰</button>
-    <button onclick="setTheme('blackhole')">🕳️</button>
+    <div id="chatHeader" style="display:none">
+      <button id="backBtn">←</button>
+      <div class="avatar" id="hAvatar"></div>
+      <div>
+        <div class="h-name" id="hName"></div>
+        <div class="h-status" id="hStatus">в сети</div>
+      </div>
+      <div id="headerActions">
+        <button title="Голосовой звонок" onclick="startVoiceCall()">📞</button>
+        <button title="Видеозвонок" onclick="startVideoCall()">🎥</button>
+      </div>
+    </div>
+
+    <div id="messages"></div>
+
+    <div id="inputBar" style="display:none">
+      <button class="iBtn" id="attachBtn" title="Прикрепить">📎</button>
+      <textarea id="msgInput" rows="1" placeholder="Сообщение"></textarea>
+      <button id="sendBtn" title="Отправить">➤</button>
+    </div>
+  </main>
 </div>
 
-<div class="container">
-    <div class="header">
-        <div class="header-logo">🌌 <span>gui</span>mods</div>
-        <div style="display:flex; gap:5px; flex-wrap:wrap;">
-            <button class="header-btn" onclick="scrollToId('rouletteSection')">🎲</button>
-            <button class="header-btn" onclick="scrollToId('userSection')">👤</button>
-            <button class="header-btn" onclick="scrollToId('aiSection')">🤖</button>
-            <button class="header-btn" onclick="toggleAllMods()">📦</button>
-        </div>
-    </div>
-
-    <!-- ФИЛЬТРЫ -->
-    <div class="filter-panel">
-        <div class="filter-group">
-            <span class="filter-label">📌 Версия</span>
-            <select class="filter-select" id="versionFilter"><option value="all">Все версии</option></select>
-        </div>
-        <div class="filter-group">
-            <span class="filter-label">⚙️ Загрузчик</span>
-            <select class="filter-select" id="loaderFilter">
-                <option value="all">Все</option>
-                <option value="forge">Forge</option>
-                <option value="fabric">Fabric</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <span class="filter-label">🏷️ Категория</span>
-            <select class="filter-select" id="categoryFilter">
-                <option value="all">Все категории</option>
-                <option value="cheats">🔥 Читы</option>
-                <option value="visuals">🎨 Визуалы</option>
-                <option value="shaders">💎 Шейдеры</option>
-                <option value="resourcepacks">📦 Ресурс-паки</option>
-                <option value="optimization">🚀 Оптимизация</option>
-                <option value="horror">👻 Хоррор</option>
-                <option value="builds">📦 Сборки</option>
-                <option value="tech">⚙️ Техника</option>
-                <option value="magic">✨ Магия</option>
-                <option value="adventure">🗺️ Приключения</option>
-                <option value="utility">🛠️ Утилиты</option>
-                <option value="other">📦 Другое</option>
-                <option value="weapons">🔫 Оружие</option>
-                <option value="transport">🚗 Транспорт</option>
-                <option value="dimensions">🌌 Измерения</option>
-                <option value="food">🍔 Еда</option>
-                <option value="biomes">🌍 Биомы</option>
-                <option value="mobs">👾 Мобы</option>
-                <option value="storage">📦 Хранение</option>
-                <option value="energy">⚡ Энергия</option>
-                <option value="automation">🏭 Автоматизация</option>
-                <option value="cosmetic">💄 Косметика</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <span class="filter-label">💰 Цена</span>
-            <select class="filter-select" id="priceFilter">
-                <option value="all">Все</option>
-                <option value="free">🆓 Бесплатные</option>
-                <option value="paid">💰 Платные</option>
-            </select>
-        </div>
-        <button class="filter-btn" onclick="applyFilters()">🔍 Применить</button>
-        <button class="filter-reset" onclick="resetFilters()">✕ Сброс</button>
-    </div>
-
-    <div class="filter-stats" id="filterStats">Все элементы отображены</div>
-
-    <div class="section-box">
-        <h2>🌌 GuiMods — 2000+ Элементов</h2>
-        <p style="color:#ccc; font-size:.8em;">Моды + Шейдеры + Ресурс-паки. Все ссылки ведут на официальные сайты или проверенные страницы CurseForge/Modrinth.</p>
-        <p style="color:#66ccff; font-size:.75em;" id="modStats"></p>
-    </div>
-
-    <div class="search-row">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Поиск модов, шейдеров, ресурс-паков...">
-    </div>
-
-    <div class="section-box roulette-section" id="rouletteSection">
-        <h3>🎲 Рулетка</h3>
-        <div style="display:flex; gap:5px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
-            <input type="number" id="rouletteCount" value="3" min="1" max="20" style="width:55px; padding:6px; border-radius:10px; border:1px solid rgba(255,136,187,.3); background:rgba(20,20,30,.8); color:#fff; font-size:.8em;">
-            <button class="ai-btn" onclick="spinRoulette()" style="background:#ff88bb;">🎰 Крутить</button>
-        </div>
-        <div class="mod-grid" id="rouletteResults"></div>
-    </div>
-
-    <div class="section-box user-section" id="userSection">
-        <h3>👤 Мои моды</h3>
-        <div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:8px;">
-            <input type="text" id="userModName" placeholder="Название" style="flex:1; padding:7px 10px; border-radius:10px; border:1px solid rgba(102,204,255,.3); background:rgba(20,20,30,.8); color:#fff; font-size:.8em;">
-            <button class="ai-btn" onclick="addUserMod()" style="background:#66ccff; color:#000;">➕</button>
-        </div>
-        <div class="mod-grid" id="userModsGrid"></div>
-    </div>
-
-    <!-- КАТЕГОРИИ -->
-    <div class="category category-cheats" id="cat-cheats"><div class="cat-header"><span class="cat-icon">🔥</span><span class="cat-title">Читы</span><span class="cat-count" id="cheatsCount">0</span></div><div class="mod-grid" id="cheatsGrid"></div></div>
-    <div class="category category-visuals" id="cat-visuals"><div class="cat-header"><span class="cat-icon">🎨</span><span class="cat-title">Визуалы</span><span class="cat-count" id="visualsCount">0</span></div><div class="mod-grid" id="visualsGrid"></div></div>
-    <div class="category category-shaders" id="cat-shaders"><div class="cat-header"><span class="cat-icon">💎</span><span class="cat-title">Шейдеры</span><span class="cat-count" id="shadersCount">0</span></div><div class="mod-grid" id="shadersGrid"></div></div>
-    <div class="category category-resourcepacks" id="cat-resourcepacks"><div class="cat-header"><span class="cat-icon">📦</span><span class="cat-title">Ресурс-паки</span><span class="cat-count" id="resourcepacksCount">0</span></div><div class="mod-grid" id="resourcepacksGrid"></div></div>
-    <div class="category category-optimization" id="cat-optimization"><div class="cat-header"><span class="cat-icon">🚀</span><span class="cat-title">Оптимизация</span><span class="cat-count" id="optimizationCount">0</span></div><div class="mod-grid" id="optimizationGrid"></div></div>
-    <div class="category category-horror" id="cat-horror"><div class="cat-header"><span class="cat-icon">👻</span><span class="cat-title">Хоррор</span><span class="cat-count" id="horrorCount">0</span></div><div class="mod-grid" id="horrorGrid"></div></div>
-    <div class="category category-builds" id="cat-builds"><div class="cat-header"><span class="cat-icon">📦</span><span class="cat-title">Сборки</span><span class="cat-count" id="buildsCount">0</span></div><div class="mod-grid" id="buildsGrid"></div></div>
-    <div class="category category-tech" id="cat-tech"><div class="cat-header"><span class="cat-icon">⚙️</span><span class="cat-title">Техника</span><span class="cat-count" id="techCount">0</span></div><div class="mod-grid" id="techGrid"></div></div>
-    <div class="category category-magic" id="cat-magic"><div class="cat-header"><span class="cat-icon">✨</span><span class="cat-title">Магия</span><span class="cat-count" id="magicCount">0</span></div><div class="mod-grid" id="magicGrid"></div></div>
-    <div class="category category-adventure" id="cat-adventure"><div class="cat-header"><span class="cat-icon">🗺️</span><span class="cat-title">Приключения</span><span class="cat-count" id="adventureCount">0</span></div><div class="mod-grid" id="adventureGrid"></div></div>
-    <div class="category category-utility" id="cat-utility"><div class="cat-header"><span class="cat-icon">🛠️</span><span class="cat-title">Утилиты</span><span class="cat-count" id="utilityCount">0</span></div><div class="mod-grid" id="utilityGrid"></div></div>
-    <div class="category category-other" id="cat-other"><div class="cat-header"><span class="cat-icon">📦</span><span class="cat-title">Другое</span><span class="cat-count" id="otherCount">0</span></div><div class="mod-grid" id="otherGrid"></div></div>
-    <div class="category category-weapons" id="cat-weapons"><div class="cat-header"><span class="cat-icon">🔫</span><span class="cat-title">Оружие</span><span class="cat-count" id="weaponsCount">0</span></div><div class="mod-grid" id="weaponsGrid"></div></div>
-    <div class="category category-transport" id="cat-transport"><div class="cat-header"><span class="cat-icon">🚗</span><span class="cat-title">Транспорт</span><span class="cat-count" id="transportCount">0</span></div><div class="mod-grid" id="transportGrid"></div></div>
-    <div class="category category-dimensions" id="cat-dimensions"><div class="cat-header"><span class="cat-icon">🌌</span><span class="cat-title">Измерения</span><span class="cat-count" id="dimensionsCount">0</span></div><div class="mod-grid" id="dimensionsGrid"></div></div>
-    <div class="category category-food" id="cat-food"><div class="cat-header"><span class="cat-icon">🍔</span><span class="cat-title">Еда</span><span class="cat-count" id="foodCount">0</span></div><div class="mod-grid" id="foodGrid"></div></div>
-    <div class="category category-biomes" id="cat-biomes"><div class="cat-header"><span class="cat-icon">🌍</span><span class="cat-title">Биомы</span><span class="cat-count" id="biomesCount">0</span></div><div class="mod-grid" id="biomesGrid"></div></div>
-    <div class="category category-mobs" id="cat-mobs"><div class="cat-header"><span class="cat-icon">👾</span><span class="cat-title">Мобы</span><span class="cat-count" id="mobsCount">0</span></div><div class="mod-grid" id="mobsGrid"></div></div>
-    <div class="category category-storage" id="cat-storage"><div class="cat-header"><span class="cat-icon">📦</span><span class="cat-title">Хранение</span><span class="cat-count" id="storageCount">0</span></div><div class="mod-grid" id="storageGrid"></div></div>
-    <div class="category category-energy" id="cat-energy"><div class="cat-header"><span class="cat-icon">⚡</span><span class="cat-title">Энергия</span><span class="cat-count" id="energyCount">0</span></div><div class="mod-grid" id="energyGrid"></div></div>
-    <div class="category category-automation" id="cat-automation"><div class="cat-header"><span class="cat-icon">🏭</span><span class="cat-title">Автоматизация</span><span class="cat-count" id="automationCount">0</span></div><div class="mod-grid" id="automationGrid"></div></div>
-    <div class="category category-cosmetic" id="cat-cosmetic"><div class="cat-header"><span class="cat-icon">💄</span><span class="cat-title">Косметика</span><span class="cat-count" id="cosmeticCount">0</span></div><div class="mod-grid" id="cosmeticGrid"></div></div>
-
-    <div class="footer">🌌 GuiMods v20 — Все ссылки на реальные существующие домены и страницы CurseForge</div>
+<!-- Auth Modal -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <h2>Вход в Nimbus</h2>
+    <input type="tel" id="phoneInput" placeholder="Ваш номер (например: 79001234567)">
+    <input type="text" id="nameInput" placeholder="Ваше имя">
+    <button onclick="login()">Войти</button>
+    <p style="text-align:center;margin-top:15px;color:var(--text-dim);font-size:12px;">
+      Придумайте любой номер и сообщите его другу
+    </p>
+  </div>
 </div>
+
+<!-- Profile Modal -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal">
+    <h2>Мой профиль</h2>
+    <div id="profileSection">
+      <div class="avatar" id="profileAvatar" onclick="changeAvatar()">📷</div>
+      <input type="text" id="profileName" placeholder="Имя">
+      <input type="tel" id="profilePhone" placeholder="Номер телефона" disabled style="opacity:.6;">
+      <button onclick="saveProfile()">Сохранить</button>
+      <button class="secondary" onclick="closeProfile()">Закрыть</button>
+      <button class="secondary" onclick="logout()" style="color:#e17076;">Выйти</button>
+    </div>
+  </div>
+</div>
+
+<!-- Search Result Modal -->
+<div class="modal-overlay" id="searchModal">
+  <div class="modal">
+    <h2>Найден пользователь</h2>
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+      <div class="avatar" id="foundAvatar" style="width:60px;height:60px;"></div>
+      <div>
+        <div id="foundName" style="font-weight:600;font-size:16px;"></div>
+        <div id="foundPhone" style="color:var(--text-dim);font-size:14px;"></div>
+      </div>
+    </div>
+    <button onclick="startChatWithFound()">Начать чат</button>
+    <button class="secondary" onclick="closeSearchModal()">Отмена</button>
+  </div>
+</div>
+
+<!-- Call Modal -->
+<div id="callModal">
+  <video id="remoteVideo" autoplay playsinline></video>
+  <div class="call-avatar" id="callAvatar"></div>
+  <div class="call-info">
+    <div class="call-name" id="callName"></div>
+    <div class="call-status" id="callStatus">Вызов...</div>
+  </div>
+  <div class="call-actions">
+    <button class="call-btn mute" id="muteBtn" onclick="toggleMute()">🎤</button>
+    <button class="call-btn video" id="videoBtn" onclick="toggleVideo()">📹</button>
+    <button class="call-btn end" onclick="endCall()">📞</button>
+  </div>
+</div>
+
+<video id="localVideo" autoplay muted playsinline></video>
+
+<!-- Incoming Call Modal -->
+<div id="incomingCallModal">
+  <div class="caller-info">
+    <div class="call-avatar" id="incomingAvatar" style="width:60px;height:60px;font-size:24px;"></div>
+    <div>
+      <div style="font-weight:600;" id="incomingName"></div>
+      <div style="color:var(--text-dim);font-size:14px;" id="incomingType">Входящий звонок...</div>
+    </div>
+  </div>
+  <div class="call-actions">
+    <button class="btn accept" onclick="acceptCall()">Принять</button>
+    <button class="btn decline" onclick="declineCall()">Отклонить</button>
+  </div>
+</div>
+
+<!-- PeerJS для звонков -->
+<script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
 
 <script>
-    // ============ ВЕРСИИ ============
-    const allVersions = ['1.16.5','1.17.1','1.18.2','1.19.2','1.19.4','1.20.1','1.20.4','1.21.0','1.21.1','1.21.4'];
+// ================= ДАННЫЕ =================
+let currentUser = null;
+let activeChat = null;
+let foundUser = null;
+let peer = null;
+let localStream = null;
+let currentCall = null;
+let isMuted = false;
+let isVideoEnabled = false;
+let callType = 'voice';
 
-    // ============ ВСЕ КАТЕГОРИИ ============
-    const allMods = { 
-        cheats:[], visuals:[], shaders:[], resourcepacks:[], optimization:[], horror:[], builds:[], tech:[], magic:[], adventure:[], utility:[], other:[],
-        weapons:[], transport:[], dimensions:[], food:[], biomes:[], mobs:[], storage:[], energy:[], automation:[], cosmetic:[]
-    };
+// Хранилище пользователей (в реальном проекте - сервер)
+let users = JSON.parse(localStorage.getItem('nimbus_users') || '[]');
+let chats = JSON.parse(localStorage.getItem('nimbus_chats') || '[]');
+let messages = JSON.parse(localStorage.getItem('nimbus_messages') || '[]');
 
-    const usedLinks = new Set();
-    const usedNames = new Set();
-    const curseForgeBase = 'https://www.curseforge.com/minecraft/mc-mods/';
-    const modrinthBase = 'https://modrinth.com/mod/';
+const $ = s => document.querySelector(s);
+const chatListEl = $("#chatList"), messagesEl = $("#messages");
+const inputBar = $("#inputBar"), chatHeader = $("#chatHeader"), emptyState = $("#emptyState");
+const msgInput = $("#msgInput");
 
-    function generateMod(name, author, ver, desc, price, rating, loader, category, link) {
-        if (usedNames.has(name) || usedLinks.has(link)) return null;
-        usedNames.add(name);
-        usedLinks.add(link);
-        return { name, author, ver, desc, price, rating, loader, category, downloads: Math.floor(Math.random()*1000000)+10000, link };
+function initials(name){
+  if (!name) return "?";
+  return name.replace(/[^\p{L} ]/gu,"").trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+}
+
+function avatarStyle(avatar){
+  if (avatar) return `background-image:url(${avatar});background-size:cover;`;
+  return "background:linear-gradient(135deg,#5288c1,#7ab3ef);";
+}
+
+function nowTime(){
+  const d = new Date();
+  return String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");
+}
+
+function saveData() {
+  localStorage.setItem('nimbus_users', JSON.stringify(users));
+  localStorage.setItem('nimbus_chats', JSON.stringify(chats));
+  localStorage.setItem('nimbus_messages', JSON.stringify(messages));
+}
+
+// ================= АВТОРИЗАЦИЯ =================
+function login() {
+  const phone = $("#phoneInput").value.trim().replace(/\D/g, '');
+  const name = $("#nameInput").value.trim();
+  
+  if (!phone || !name) {
+    alert("Введите номер телефона и имя");
+    return;
+  }
+  
+  let normalizedPhone = phone;
+  if (normalizedPhone.startsWith('8')) normalizedPhone = '7' + normalizedPhone.slice(1);
+  if (!normalizedPhone.startsWith('7')) normalizedPhone = '7' + normalizedPhone;
+  
+  let user = users.find(u => u.phone === normalizedPhone);
+  if (user) {
+    user.name = name;
+  } else {
+    user = { phone: normalizedPhone, name: name, avatar: null };
+    users.push(user);
+  }
+  
+  currentUser = user;
+  localStorage.setItem('nimbus_current_user', JSON.stringify(currentUser));
+  saveData();
+  
+  $("#authModal").classList.remove("open");
+  initPeer();
+  initializeApp();
+}
+
+function logout() {
+  currentUser = null;
+  localStorage.removeItem('nimbus_current_user');
+  if (peer) peer.destroy();
+  closeProfile();
+  resetChatView();
+  chatListEl.innerHTML = "";
+  $("#authModal").classList.add("open");
+}
+
+// ================= PEERJS ДЛЯ ЗВОНКОВ =================
+function initPeer() {
+  if (!currentUser) return;
+  
+  peer = new Peer('nimbus-' + currentUser.phone, {
+    debug: 2
+  });
+  
+  peer.on('open', (id) => {
+    console.log('My peer ID is: ' + id);
+  });
+  
+  peer.on('call', (call) => {
+    currentCall = call;
+    
+    // Показываем входящий звонок
+    const callerPhone = call.metadata.from;
+    const caller = users.find(u => u.phone === callerPhone);
+    
+    if (caller) {
+      showIncomingCall(caller, call.metadata.type);
     }
-
-    // ============ РЕАЛЬНЫЕ МОДЫ С СУЩЕСТВУЮЩИМИ ДОМЕНАМИ ============
-    const realModsData = {
-        cheats: [
-            ["Wurst","Alexander","1.20.4","200+ функций","free",8,"forge","https://www.wurstclient.net/"],
-            ["Meteor","Meteor Dev","1.20.4","Fabric чит","free",9,"fabric","https://meteorclient.com/"],
-            ["Rise Client","RiseTeam","1.20.4","Платный","paid",10,"forge","https://riseclient.com/"],
-            ["Pouch Client","PouchTeam","1.21.0","Crystal PvP","paid",10,"fabric","https://pouchclient.fun/"],
-            ["Novoline","NovolineTeam","1.20.4","AntiBot","paid",9,"forge","https://novoline.lol/"],
-            ["LiquidBounce","CCBlueX","1.20.4","Forge чит","free",9,"forge","https://liquidbounce.net/"],
-            ["Impact","ImpactClient","1.19.2","AutoCrystal","free",8,"forge","https://impactclient.net/"],
-            ["Aristois","Aristois Team","1.20.4","Лаунчер","free",7,"fabric","https://aristois.net/"],
-            ["Exhibition","ExhibitionTeam","1.20.4","Анархия","paid",9,"forge","https://exhibitionclient.com/"],
-            ["Moon Client","MoonTeam","1.20.4","Визуал","paid",8,"fabric","https://moonclient.xyz/"],
-            ["ZeroDay","ZeroDayTeam","1.20.4","Скрытный","free",7,"forge","https://zerodayclient.com/"],
-            ["Wolfram","WolframDev","1.20.4","Crystal PvP","free",8,"fabric","https://wolframclient.com/"],
-            ["Raven B+","RavenTeam","1.20.4","Открытый","free",8,"forge","https://github.com/Kopamed/Raven-bPLUS"],
-            ["Sigma","SigmaTeam","1.20.4","Классика","free",7,"forge","https://sigmaclient.info/"],
-            ["Kuro","KuroDev","1.20.4","Лёгкий","free",7,"fabric","https://kuroclient.com/"],
-            ["Inertia","Inertia Team","1.20.4","Современный","free",8,"forge","https://inertiaclient.com/"],
-            ["CatLean","Frozen_soft","1.21.4","Детект","free",8,"fabric","https://github.com/Frozen-soft/CatLean"],
-            ["Vega","VegaTeam","1.20.4","UI","free",7,"forge","https://vegaclient.com/"],
-            ["Explicit","ExplicitDev","1.20.4","KillAura","free",7,"forge","https://explicitclient.com/"],
-            ["FDP Client","FDPTeam","1.20.4","AutoCrystal","paid",9,"fabric","https://fdpinfo.github.io/"]
-        ],
-        visuals: [
-            ["OptiFine","sp614x","1.20.1","Шейдеры","free",9,"forge","https://optifine.net/home"],
-            ["Fresh Animations","FreshLX","1.21.0","Мобы","free",8,"fabric","https://www.curseforge.com/minecraft/texture-packs/fresh-animations"],
-            ["Rival Visual","winvi","1.21.4","PvP","free",8,"fabric","https://github.com/winvi314/Rival-Visual"],
-            ["Destra Visual","DestraTeam","1.21.0","Платный","paid",10,"fabric","https://destravisual.com/"],
-            ["Loly Visual","LolyTeam","1.21.0","PvP","paid",9,"fabric","https://lolyvisual.com/"],
-            ["SelectVisuals","SelectTeam","1.21.0","UI","free",7,"forge","https://selectvisuals.com/"]
-        ],
-        optimization: [
-            ["Sodium","CaffeineMC","1.20.4","FPS","free",10,"fabric","https://modrinth.com/mod/sodium"],
-            ["Lithium","CaffeineMC","1.20.4","Логика","free",9,"fabric","https://modrinth.com/mod/lithium"],
-            ["ModernFix","embeddedt","1.20.4","Загрузка","free",9,"forge","https://modrinth.com/mod/modernfix"],
-            ["FerriteCore","malte0811","1.20.4","RAM","free",8,"fabric","https://modrinth.com/mod/ferrite-core"],
-            ["Entity Culling","tr7zw","1.20.4","Сущности","free",8,"fabric","https://modrinth.com/mod/entityculling"],
-            ["Starlight","Tuinity","1.20.4","Свет","free",9,"forge","https://modrinth.com/mod/starlight"],
-            ["DashLoader","skmedix","1.20.4","Загрузка","free",9,"forge","https://modrinth.com/mod/dashloader"]
-        ],
-        horror: [
-            ["Verity","HorrorTeam","1.20.1","Психология","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/verity"],
-            ["The Grue","Shino","1.20.1","Монстр","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/the-grue"],
-            ["Dread","DreadTeam","1.19.2","Скримеры","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/dread"],
-            ["Siren Head","SHTeam","1.20.1","Сиреноголовый","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/siren-head"],
-            ["The Man From The Fog","FogTeam","1.20.1","Туман","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/the-man-from-the-fog"]
-        ],
-        builds: [
-            ["All The Mods 9","ATM Team","1.20.1","400+","free",10,"forge","https://www.curseforge.com/minecraft/modpacks/all-the-mods-9"],
-            ["Better Minecraft","BuildTeam","1.20.1","Приключения","free",9,"forge","https://www.curseforge.com/minecraft/modpacks/better-mc-fabric"],
-            ["RLCraft","Shivaxi","1.12.2","Хардкор","free",9,"forge","https://www.curseforge.com/minecraft/modpacks/rlcraft"],
-            ["Vault Hunters","VHTeam","1.18.2","Подземелья","free",9,"forge","https://www.curseforge.com/minecraft/modpacks/vault-hunters"],
-            ["SkyFactory 4","SFTeam","1.12.2","Небо","free",9,"forge","https://www.curseforge.com/minecraft/modpacks/skyfactory-4"]
-        ],
-        tech: [
-            ["Thermal Expansion","TeamCoFH","1.20.1","Энергия","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/thermal-expansion"],
-            ["Mekanism","MekanismTeam","1.20.1","Техника","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/mekanism"],
-            ["Create","CreateTeam","1.20.1","Механизмы","free",10,"forge","https://www.curseforge.com/minecraft/mc-mods/create"],
-            ["Applied Energistics 2","AE2Team","1.20.1","Хранение","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/applied-energistics-2"],
-            ["Refined Storage","RSTeam","1.20.1","Склад","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/refined-storage"]
-        ],
-        magic: [
-            ["Thaumcraft","Azanor","1.20.1","Исследования","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/thaumcraft"],
-            ["Botania","Vazkii","1.20.1","Природа","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/botania"],
-            ["Blood Magic","WayofTime","1.20.1","Кровь","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/blood-magic"],
-            ["Astral Sorcery","ASTeam","1.20.1","Звёзды","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/astral-sorcery"],
-            ["Ars Nouveau","ANTeam","1.20.1","Заклинания","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/ars-nouveau"]
-        ],
-        adventure: [
-            ["Twilight Forest","Benimatic","1.20.1","Лес","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/the-twilight-forest"],
-            ["Aether","AetherTeam","1.20.1","Небеса","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/aether"],
-            ["Galacticraft","MicDoodle8","1.20.1","Космос","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/galacticraft"],
-            ["The Betweenlands","BetweenTeam","1.20.1","Болото","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/the-betweenlands"],
-            ["Blue Skies","BSTeam","1.20.1","Измерения","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/blue-skies"]
-        ],
-        utility: [
-            ["JEI","mezz","1.20.1","Рецепты","free",10,"forge","https://www.curseforge.com/minecraft/mc-mods/jei"],
-            ["JourneyMap","techbrew","1.20.1","Карта","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/journeymap"],
-            ["Xaero's Minimap","Xaero","1.20.1","Мини-карта","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/xaeros-minimap"],
-            ["WAILA","ProfMobius","1.20.1","Инфо","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/waila"],
-            ["Inventory Tweaks","ITTeam","1.20.1","Сортировка","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/inventory-tweaks"]
-        ],
-        other: [
-            ["Biomes O' Plenty","Adubbz","1.20.1","Биомы","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/biomes-o-plenty"],
-            ["Quark","Vazkii","1.20.1","Улучшения","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/quark"],
-            ["Tinkers' Construct","TCTeam","1.20.1","Инструменты","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/tinkers-construct"],
-            ["Waystones","WSTeam","1.20.1","Телепорты","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/waystones"],
-            ["Iron Chests","ICTeam","1.20.1","Сундуки","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/iron-chests"]
-        ],
-        weapons: [
-            ["MrCrayfish's Gun Mod","MrCrayfish","1.20.1","Огнестрельное оружие","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/mr-crayfishs-gun-mod"],
-            ["Techguns","TechgunsTeam","1.20.1","Пушки","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/techguns"],
-            ["Immersive Engineering","BluSunrize","1.20.1","Оружие","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/immersive-engineering"]
-        ],
-        transport: [
-            ["MrCrayfish's Vehicle Mod","MrCrayfish","1.20.1","Автомобили","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/mr-crayfishs-vehicle-mod"],
-            ["Immersive Vehicles","IVTeam","1.20.1","Транспорт","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/immersive-vehicles"],
-            ["Traincraft","TraincraftTeam","1.20.1","Поезда","free",7,"forge","https://www.curseforge.com/minecraft/mc-mods/traincraft"]
-        ],
-        dimensions: [
-            ["The Aether","AetherTeam","1.20.1","Райское измерение","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/aether"],
-            ["Galacticraft","MicDoodle8","1.20.1","Космос","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/galacticraft"],
-            ["Twilight Forest","Benimatic","1.20.1","Лес измерение","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/the-twilight-forest"]
-        ],
-        food: [
-            ["Pam's HarvestCraft","Pam","1.20.1","Еда","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/pams-harvestcraft"],
-            ["Farmer's Delight","vectorwing","1.20.1","Готовка","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/farmers-delight"],
-            ["Cuisine","CuisineTeam","1.20.1","Кулинария","free",7,"forge","https://www.curseforge.com/minecraft/mc-mods/cuisine"]
-        ],
-        biomes: [
-            ["Biomes O' Plenty","Adubbz","1.20.1","Новые биомы","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/biomes-o-plenty"],
-            ["Oh The Biomes You'll Go","BYGTeam","1.20.1","Биомы","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go"],
-            ["Terralith","Starmute","1.20.1","Терраформ","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/terralith"]
-        ],
-        mobs: [
-            ["Alex's Mobs","alexthe668","1.20.1","Новые мобы","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/alexs-mobs"],
-            ["Mowzie's Mobs","Mowzie","1.20.1","Монстры","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/mowzies-mobs"],
-            ["Ice and Fire","IAFTeam","1.20.1","Драконы","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/ice-and-fire-dragons"]
-        ],
-        storage: [
-            ["Iron Chests","ICTeam","1.20.1","Сундуки","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/iron-chests"],
-            ["Storage Drawers","StorageTeam","1.20.1","Хранение","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/storage-drawers"],
-            ["Simple Storage","SimpleTeam","1.20.1","Склад","free",7,"forge","https://www.curseforge.com/minecraft/mc-mods/simple-storage"]
-        ],
-        energy: [
-            ["Mekanism","MekanismTeam","1.20.1","Энергия","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/mekanism"],
-            ["Thermal Expansion","TeamCoFH","1.20.1","Энергия","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/thermal-expansion"],
-            ["Extreme Reactors","ERTeam","1.20.1","Реакторы","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/extreme-reactors"]
-        ],
-        automation: [
-            ["Create","CreateTeam","1.20.1","Механизмы","free",10,"forge","https://www.curseforge.com/minecraft/mc-mods/create"],
-            ["Applied Energistics 2","AE2Team","1.20.1","Автоматизация","free",9,"forge","https://www.curseforge.com/minecraft/mc-mods/applied-energistics-2"],
-            ["Refined Storage","RSTeam","1.20.1","Автоматизация","free",8,"forge","https://www.curseforge.com/minecraft/mc-mods/refined-storage"]
-        ],
-        cosmetic: [
-            ["Cosmetic Armor","CosmeticTeam","1.20.1","Броня","free",7,"forge","https://www.curseforge.com/minecraft/mc-mods/cosmetic-armor"],
-            ["Custom Skin Loader","CSLTeam","1.20.1","Скины","free",7,"forge","https://www.curseforge.com/minecraft/mc-mods/custom-skin-loader"],
-            ["Hat Pack","HatTeam","1.20.1","Шляпы","free",7,"forge","https://www.curseforge.com/minecraft/mc-mods/hat-pack"]
-        ]
-    };
-
-    // Добавляем реальные моды
-    for (const cat in realModsData) {
-        realModsData[cat].forEach(m => {
-            const [name, author, ver, desc, price, rating, loader, link] = m;
-            const mod = generateMod(name, author, ver, desc, price, rating, loader, cat, link);
-            if (mod) allMods[cat].push(mod);
-        });
-    }
-
-    // ============ ГЕНЕРИРУЕМ ШЕЙДЕРЫ С РЕАЛЬНЫМИ ССЫЛКАМИ ============
-    const shaderList = [
-        ["Complementary Shaders","EminGT","1.21.0","Реалистичная вода, облака, тени","free",10,"https://www.curseforge.com/minecraft/shaders/complementary-shaders"],
-        ["BSL Shaders","CaptTatsu","1.21.0","Яркие объемные шейдеры","free",9,"https://www.curseforge.com/minecraft/shaders/bsl-shaders"],
-        ["Sildur's Shaders","Sildur","1.21.0","Легкие для слабых ПК","free",8,"https://www.curseforge.com/minecraft/shaders/sildurs-shaders"],
-        ["SEUS","Sonic Ether","PTGI","Трассировка лучей","paid",10,"https://www.sonicether.com/seus/"],
-        ["Continuum","ContinuumTeam","2.1","Киношная графика","paid",9,"https://continuum.graphics/"],
-        ["Kappa Shader","Rre36","v5.2","Стилизованный","free",8,"https://www.curseforge.com/minecraft/shaders/kappa-shader"],
-        ["Nostalgia Shader","Rre36","v4.0","Ватная атмосфера","free",9,"https://www.curseforge.com/minecraft/shaders/nostalgia-shader"],
-        ["Photon Shaders","PhotonTeam","1.21","Переработка неба","free",8,"https://www.curseforge.com/minecraft/shaders/photon-shaders"],
-        ["Chocapic13","Chocapic13","v9.1","Классические шейдеры","free",8,"https://www.curseforge.com/minecraft/shaders/chocapic13-shaders"],
-        ["ProjectLUMA","LUMA Team","v1.32","Киношные эффекты","free",9,"https://www.curseforge.com/minecraft/shaders/projectluma"],
-        ["Voyager Shader","VoyagerTeam","2.0","Космическая атмосфера","free",8,"https://www.curseforge.com/minecraft/shaders/voyager-shader"],
-        ["Solas Shader","SolasTeam","1.1","Теплые тона","free",8,"https://www.curseforge.com/minecraft/shaders/solas-shader"],
-        ["AstraLex Shaders","AstraLex","v92","Основан на BSL","free",8,"https://www.curseforge.com/minecraft/shaders/astralex-shaders"],
-        ["MakeUp Ultra Fast","MakeUpTeam","8.7","Быстрые шейдеры","free",8,"https://www.curseforge.com/minecraft/shaders/makeup-ultra-fast-shaders"],
-        ["Tea Shader","TeaTeam","v2.0","Мягкий свет","free",7,"https://www.curseforge.com/minecraft/shaders/tea-shader"],
-        ["Vanilla Plus","VPTeam","3.0","Ванильный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/vanilla-plus-shader"],
-        ["Oceano Shader","OceanoTeam","3.0","Океанская атмосфера","free",8,"https://www.curseforge.com/minecraft/shaders/oceano-shader"],
-        ["RedHat Shader","RedHat","v34","Яркие цвета","free",7,"https://www.curseforge.com/minecraft/shaders/redhat-shader"],
-        ["Simplicissimus","SimplicissimusTeam","1.4","Минималистичный","free",7,"https://www.curseforge.com/minecraft/shaders/simplicissimus-shader"],
-        ["Werrus Shaders","Werrus","v5.0","Ночная атмосфера","free",8,"https://www.curseforge.com/minecraft/shaders/werrus-shaders"],
-        ["Ebin Shaders","EbinTeam","v2.0","Стилизованные","free",7,"https://www.curseforge.com/minecraft/shaders/ebin-shaders"],
-        ["Insanity Shader","InsanityTeam","1.2","Безумные эффекты","free",7,"https://www.curseforge.com/minecraft/shaders/insanity-shader"],
-        ["DrDestens Shaders","DrDesten","1.0","Уникальный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/drdestens-shaders"],
-        ["Soft Voxels","SoftVoxelsTeam","1.0","Мягкие воксели","free",8,"https://www.curseforge.com/minecraft/shaders/soft-voxels"],
-        ["Bliss Shader","BlissTeam","v1.0","Спокойная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/bliss-shader"],
-        ["Enhanced Default","EDTeam","1.0","Улучшенный ванильный","free",7,"https://www.curseforge.com/minecraft/shaders/enhanced-default"],
-        ["Lux Shader","LuxTeam","1.0","Роскошный свет","free",7,"https://www.curseforge.com/minecraft/shaders/lux-shader"],
-        ["Noble Shader","NobleTeam","1.0","Благородный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/noble-shader"],
-        ["Pearl Shader","PearlTeam","1.0","Жемчужные тона","free",7,"https://www.curseforge.com/minecraft/shaders/pearl-shader"],
-        ["Quartz Shader","QuartzTeam","1.0","Кварцевый блеск","free",7,"https://www.curseforge.com/minecraft/shaders/quartz-shader"],
-        ["Onyx Shader","OnyxTeam","1.0","Ониксовый контраст","free",7,"https://www.curseforge.com/minecraft/shaders/onyx-shader"],
-        ["Amethyst Shader","AmethystTeam","1.0","Аметистовые тона","free",7,"https://www.curseforge.com/minecraft/shaders/amethyst-shader"],
-        ["Coral Shader","CoralTeam","1.0","Коралловые цвета","free",7,"https://www.curseforge.com/minecraft/shaders/coral-shader"],
-        ["Dune Shader","DuneTeam","1.0","Пустынная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/dune-shader"],
-        ["Echo Shader","EchoTeam","1.0","Эхо-эффекты","free",7,"https://www.curseforge.com/minecraft/shaders/echo-shader"],
-        ["Fable Shader","FableTeam","1.0","Сказочный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/fable-shader"],
-        ["Glacier Shader","GlacierTeam","1.0","Ледниковая атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/glacier-shader"],
-        ["Halo Shader","HaloTeam","1.0","Ореол света","free",7,"https://www.curseforge.com/minecraft/shaders/halo-shader"],
-        ["Iris Shader","IrisTeam","1.0","Радужные эффекты","free",7,"https://www.curseforge.com/minecraft/shaders/iris-shader"],
-        ["Jade Shader","JadeTeam","1.0","Нефритовые тона","free",7,"https://www.curseforge.com/minecraft/shaders/jade-shader"],
-        ["Koi Shader","KoiTeam","1.0","Рыбный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/koi-shader"],
-        ["Lava Shader","LavaTeam","1.0","Вулканическая атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/lava-shader"],
-        ["Mist Shader","MistTeam","1.0","Туманные эффекты","free",7,"https://www.curseforge.com/minecraft/shaders/mist-shader"],
-        ["Nimbus Shader","NimbusTeam","1.0","Облачная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/nimbus-shader"],
-        ["Opal Shader","OpalTeam","1.0","Опаловые тона","free",7,"https://www.curseforge.com/minecraft/shaders/opal-shader"],
-        ["Pine Shader","PineTeam","1.0","Лесная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/pine-shader"],
-        ["Rune Shader","RuneTeam","1.0","Рунический стиль","free",7,"https://www.curseforge.com/minecraft/shaders/rune-shader"],
-        ["Sage Shader","SageTeam","1.0","Мудрый стиль","free",7,"https://www.curseforge.com/minecraft/shaders/sage-shader"],
-        ["Tide Shader","TideTeam","1.0","Приливные волны","free",7,"https://www.curseforge.com/minecraft/shaders/tide-shader"],
-        ["Umber Shader","UmberTeam","1.0","Янтарные тона","free",7,"https://www.curseforge.com/minecraft/shaders/umber-shader"],
-        ["Vale Shader","ValeTeam","1.0","Долинная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/vale-shader"],
-        ["Wisp Shader","WispTeam","1.0","Призрачный свет","free",7,"https://www.curseforge.com/minecraft/shaders/wisp-shader"],
-        ["Zephyr Shader","ZephyrTeam","1.0","Ветряная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/zephyr-shader"],
-        ["Aurora Shader","AuroraTeam","1.0","Северное сияние","free",8,"https://www.curseforge.com/minecraft/shaders/aurora-shader"],
-        ["Blaze Shader","BlazeTeam","1.0","Огненная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/blaze-shader"],
-        ["Celestial Shader","CelestialTeam","1.0","Небесная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/celestial-shader"],
-        ["Dream Shader","DreamTeam","1.0","Сновиденческая","free",7,"https://www.curseforge.com/minecraft/shaders/dream-shader"],
-        ["Ember Shader","EmberTeam","1.0","Тлеющая атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/ember-shader"],
-        ["Frost Shader","FrostTeam","1.0","Морозная атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/frost-shader"],
-        ["Golden Shader","GoldenTeam","1.0","Золотая атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/golden-shader"],
-        ["Harmony Shader","HarmonyTeam","1.0","Гармоничный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/harmony-shader"],
-        ["Ivory Shader","IvoryTeam","1.0","Слоновая кость","free",7,"https://www.curseforge.com/minecraft/shaders/ivory-shader"],
-        ["Journey Shader","JourneyTeam","1.0","Путешествие","free",7,"https://www.curseforge.com/minecraft/shaders/journey-shader"],
-        ["Kingdom Shader","KingdomTeam","1.0","Королевский стиль","free",7,"https://www.curseforge.com/minecraft/shaders/kingdom-shader"],
-        ["Legacy Shader","LegacyTeam","1.0","Наследие","free",7,"https://www.curseforge.com/minecraft/shaders/legacy-shader"],
-        ["Miracle Shader","MiracleTeam","1.0","Чудесный стиль","free",7,"https://www.curseforge.com/minecraft/shaders/miracle-shader"],
-        ["Nebula Shader","NebulaTeam","1.0","Туманность","free",8,"https://www.curseforge.com/minecraft/shaders/nebula-shader"],
-        ["Origin Shader","OriginTeam","1.0","Изначальный","free",7,"https://www.curseforge.com/minecraft/shaders/origin-shader"],
-        ["Paradise Shader","ParadiseTeam","1.0","Райская атмосфера","free",7,"https://www.curseforge.com/minecraft/shaders/paradise-shader"],
-        ["Quest Shader","QuestTeam","1.0","Квестовый стиль","free",7,"https://www.curseforge.com/minecraft/shaders/quest-shader"],
-        ["Radiant Shader","RadiantTeam","1.0","Сияющий","free",8,"https://www.curseforge.com/minecraft/shaders/radiant-shader"],
-        ["Serenity Shader","SerenityTeam","1.0","Спокойствие","free",7,"https://www.curseforge.com/minecraft/shaders/serenity-shader"],
-        ["Twilight Shader","TwilightTeam","1.0","Сумеречный","free",7,"https://www.curseforge.com/minecraft/shaders/twilight-shader"],
-        ["Unity Shader","UnityTeam","1.0","Единство","free",7,"https://www.curseforge.com/minecraft/shaders/unity-shader"],
-        ["Vision Shader","VisionTeam","1.0","Зрение","free",7,"https://www.curseforge.com/minecraft/shaders/vision-shader"],
-        ["Wonder Shader","WonderTeam","1.0","Чудеса","free",7,"https://www.curseforge.com/minecraft/shaders/wonder-shader"],
-        ["Zenith Shader","ZenithTeam","1.0","Зенит","free",8,"https://www.curseforge.com/minecraft/shaders/zenith-shader"]
-    ];
-
-    shaderList.forEach(s => {
-        const [name, author, ver, desc, price, rating, link] = s;
-        const mod = generateMod(name, author, ver, desc, price, rating, 'fabric', 'shaders', link);
-        if (mod) allMods.shaders.push(mod);
+    
+    call.on('stream', (remoteStream) => {
+      const remoteVideo = $("#remoteVideo");
+      remoteVideo.srcObject = remoteStream;
+      remoteVideo.style.display = 'block';
+      $("#callStatus").textContent = 'В сети';
     });
-
-    // ============ ГЕНЕРИРУЕМ РЕСУРС-ПАКИ С РЕАЛЬНЫМИ ССЫЛКАМИ ============
-    const resourcePackList = [
-        ["Faithful","FaithfulTeam","1.21","Классический HD","free",9,"https://faithfulpack.net/"],
-        ["Default HD","DefaultHDTeam","1.21","Ванильный HD","free",8,"https://www.curseforge.com/minecraft/texture-packs/default-hd"],
-        ["Mizuno's 16 Craft","Mizuno","1.21","Минималистичный","free",8,"https://www.curseforge.com/minecraft/texture-packs/mizunos-16-craft"],
-        ["Bare Bones","BareBonesTeam","1.21","Простой и чистый","free",8,"https://modrinth.com/resourcepack/bare-bones"],
-        ["Jicklus","Jicklus","1.21","Теплый стиль","free",7,"https://www.curseforge.com/minecraft/texture-packs/jicklus"],
-        ["John Smith Legacy","JSLTeam","1.21","Средневековый","free",8,"https://www.johnsmithlegacy.co.uk/"],
-        ["Dokucraft","DokuTeam","1.21","Фэнтези","free",8,"https://www.dokucraft.co.uk/"],
-        ["Soartex Fanver","SoartexTeam","1.21","Гладкий","free",8,"https://soartex.net/"],
-        ["Sphax PureBDCraft","SphaxTeam","1.21","Комиксный стиль","free",9,"https://bdcraft.net/"],
-        ["Pixel Perfection","PixelTeam","1.21","Идеальный пиксель","free",8,"https://www.curseforge.com/minecraft/texture-packs/pixel-perfection"],
-        ["LB Photo Realism","LBTeam","1.21","Реалистичный","free",7,"https://www.curseforge.com/minecraft/texture-packs/lb-photo-realism"],
-        ["Modern HD","ModernHDTeam","1.21","Современный","free",7,"https://www.curseforge.com/minecraft/texture-packs/modern-hd"],
-        ["Chroma Hills","ChromaTeam","1.21","Яркий HD","free",8,"https://chromahills.com/"],
-        ["Conquest","ConquestTeam","1.21","Исторический","free",9,"https://conquest.reforged.gg/"],
-        ["Excalibur","ExcaliburTeam","1.21","Рыцарский","free",7,"https://www.curseforge.com/minecraft/texture-packs/excalibur"],
-        ["Sapixcraft","SapixTeam","1.21","Мягкий HD","free",7,"https://www.curseforge.com/minecraft/texture-packs/sapixcraft"],
-        ["Rodrigo's Pack","RodrigoTeam","1.21","Детализированный","free",8,"https://www.curseforge.com/minecraft/texture-packs/rodrigos-pack"],
-        ["Misa's Realistic","MisaTeam","1.21","Реалистичный","free",8,"https://www.curseforge.com/minecraft/texture-packs/misas-realistic"],
-        ["Wolfhound","WolfhoundTeam","1.21","Средневековый","free",7,"https://www.curseforge.com/minecraft/texture-packs/wolfhound"],
-        ["ZigZag","ZigZagTeam","1.21","Геометрический","free",7,"https://www.curseforge.com/minecraft/texture-packs/zigzag"],
-        ["Aether Pack","AetherTeam","1.21","Небесный","free",7,"https://www.curseforge.com/minecraft/texture-packs/aether-pack"],
-        ["Bloom Pack","BloomTeam","1.21","Цветущий","free",7,"https://www.curseforge.com/minecraft/texture-packs/bloom-pack"],
-        ["Crafty Pack","CraftyTeam","1.21","Уютный","free",7,"https://www.curseforge.com/minecraft/texture-packs/crafty-pack"],
-        ["Dune Pack","DuneTeam","1.21","Пустынный","free",7,"https://www.curseforge.com/minecraft/texture-packs/dune-pack"],
-        ["Elder Pack","ElderTeam","1.21","Древний","free",7,"https://www.curseforge.com/minecraft/texture-packs/elder-pack"],
-        ["Forest Pack","ForestTeam","1.21","Лесной","free",7,"https://www.curseforge.com/minecraft/texture-packs/forest-pack"],
-        ["Ghost Pack","GhostTeam","1.21","Призрачный","free",7,"https://www.curseforge.com/minecraft/texture-packs/ghost-pack"],
-        ["Haven Pack","HavenTeam","1.21","Убежище","free",7,"https://www.curseforge.com/minecraft/texture-packs/haven-pack"],
-        ["Island Pack","IslandTeam","1.21","Островной","free",7,"https://www.curseforge.com/minecraft/texture-packs/island-pack"],
-        ["Jungle Pack","JungleTeam","1.21","Джунгли","free",7,"https://www.curseforge.com/minecraft/texture-packs/jungle-pack"],
-        ["Knight Pack","KnightTeam","1.21","Рыцарский","free",7,"https://www.curseforge.com/minecraft/texture-packs/knight-pack"],
-        ["Lush Pack","LushTeam","1.21","Пышный","free",7,"https://www.curseforge.com/minecraft/texture-packs/lush-pack"],
-        ["Meadow Pack","MeadowTeam","1.21","Луговой","free",7,"https://www.curseforge.com/minecraft/texture-packs/meadow-pack"],
-        ["Noble Pack","NobleTeam","1.21","Благородный","free",7,"https://www.curseforge.com/minecraft/texture-packs/noble-pack"],
-        ["Ocean Pack","OceanTeam","1.21","Океанский","free",7,"https://www.curseforge.com/minecraft/texture-packs/ocean-pack"],
-        ["Peak Pack","PeakTeam","1.21","Горный","free",7,"https://www.curseforge.com/minecraft/texture-packs/peak-pack"],
-        ["Quartz Pack","QuartzTeam","1.21","Кварцевый","free",7,"https://www.curseforge.com/minecraft/texture-packs/quartz-pack"],
-        ["River Pack","RiverTeam","1.21","Речной","free",7,"https://www.curseforge.com/minecraft/texture-packs/river-pack"],
-        ["Savanna Pack","SavannaTeam","1.21","Саванна","free",7,"https://www.curseforge.com/minecraft/texture-packs/savanna-pack"],
-        ["Tundra Pack","TundraTeam","1.21","Тундра","free",7,"https://www.curseforge.com/minecraft/texture-packs/tundra-pack"],
-        ["Urban Pack","UrbanTeam","1.21","Городской","free",7,"https://www.curseforge.com/minecraft/texture-packs/urban-pack"],
-        ["Valley Pack","ValleyTeam","1.21","Долинный","free",7,"https://www.curseforge.com/minecraft/texture-packs/valley-pack"],
-        ["Woodland Pack","WoodlandTeam","1.21","Лесной","free",7,"https://www.curseforge.com/minecraft/texture-packs/woodland-pack"],
-        ["Zen Pack","ZenTeam","1.21","Дзен стиль","free",7,"https://www.curseforge.com/minecraft/texture-packs/zen-pack"],
-        ["Alpine Pack","AlpineTeam","1.21","Альпийский","free",7,"https://www.curseforge.com/minecraft/texture-packs/alpine-pack"],
-        ["Breeze Pack","BreezeTeam","1.21","Ветреный","free",7,"https://www.curseforge.com/minecraft/texture-packs/breeze-pack"],
-        ["Canyon Pack","CanyonTeam","1.21","Каньон","free",7,"https://www.curseforge.com/minecraft/texture-packs/canyon-pack"],
-        ["Delta Pack","DeltaTeam","1.21","Дельта","free",7,"https://www.curseforge.com/minecraft/texture-packs/delta-pack"],
-        ["Eclipse Pack","EclipseTeam","1.21","Затмение","free",7,"https://www.curseforge.com/minecraft/texture-packs/eclipse-pack"],
-        ["Fjord Pack","FjordTeam","1.21","Фьорд","free",7,"https://www.curseforge.com/minecraft/texture-packs/fjord-pack"],
-        ["Grove Pack","GroveTeam","1.21","Роща","free",7,"https://www.curseforge.com/minecraft/texture-packs/grove-pack"],
-        ["Harbor Pack","HarborTeam","1.21","Гавань","free",7,"https://www.curseforge.com/minecraft/texture-packs/harbor-pack"],
-        ["Icicle Pack","IcicleTeam","1.21","Сосульки","free",7,"https://www.curseforge.com/minecraft/texture-packs/icicle-pack"],
-        ["Jade Pack","JadeTeam","1.21","Нефритовый","free",7,"https://www.curseforge.com/minecraft/texture-packs/jade-pack"],
-        ["Kelp Pack","KelpTeam","1.21","Водоросли","free",7,"https://www.curseforge.com/minecraft/texture-packs/kelp-pack"],
-        ["Lagoon Pack","LagoonTeam","1.21","Лагуна","free",7,"https://www.curseforge.com/minecraft/texture-packs/lagoon-pack"],
-        ["Marsh Pack","MarshTeam","1.21","Болото","free",7,"https://www.curseforge.com/minecraft/texture-packs/marsh-pack"],
-        ["Nectar Pack","NectarTeam","1.21","Нектар","free",7,"https://www.curseforge.com/minecraft/texture-packs/nectar-pack"],
-        ["Oasis Pack","OasisTeam","1.21","Оазис","free",7,"https://www.curseforge.com/minecraft/texture-packs/oasis-pack"],
-        ["Prairie Pack","PrairieTeam","1.21","Прерия","free",7,"https://www.curseforge.com/minecraft/texture-packs/prairie-pack"],
-        ["Reef Pack","ReefTeam","1.21","Риф","free",7,"https://www.curseforge.com/minecraft/texture-packs/reef-pack"],
-        ["Summit Pack","SummitTeam","1.21","Вершина","free",7,"https://www.curseforge.com/minecraft/texture-packs/summit-pack"],
-        ["Tropic Pack","TropicTeam","1.21","Тропики","free",7,"https://www.curseforge.com/minecraft/texture-packs/tropic-pack"],
-        ["Vista Pack","VistaTeam","1.21","Вид","free",7,"https://www.curseforge.com/minecraft/texture-packs/vista-pack"],
-        ["Willow Pack","WillowTeam","1.21","Ива","free",7,"https://www.curseforge.com/minecraft/texture-packs/willow-pack"],
-        ["Zion Pack","ZionTeam","1.21","Сион","free",7,"https://www.curseforge.com/minecraft/texture-packs/zion-pack"],
-        ["Amber Pack","AmberTeam","1.21","Янтарный","free",7,"https://www.curseforge.com/minecraft/texture-packs/amber-pack"],
-        ["Bamboo Pack","BambooTeam","1.21","Бамбук","free",7,"https://www.curseforge.com/minecraft/texture-packs/bamboo-pack"],
-        ["Cedar Pack","CedarTeam","1.21","Кедр","free",7,"https://www.curseforge.com/minecraft/texture-packs/cedar-pack"],
-        ["Dahlia Pack","DahliaTeam","1.21","Георгин","free",7,"https://www.curseforge.com/minecraft/texture-packs/dahlia-pack"],
-        ["Elm Pack","ElmTeam","1.21","Вяз","free",7,"https://www.curseforge.com/minecraft/texture-packs/elm-pack"],
-        ["Fern Pack","FernTeam","1.21","Папоротник","free",7,"https://www.curseforge.com/minecraft/texture-packs/fern-pack"],
-        ["Garden Pack","GardenTeam","1.21","Сад","free",7,"https://www.curseforge.com/minecraft/texture-packs/garden-pack"],
-        ["Holly Pack","HollyTeam","1.21","Остролист","free",7,"https://www.curseforge.com/minecraft/texture-packs/holly-pack"],
-        ["Ivy Pack","IvyTeam","1.21","Плющ","free",7,"https://www.curseforge.com/minecraft/texture-packs/ivy-pack"],
-        ["Juniper Pack","JuniperTeam","1.21","Можжевельник","free",7,"https://www.curseforge.com/minecraft/texture-packs/juniper-pack"],
-        ["Lavender Pack","LavenderTeam","1.21","Лаванда","free",7,"https://www.curseforge.com/minecraft/texture-packs/lavender-pack"],
-        ["Maple Pack","MapleTeam","1.21","Клен","free",7,"https://www.curseforge.com/minecraft/texture-packs/maple-pack"],
-        ["Nettle Pack","NettleTeam","1.21","Крапива","free",7,"https://www.curseforge.com/minecraft/texture-packs/nettle-pack"],
-        ["Orchid Pack","OrchidTeam","1.21","Орхидея","free",7,"https://www.curseforge.com/minecraft/texture-packs/orchid-pack"],
-        ["Palm Pack","PalmTeam","1.21","Пальма","free",7,"https://www.curseforge.com/minecraft/texture-packs/palm-pack"],
-        ["Rose Pack","RoseTeam","1.21","Роза","free",7,"https://www.curseforge.com/minecraft/texture-packs/rose-pack"],
-        ["Sage Pack","SageTeam","1.21","Шалфей","free",7,"https://www.curseforge.com/minecraft/texture-packs/sage-pack"],
-        ["Thistle Pack","ThistleTeam","1.21","Чертополох","free",7,"https://www.curseforge.com/minecraft/texture-packs/thistle-pack"],
-        ["Violet Pack","VioletTeam","1.21","Фиалка","free",7,"https://www.curseforge.com/minecraft/texture-packs/violet-pack"],
-        ["Wisteria Pack","WisteriaTeam","1.21","Глициния","free",7,"https://www.curseforge.com/minecraft/texture-packs/wisteria-pack"],
-        ["Yarrow Pack","YarrowTeam","1.21","Тысячелистник","free",7,"https://www.curseforge.com/minecraft/texture-packs/yarrow-pack"],
-        ["Zinnia Pack","ZinniaTeam","1.21","Цинния","free",7,"https://www.curseforge.com/minecraft/texture-packs/zinnia-pack"],
-        ["Aster Pack","AsterTeam","1.21","Астра","free",7,"https://www.curseforge.com/minecraft/texture-packs/aster-pack"],
-        ["Begonia Pack","BegoniaTeam","1.21","Бегония","free",7,"https://www.curseforge.com/minecraft/texture-packs/begonia-pack"],
-        ["Camellia Pack","CamelliaTeam","1.21","Камелия","free",7,"https://www.curseforge.com/minecraft/texture-packs/camellia-pack"],
-        ["Daffodil Pack","DaffodilTeam","1.21","Нарцисс","free",7,"https://www.curseforge.com/minecraft/texture-packs/daffodil-pack"],
-        ["Edelweiss Pack","EdelweissTeam","1.21","Эдельвейс","free",7,"https://www.curseforge.com/minecraft/texture-packs/edelweiss-pack"],
-        ["Foxglove Pack","FoxgloveTeam","1.21","Наперстянка","free",7,"https://www.curseforge.com/minecraft/texture-packs/foxglove-pack"],
-        ["Geranium Pack","GeraniumTeam","1.21","Герань","free",7,"https://www.curseforge.com/minecraft/texture-packs/geranium-pack"],
-        ["Hibiscus Pack","HibiscusTeam","1.21","Гибискус","free",7,"https://www.curseforge.com/minecraft/texture-packs/hibiscus-pack"]
-    ];
-
-    resourcePackList.forEach(rp => {
-        const [name, author, ver, desc, price, rating, link] = rp;
-        const mod = generateMod(name, author, ver, desc, price, rating, 'fabric', 'resourcepacks', link);
-        if (mod) allMods.resourcepacks.push(mod);
+    
+    call.on('close', () => {
+      endCall();
     });
+  });
+  
+  peer.on('error', (err) => {
+    console.error('PeerJS error:', err);
+    if (err.type === 'peer-unavailable') {
+      alert('Пользователь не в сети');
+      endCall();
+    }
+  });
+}
 
-    // ============ ТЕМЫ ============
-    const themeMap = {
-        quasar: 'bgQuasar', beach: 'bgBeach', cave: 'bgCave', space: 'bgSpace',
-        city: 'bgCity', forest: 'bgForest', neon: 'bgNeon', sunset: 'bgSunset',
-        arctic: 'bgArctic', desert: 'bgDesert', ocean: 'bgOcean', volcano: 'bgVolcano',
-        aurora: 'bgAurora', sakura: 'bgSakura', dungeon: 'bgDungeon', blackhole: 'bgBlackhole'
+async function startVoiceCall() {
+  if (!activeChat || !currentUser || !peer) return;
+  callType = 'voice';
+  await initiateCall();
+}
+
+async function startVideoCall() {
+  if (!activeChat || !currentUser || !peer) return;
+  callType = 'video';
+  await initiateCall();
+}
+
+async function initiateCall() {
+  try {
+    const constraints = {
+      audio: true,
+      video: callType === 'video'
     };
-
-    function setTheme(theme) {
-        document.querySelectorAll('.bg-layer').forEach(el => el.classList.remove('active'));
-        const target = document.getElementById(themeMap[theme]);
-        if (target) target.classList.add('active');
-        const starsEl = document.getElementById('starsLayer');
-        if (['space','quasar','city','neon','aurora','dungeon','blackhole'].includes(theme)) {
-            starsEl.classList.add('active');
-        } else {
-            starsEl.classList.remove('active');
-        }
-        document.querySelectorAll('.theme-panel button').forEach(btn => {
-            btn.classList.toggle('active-theme', btn.getAttribute('onclick') === `setTheme('${theme}')`);
-        });
-    }
-
-    // ============ ЗВЕЗДЫ ============
-    function createStars() {
-        const container = document.getElementById('starsLayer');
-        const frag = document.createDocumentFragment();
-        for (let i = 0; i < 400; i++) {
-            const star = document.createElement('div');
-            star.className = 'star-dot';
-            star.style.width = Math.random()*2+1+'px';
-            star.style.height = star.style.width;
-            star.style.left = Math.random()*100+'%';
-            star.style.top = Math.random()*100+'%';
-            star.style.animationDuration = Math.random()*4+2+'s';
-            star.style.opacity = Math.random()*0.8+0.2;
-            frag.appendChild(star);
-        }
-        container.appendChild(frag);
-    }
-
-    // ============ ОТРИСОВКА ============
-    function createModCard(mod) {
-        const card = document.createElement('div');
-        card.className = 'mod-card';
-        
-        let badge = '';
-        if (mod.price === 'paid') {
-            badge = '<div class="paid-badge">💰 ПЛАТНЫЙ</div>';
-        } else {
-            badge = '<div class="free-badge">🆓 БЕСПЛАТНЫЙ</div>';
-        }
-        
-        card.innerHTML = `
-            ${badge}
-            <div class="mod-name">${mod.name}</div>
-            <div class="mod-ver">📌 ${mod.ver} · ${mod.author}</div>
-            <div class="mod-desc">${mod.desc}</div>
-            <span class="mod-loader ${mod.loader === 'forge' ? 'loader-forge' : 'loader-fabric'}">${mod.loader === 'forge' ? 'Forge' : 'Fabric'}</span>
-            <span class="price-tag ${mod.price === 'free' ? 'price-free' : 'price-paid'}">${mod.price === 'free' ? '🆓 Бесплатно' : '💰 Платно'}</span>
-            <span class="mod-rating">⭐ ${mod.rating}</span>
-            <span class="mod-downloads">📥 ${(mod.downloads/1000).toFixed(1)}k</span>
-            <br>
-            <a class="mod-link-btn" href="${mod.link}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">🔗 Скачать / Официальная страница</a>
-        `;
-        card.addEventListener('click', () => {
-            window.open(mod.link, '_blank', 'noopener,noreferrer');
-        });
-        return card;
-    }
-
-    function renderCategory(gridId, modList, countId) {
-        const grid = document.getElementById(gridId);
-        const frag = document.createDocumentFragment();
-        modList.forEach(m => frag.appendChild(createModCard(m)));
-        grid.innerHTML = '';
-        grid.appendChild(frag);
-        document.getElementById(countId).textContent = modList.length;
-    }
-
-    function renderAll() {
-        renderCategory('cheatsGrid', allMods.cheats, 'cheatsCount');
-        renderCategory('visualsGrid', allMods.visuals, 'visualsCount');
-        renderCategory('shadersGrid', allMods.shaders, 'shadersCount');
-        renderCategory('resourcepacksGrid', allMods.resourcepacks, 'resourcepacksCount');
-        renderCategory('optimizationGrid', allMods.optimization, 'optimizationCount');
-        renderCategory('horrorGrid', allMods.horror, 'horrorCount');
-        renderCategory('buildsGrid', allMods.builds, 'buildsCount');
-        renderCategory('techGrid', allMods.tech, 'techCount');
-        renderCategory('magicGrid', allMods.magic, 'magicCount');
-        renderCategory('adventureGrid', allMods.adventure, 'adventureCount');
-        renderCategory('utilityGrid', allMods.utility, 'utilityCount');
-        renderCategory('otherGrid', allMods.other, 'otherCount');
-        renderCategory('weaponsGrid', allMods.weapons, 'weaponsCount');
-        renderCategory('transportGrid', allMods.transport, 'transportCount');
-        renderCategory('dimensionsGrid', allMods.dimensions, 'dimensionsCount');
-        renderCategory('foodGrid', allMods.food, 'foodCount');
-        renderCategory('biomesGrid', allMods.biomes, 'biomesCount');
-        renderCategory('mobsGrid', allMods.mobs, 'mobsCount');
-        renderCategory('storageGrid', allMods.storage, 'storageCount');
-        renderCategory('energyGrid', allMods.energy, 'energyCount');
-        renderCategory('automationGrid', allMods.automation, 'automationCount');
-        renderCategory('cosmeticGrid', allMods.cosmetic, 'cosmeticCount');
-        
-        const total = Object.values(allMods).reduce((s, arr) => s + arr.length, 0);
-        document.getElementById('modStats').textContent = 
-            `✅ Всего: ${total} | Уникальных: ${usedNames.size} | Шейдеров: ${allMods.shaders.length} | Ресурс-паков: ${allMods.resourcepacks.length}`;
-    }
-
-    // ============ ФИЛЬТРЫ ============
-    function applyFilters() {
-        const version = document.getElementById('versionFilter').value;
-        const loader = document.getElementById('loaderFilter').value;
-        const category = document.getElementById('categoryFilter').value;
-        const price = document.getElementById('priceFilter').value;
-        const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
-        
-        let visibleCount = 0;
-        
-        for (const cat in allMods) {
-            const catEl = document.getElementById(`cat-${cat}`);
-            if (!catEl) continue;
-            const grid = document.getElementById(`${cat}Grid`);
-            const countEl = document.getElementById(`${cat}Count`);
-            
-            if (category !== 'all' && cat !== category) {
-                catEl.classList.add('hidden-category');
-                continue;
-            }
-            
-            const filtered = allMods[cat].filter(mod => {
-                if (version !== 'all' && mod.ver !== version) return false;
-                if (loader !== 'all' && mod.loader !== loader) return false;
-                if (price !== 'all' && mod.price !== price) return false;
-                if (searchQuery && !mod.name.toLowerCase().includes(searchQuery) && !mod.desc.toLowerCase().includes(searchQuery)) return false;
-                return true;
-            });
-            
-            if (filtered.length > 0) {
-                catEl.classList.remove('hidden-category');
-                grid.innerHTML = '';
-                const frag = document.createDocumentFragment();
-                filtered.forEach(m => frag.appendChild(createModCard(m)));
-                grid.appendChild(frag);
-                countEl.textContent = filtered.length;
-                visibleCount += filtered.length;
-            } else {
-                catEl.classList.add('hidden-category');
-            }
-        }
-        
-        document.getElementById('filterStats').textContent = 
-            `📊 Показано: ${visibleCount} элементов | Версия: ${version === 'all' ? 'Все' : version} | Загрузчик: ${loader === 'all' ? 'Все' : loader} | Категория: ${category === 'all' ? 'Все' : category} | Цена: ${price === 'all' ? 'Все' : (price === 'free' ? 'Бесплатные' : 'Платные')}`;
-    }
-
-    function resetFilters() {
-        document.getElementById('versionFilter').value = 'all';
-        document.getElementById('loaderFilter').value = 'all';
-        document.getElementById('categoryFilter').value = 'all';
-        document.getElementById('priceFilter').value = 'all';
-        document.getElementById('searchInput').value = '';
-        renderAll();
-        document.getElementById('filterStats').textContent = 'Все элементы отображены';
-    }
-
-    // ============ ФУНКЦИИ ============
-    function scrollToId(id) { 
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: 'smooth' }); 
+    localStream = await navigator.mediaDevices.getUserMedia(constraints);
+    
+    // Показываем локальное видео
+    if (callType === 'video') {
+      $("#localVideo").srcObject = localStream;
+      $("#localVideo").style.display = 'block';
     }
     
-    function spinRoulette() {
-        const count = Math.min(parseInt(document.getElementById('rouletteCount').value) || 3, 20);
-        const all = Object.values(allMods).flat();
-        const selected = [...all].sort(() => Math.random() - 0.5).slice(0, count);
-        const container = document.getElementById('rouletteResults');
-        container.innerHTML = '';
-        selected.forEach(m => container.appendChild(createModCard(m)));
+    // Звоним пользователю
+    const call = peer.call('nimbus-' + activeChat.phone, localStream, {
+      metadata: { from: currentUser.phone, type: callType }
+    });
+    
+    currentCall = call;
+    showCallModal(activeChat, 'Вызов...', callType);
+    
+    call.on('stream', (remoteStream) => {
+      const remoteVideo = $("#remoteVideo");
+      remoteVideo.srcObject = remoteStream;
+      remoteVideo.style.display = 'block';
+      $("#callStatus").textContent = 'В сети';
+    });
+    
+    call.on('close', () => {
+      endCall();
+    });
+    
+    call.on('error', (err) => {
+      console.error('Call error:', err);
+      alert('Ошибка звонка');
+      endCall();
+    });
+    
+  } catch (error) {
+    console.error('Media error:', error);
+    alert('Не удалось получить доступ к камере/микрофону');
+  }
+}
+
+function showIncomingCall(caller, type) {
+  callType = type || 'voice';
+  
+  const avatarEl = $("#incomingAvatar");
+  if (caller.avatar) {
+    avatarEl.innerHTML = `<img src="${caller.avatar}" alt="avatar">`;
+  } else {
+    avatarEl.textContent = initials(caller.name);
+  }
+  $("#incomingName").textContent = caller.name;
+  $("#incomingType").textContent = callType === 'video' ? 'Видеозвонок...' : 'Голосовой звонок...';
+  $("#incomingCallModal").classList.add("open");
+  
+  playRingtone();
+}
+
+function playRingtone() {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.value = 800;
+    oscillator.type = 'sine';
+    gainNode.gain.value = 0.1;
+    
+    oscillator.start();
+    setTimeout(() => {
+      oscillator.stop();
+      audioContext.close();
+    }, 1000);
+  } catch (error) {}
+}
+
+async function acceptCall() {
+  if (!currentCall) return;
+  
+  try {
+    const constraints = {
+      audio: true,
+      video: callType === 'video'
+    };
+    localStream = await navigator.mediaDevices.getUserMedia(constraints);
+    
+    currentCall.answer(localStream);
+    $("#incomingCallModal").classList.remove("open");
+    
+    if (callType === 'video') {
+      $("#localVideo").srcObject = localStream;
+      $("#localVideo").style.display = 'block';
     }
     
-    function addUserMod() {
-        const name = document.getElementById('userModName').value.trim();
-        if (!name) return;
-        const grid = document.getElementById('userModsGrid');
-        const card = document.createElement('div');
-        card.className = 'mod-card';
-        card.innerHTML = `<div class="mod-name">${name}</div><div class="mod-ver">📌 Пользовательский</div>`;
-        grid.appendChild(card);
-        document.getElementById('userModName').value = '';
+    const callerPhone = currentCall.metadata.from;
+    const caller = users.find(u => u.phone === callerPhone);
+    if (caller) {
+      showCallModal(caller, 'Соединение...', callType);
     }
     
-    function sendAI() {
-        const input = document.getElementById('aiInput');
-        const chat = document.getElementById('aiChat');
-        const msg = input.value.trim();
-        if (!msg) return;
-        chat.innerHTML += `<div class="ai-msg user"><strong>Вы:</strong> ${msg}</div>`;
-        let resp = 'Используйте фильтры.';
-        const l = msg.toLowerCase();
-        if (l.includes('шейдер')) resp = `💎 В каталоге ${allMods.shaders.length} шейдеров. Лучшие: Complementary Shaders (10/10), SEUS PTGI (10/10), BSL (9/10).`;
-        else if (l.includes('ресурс')||l.includes('пак')||l.includes('текстур')) resp = `📦 В каталоге ${allMods.resourcepacks.length} ресурс-паков. Лучшие: Faithful (9/10), Sphax PureBDCraft (9/10), Conquest (9/10).`;
-        else if (l.includes('чит')||l.includes('pvp')) resp = '🔥 Читы: Wurst, Meteor, Rise Client (10/10), Pouch Client (10/10).';
-        else if (l.includes('fps')||l.includes('оптимиз')) resp = '🚀 Оптимизация: Sodium (10/10), Lithium (9/10), ModernFix (9/10).';
-        else if (l.includes('сборк')) resp = '📦 Сборки: All The Mods 9 (10/10), RLCraft (9/10), Vault Hunters.';
-        chat.innerHTML += `<div class="ai-msg bot"><strong>GuiMods AI:</strong> ${resp}</div>`;
-        input.value = '';
-        chat.scrollTop = chat.scrollHeight;
-    }
+  } catch (error) {
+    console.error('Accept call error:', error);
+    alert('Не удалось получить доступ к камере/микрофону');
+  }
+}
+
+function declineCall() {
+  if (currentCall) {
+    currentCall.close();
+  }
+  $("#incomingCallModal").classList.remove("open");
+  currentCall = null;
+}
+
+function showCallModal(user, status, type = 'voice') {
+  const avatarEl = $("#callAvatar");
+  if (user.avatar) {
+    avatarEl.innerHTML = `<img src="${user.avatar}" alt="avatar">`;
+  } else {
+    avatarEl.textContent = initials(user.name);
+  }
+  $("#callName").textContent = user.name;
+  $("#callStatus").textContent = status;
+  
+  const remoteVideo = $("#remoteVideo");
+  const localVideo = $("#localVideo");
+  const videoBtn = $("#videoBtn");
+  
+  if (type === 'video') {
+    remoteVideo.style.display = 'block';
+    localVideo.style.display = 'block';
+    videoBtn.style.display = 'flex';
+  } else {
+    remoteVideo.style.display = 'none';
+    localVideo.style.display = 'none';
+    videoBtn.style.display = 'none';
+  }
+  
+  $("#callModal").classList.add("open");
+}
+
+function endCall() {
+  if (currentCall) {
+    currentCall.close();
+    currentCall = null;
+  }
+  
+  if (localStream) {
+    localStream.getTracks().forEach(track => track.stop());
+    localStream = null;
+  }
+  
+  $("#callModal").classList.remove("open");
+  $("#remoteVideo").srcObject = null;
+  $("#localVideo").srcObject = null;
+  isMuted = false;
+  isVideoEnabled = false;
+}
+
+function toggleMute() {
+  if (!localStream) return;
+  
+  isMuted = !isMuted;
+  localStream.getAudioTracks().forEach(track => {
+    track.enabled = !isMuted;
+  });
+  
+  $("#muteBtn").classList.toggle("active", isMuted);
+  $("#muteBtn").textContent = isMuted ? '🔇' : '🎤';
+}
+
+function toggleVideo() {
+  if (!localStream || callType !== 'video') return;
+  
+  isVideoEnabled = !isVideoEnabled;
+  localStream.getVideoTracks().forEach(track => {
+    track.enabled = isVideoEnabled;
+  });
+  
+  $("#videoBtn").classList.toggle("active", isVideoEnabled);
+  $("#videoBtn").textContent = isVideoEnabled ? '📹' : '📷';
+}
+
+// ================= ЧАТ =================
+function searchUser(phone) {
+  const cleanPhone = phone.replace(/\D/g, '');
+  let normalized = cleanPhone.startsWith('8') ? '7' + cleanPhone.slice(1) : cleanPhone;
+  if (!normalized.startsWith('7')) normalized = '7' + normalized;
+  
+  return users.find(u => u.phone === normalized);
+}
+
+function openSearchResult(user) {
+  if (!user || user.phone === currentUser.phone) {
+    alert(user ? "Это ваш номер" : "Пользователь не найден. Попросите друга зарегистрироваться с этим номером");
+    return;
+  }
+  
+  foundUser = user;
+  const avatarEl = $("#foundAvatar");
+  if (user.avatar) {
+    avatarEl.style.cssText = avatarStyle(user.avatar);
+    avatarEl.innerHTML = `<img src="${user.avatar}" alt="avatar">`;
+  } else {
+    avatarEl.style.cssText = avatarStyle(null);
+    avatarEl.textContent = initials(user.name);
+  }
+  $("#foundName").textContent = user.name;
+  $("#foundPhone").textContent = '+' + user.phone;
+  $("#searchModal").classList.add("open");
+}
+
+function closeSearchModal() {
+  $("#searchModal").classList.remove("open");
+  foundUser = null;
+}
+
+function startChatWithFound() {
+  if (!foundUser || !currentUser) return;
+  
+  const participants = [currentUser.phone, foundUser.phone].sort();
+  const chatId = participants.join('_');
+  
+  let chat = chats.find(c => c.id === chatId);
+  if (!chat) {
+    chat = { id: chatId, participants: participants, createdAt: Date.now() };
+    chats.push(chat);
+    saveData();
+  }
+  
+  closeSearchModal();
+  openChat(foundUser, chatId);
+}
+
+function loadChats() {
+  if (!currentUser) return;
+  const userChats = chats.filter(c => c.participants.includes(currentUser.phone));
+  renderChatList(userChats);
+}
+
+function renderChatList(userChats) {
+  chatListEl.innerHTML = "";
+  
+  userChats.forEach(chat => {
+    const otherPhone = chat.participants.find(p => p !== currentUser.phone);
+    const participant = users.find(u => u.phone === otherPhone);
+    if (!participant) return;
     
-    function toggleAllMods() {
-        const cards = document.querySelectorAll('.mod-card');
-        const allVis = Array.from(cards).every(c => c.style.display !== 'none');
-        cards.forEach(c => c.style.display = allVis ? 'none' : 'block');
+    const chatMessages = messages.filter(m => m.chatId === chat.id);
+    const lastMessage = chatMessages.length > 0 ? chatMessages[chatMessages.length - 1] : null;
+    
+    const el = document.createElement("div");
+    el.className = "chat-item" + (activeChat && activeChat.phone === participant.phone ? " active":"");
+    
+    const participantAvatar = participant.avatar ? 
+      `<img src="${participant.avatar}" alt="avatar">` : 
+      initials(participant.name);
+    
+    const lastText = lastMessage ? 
+      (lastMessage.from === currentUser.phone ? "Вы: " : "") + lastMessage.text : 
+      "Начните чат";
+    
+    el.innerHTML = `
+      <div class="avatar" style="${participant.avatar ? avatarStyle(participant.avatar) : avatarStyle(null)}">
+        ${participantAvatar}
+      </div>
+      <div class="chat-info">
+        <div class="chat-row1">
+          <span class="name">${participant.name}</span>
+        </div>
+        <div class="chat-row2">
+          <span class="last">${lastText}</span>
+        </div>
+      </div>`;
+    
+    el.onclick = () => openChat(participant, chat.id);
+    chatListEl.appendChild(el);
+  });
+}
+
+function openChat(participant, chatId) {
+  activeChat = participant;
+  activeChat.chatId = chatId;
+  
+  document.body.classList.add("in-chat");
+  emptyState.style.display = "none";
+  chatHeader.style.display = "flex";
+  inputBar.style.display = "flex";
+
+  const av = $("#hAvatar");
+  if (participant.avatar) {
+    av.style.cssText = avatarStyle(participant.avatar);
+    av.innerHTML = `<img src="${participant.avatar}" alt="avatar">`;
+  } else {
+    av.style.cssText = avatarStyle(null);
+    av.textContent = initials(participant.name);
+  }
+  
+  $("#hName").textContent = participant.name;
+  renderMessages(chatId);
+  msgInput.focus();
+}
+
+function renderMessages(chatId) {
+  messagesEl.innerHTML = "";
+  const chatMessages = messages.filter(m => m.chatId === chatId);
+  
+  if (chatMessages.length === 0) {
+    const empty = document.createElement("div");
+    empty.style.cssText = "text-align:center;color:var(--text-dim);margin-top:40px;font-size:14px;";
+    empty.textContent = "Нет сообщений. Начните общение!";
+    messagesEl.appendChild(empty);
+    return;
+  }
+  
+  chatMessages.forEach(m => {
+    const isOut = m.from === currentUser.phone;
+    const el = document.createElement("div");
+    el.className = "msg " + (isOut ? "out" : "in");
+    el.innerHTML = `${escapeHtml(m.text)}<span class="m-time">${m.time}${isOut ? " ✓✓" : ""}</span>`;
+    messagesEl.appendChild(el);
+  });
+  
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function resetChatView() {
+  document.body.classList.remove("in-chat");
+  emptyState.style.display = "flex";
+  chatHeader.style.display = "none";
+  inputBar.style.display = "none";
+  messagesEl.innerHTML = "";
+  activeChat = null;
+}
+
+function sendMessage() {
+  const text = msgInput.value.trim();
+  if (!text || !activeChat || !currentUser) return;
+  
+  const message = {
+    chatId: activeChat.chatId,
+    from: currentUser.phone,
+    text: text,
+    timestamp: Date.now(),
+    time: nowTime()
+  };
+  
+  messages.push(message);
+  saveData();
+  
+  msgInput.value = "";
+  msgInput.style.height = "auto";
+  renderMessages(activeChat.chatId);
+  loadChats();
+}
+
+msgInput.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { 
+    e.preventDefault(); 
+    sendMessage(); 
+  }
+});
+
+$("#sendBtn").onclick = sendMessage;
+$("#backBtn").onclick = () => { resetChatView(); loadChats(); };
+$("#profileBtn").onclick = showProfile;
+
+$("#search").addEventListener("input", e => {
+  const query = e.target.value.trim();
+  if (query.length >= 10) {
+    const user = searchUser(query);
+    if (user) {
+      openSearchResult(user);
+      e.target.value = "";
     }
+  }
+});
 
-    document.getElementById('searchInput').addEventListener('input', applyFilters);
-
-    // ============ ЗАПУСК ============
-    function init() {
-        createStars();
-        renderAll();
-        setTheme('quasar');
-        document.getElementById('aiInput').addEventListener('keydown', e => {
-            if (e.key === 'Enter') sendAI();
-        });
-        console.log('✅ GuiMods v20: Все ссылки на реальные существующие домены. Pouch Client исправлен.');
+$("#search").addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    const query = e.target.value.trim();
+    const user = searchUser(query);
+    if (user) {
+      openSearchResult(user);
+      e.target.value = "";
     }
+  }
+});
 
-    init();
+function showProfile() {
+  if (!currentUser) return;
+  $("#profileName").value = currentUser.name;
+  $("#profilePhone").value = '+' + currentUser.phone;
+  const avatarEl = $("#profileAvatar");
+  if (currentUser.avatar) {
+    avatarEl.style.cssText = avatarStyle(currentUser.avatar);
+    avatarEl.innerHTML = `<img src="${currentUser.avatar}" alt="avatar">`;
+  } else {
+    avatarEl.style.cssText = avatarStyle(null);
+    avatarEl.textContent = initials(currentUser.name);
+  }
+  $("#profileModal").classList.add("open");
+}
+
+function closeProfile() { $("#profileModal").classList.remove("open"); }
+
+function saveProfile() {
+  const name = $("#profileName").value.trim();
+  if (!name || !currentUser) return;
+  currentUser.name = name;
+  const userIndex = users.findIndex(u => u.phone === currentUser.phone);
+  if (userIndex !== -1) users[userIndex] = currentUser;
+  localStorage.setItem('nimbus_current_user', JSON.stringify(currentUser));
+  saveData();
+  closeProfile();
+  loadChats();
+}
+
+function changeAvatar() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (file && currentUser) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        currentUser.avatar = event.target.result;
+        const userIndex = users.findIndex(u => u.phone === currentUser.phone);
+        if (userIndex !== -1) users[userIndex] = currentUser;
+        localStorage.setItem('nimbus_current_user', JSON.stringify(currentUser));
+        saveData();
+        showProfile();
+        loadChats();
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  input.click();
+}
+
+const themeBtn = $("#themeBtn");
+themeBtn.onclick = () => {
+  document.body.classList.toggle("light");
+  const light = document.body.classList.contains("light");
+  themeBtn.textContent = light ? "☀️" : "🌙";
+  try { localStorage.setItem("nimbus-theme", light ? "light" : "dark"); } catch(_) {}
+};
+
+try {
+  if (localStorage.getItem("nimbus-theme") === "light") {
+    document.body.classList.add("light");
+    themeBtn.textContent = "☀️";
+  }
+} catch(_) {}
+
+function initializeApp() {
+  if (currentUser) {
+    $("#authModal").classList.remove("open");
+    loadChats();
+  } else {
+    $("#authModal").classList.add("open");
+  }
+}
+
+const savedUser = localStorage.getItem('nimbus_current_user');
+if (savedUser) {
+  currentUser = JSON.parse(savedUser);
+  initPeer();
+  initializeApp();
+} else {
+  $("#authModal").classList.add("open");
+}
+
+window.login = login;
+window.logout = logout;
+window.showProfile = showProfile;
+window.closeProfile = closeProfile;
+window.saveProfile = saveProfile;
+window.changeAvatar = changeAvatar;
+window.closeSearchModal = closeSearchModal;
+window.startChatWithFound = startChatWithFound;
+window.startVoiceCall = startVoiceCall;
+window.startVideoCall = startVideoCall;
+window.acceptCall = acceptCall;
+window.declineCall = declineCall;
+window.endCall = endCall;
+window.toggleMute = toggleMute;
+window.toggleVideo = toggleVideo;
+
+console.log("=== NIMBUS MESSENGER ===");
+console.log("Работает через PeerJS!");
+console.log("1. Откройте на телефоне и компьютере");
+console.log("2. Зарегистрируйтесь с разными номерами");
+console.log("3. Найдите друг друга и общайтесь!");
 </script>
 </body>
 </html>
