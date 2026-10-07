@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Класс 5 «М» — Ольге Борисовне</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23060a1f'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%2360a5fa'%3E5%3C/text%3E%3C/svg%3E" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    min-height: 100%;
+    background: #050818;
+    color: #e2e8f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37, 99, 235, 0.18), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(29, 78, 216, 0.15), transparent 60%),
+      linear-gradient(180deg, #050818 0%, #070b24 50%, #050818 100%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* ===== Свет за мышкой ===== */
+  .cursor-light {
+    position: fixed;
+    top: 0; left: 0;
+    width: 650px;
+    height: 650px;
+    margin-left: -325px;
+    margin-top: -325px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 5;
+    background: radial-gradient(
+      circle,
+      rgba(147, 197, 253, 0.22) 0%,
+      rgba(96, 165, 250, 0.14) 22%,
+      rgba(59, 130, 246, 0.07) 45%,
+      transparent 70%
+    );
+    mix-blend-mode: screen;
+    opacity: 0;
+    will-change: transform;
+  }
+  .cursor-light.active { opacity: 1; }
+
+  /* ===== Звёзды ===== */
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 3.5s ease-in-out infinite;
+  }
+  .star.blue { background: #93c5fd; box-shadow: 0 0 6px rgba(147, 197, 253, 0.8); }
+  .star.bright-blue {
+    background: #bfdbfe;
+    box-shadow: 0 0 8px rgba(147, 197, 253, 0.9), 0 0 16px rgba(96, 165, 250, 0.6);
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50%      { opacity: 1;   transform: scale(1.3); }
+  }
+
+  .shooting-star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #dbeafe;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 3px rgba(147, 197, 253, 0.9), 0 0 20px rgba(59, 130, 246, 0.6);
+    opacity: 0;
+  }
+  .shooting-star::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 0;
+    transform: translateY(-50%);
+    width: 140px; height: 2px;
+    background: linear-gradient(90deg, rgba(147, 197, 253, 0.9), rgba(59, 130, 246, 0.4), transparent);
+    border-radius: 1px;
+  }
+  .shooting-star.animate { animation: shoot 1.6s ease-out forwards; }
+  @keyframes shoot {
+    0%   { opacity: 0; transform: translate(0, 0); }
+    10%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(450px, 280px); }
+  }
+
+  /* ===== Свечения ===== */
+  .glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(150px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-1 { top: -160px; left: -160px; width: 600px; height: 600px; background: rgba(37, 99, 235, 0.28); animation: float 9s ease-in-out infinite; }
+  .glow-2 { bottom: -160px; right: -160px; width: 600px; height: 600px; background: rgba(29, 78, 216, 0.22); animation: float 11s ease-in-out infinite reverse; }
+  .glow-3 { top: 50%; left: 50%; width: 500px; height: 500px; transform: translate(-50%, -50%); background: rgba(59, 130, 246, 0.15); animation: float3 13s ease-in-out infinite; }
+  .glow-4 { top: 20%; right: 5%; width: 400px; height: 400px; background: rgba(96, 165, 250, 0.12); animation: float 14s ease-in-out infinite; }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(40px, -40px); }
+  }
+  @keyframes float3 {
+    0%, 100% { transform: translate(-50%, -50%); }
+    50%      { transform: translate(calc(-50% + 40px), calc(-50% - 40px)); }
+  }
+
+  /* ===== Страницы (роутер) ===== */
+  .page {
+    display: none;
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    padding: 60px 16px;
+  }
+  .page.active {
+    display: block;
+    animation: pageIn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .center-col {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 120px);
+    text-align: center;
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+  .fade-up.d1 { animation-delay: 0.1s; }
+  .fade-up.d2 { animation-delay: 0.25s; }
+  .fade-up.d3 { animation-delay: 0.4s; }
+  .fade-up.d4 { animation-delay: 0.55s; }
+  .fade-up.d5 { animation-delay: 0.7s; }
+  .fade-up.d6 { animation-delay: 0.85s; }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== Иконка книги ===== */
+  .icon-wrap { display: flex; justify-content: center; margin-bottom: 36px; position: relative; }
+  .icon-blur {
+    position: absolute;
+    inset: -30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.55), rgba(37, 99, 235, 0.2) 40%, transparent 70%);
+    filter: blur(35px);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: scale(0.95); }
+    50%      { opacity: 1;   transform: scale(1.08); }
+  }
+  .icon-circle {
+    position: relative;
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.45), rgba(29, 78, 216, 0.30));
+    border: 1px solid rgba(96, 165, 250, 0.45);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow:
+      0 10px 50px rgba(37, 99, 235, 0.5),
+      inset 0 0 40px rgba(96, 165, 250, 0.25),
+      0 0 0 1px rgba(147, 197, 253, 0.15);
+    backdrop-filter: blur(10px);
+    animation: iconFloat 6s ease-in-out infinite;
+  }
+  @keyframes iconFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+  .icon-circle svg {
+    width: 54px; height: 54px;
+    color: #dbeafe;
+    filter: drop-shadow(0 0 15px rgba(147, 197, 253, 0.9));
+  }
+
+  /* ===== Заголовок ===== */
+  h1.title {
+    font-size: clamp(2.5rem, 9vw, 5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    background: linear-gradient(120deg, #ffffff 0%, #dbeafe 25%, #60a5fa 50%, #dbeafe 75%, #ffffff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-family: Georgia, serif;
+    animation: shine 6s linear infinite;
+    filter: drop-shadow(0 4px 40px rgba(59, 130, 246, 0.5));
+  }
+  @keyframes shine {
+    to { background-position: 200% center; }
+  }
+
+  /* ===== Разделитель ===== */
+  .divider {
+    display: flex; align-items: center; justify-content: center;
+    gap: 14px; margin-bottom: 28px;
+  }
+  .divider .line {
+    height: 1px; width: 80px;
+    background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.8));
+  }
+  .divider .line.right {
+    background: linear-gradient(270deg, transparent, rgba(96, 165, 250, 0.8));
+  }
+  .divider svg {
+    width: 22px; height: 22px;
+    color: #93c5fd;
+    animation: rotate 8s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(147, 197, 253, 0.9));
+  }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+
+  p.subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: #a5b4d4;
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto 60px;
+  }
+
+  /* ===== Кнопки ===== */
+  .buttons {
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 68px;
+  }
+
+  a.card {
+    position: relative;
+    background: linear-gradient(180deg, rgba(30, 58, 138, 0.15), rgba(30, 58, 138, 0.05));
+    border: 2px solid rgba(96, 165, 250, 0.25);
+    border-radius: 20px;
+    padding: 32px 34px;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    width: 270px;
+    text-decoration: none;
+    display: block;
+    backdrop-filter: blur(12px);
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.4),
+      0 0 40px rgba(37, 99, 235, 0.10),
+      inset 0 1px 0 rgba(147, 197, 253, 0.10);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 0.4s,
+                background 0.4s,
+                box-shadow 0.4s;
+    overflow: hidden;
+  }
+  a.card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      320px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(147, 197, 253, 0.22),
+      rgba(59, 130, 246, 0.08) 30%,
+      transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  a.card:hover::before { opacity: 1; }
+  a.card:hover {
+    border-color: rgba(147, 197, 253, 0.75);
+    background: linear-gradient(180deg, rgba(30, 58, 138, 0.25), rgba(30, 58, 138, 0.10));
+    transform: translateY(-8px);
+    box-shadow:
+      0 20px 50px rgba(37, 99, 235, 0.55),
+      0 0 80px rgba(59, 130, 246, 0.30),
+      inset 0 1px 0 rgba(147, 197, 253, 0.20);
+  }
+
+  .card-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.45), rgba(29, 78, 216, 0.30));
+    border: 1px solid rgba(96, 165, 250, 0.40);
+    display: flex; align-items: center; justify-content: center;
+    color: #dbeafe;
+    margin-bottom: 18px;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow:
+      inset 0 0 20px rgba(96, 165, 250, 0.20),
+      0 0 15px rgba(59, 130, 246, 0.25);
+  }
+  a.card:hover .card-icon {
+    transform: scale(1.15) rotate(-5deg);
+    box-shadow:
+      inset 0 0 25px rgba(147, 197, 253, 0.35),
+      0 0 25px rgba(59, 130, 246, 0.5);
+  }
+  .card-icon svg {
+    width: 26px; height: 26px;
+    filter: drop-shadow(0 0 8px rgba(147, 197, 253, 0.7));
+  }
+
+  a.card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+    text-shadow: 0 0 20px rgba(96, 165, 250, 0.4);
+  }
+  a.card p {
+    font-size: 0.875rem;
+    color: #93a5c5;
+    line-height: 1.5;
+  }
+
+  .signature {
+    font-size: 0.9rem;
+    color: #6b7ba0;
+    margin-bottom: 20px;
+  }
+
+  /* ===== Страница со стихом / объяснением ===== */
+  .page-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 0 60px;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: rgba(30, 58, 138, 0.25);
+    border: 1px solid rgba(96, 165, 250, 0.35);
+    color: #bfdbfe;
+    font-family: inherit;
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 40px;
+  }
+  .back-btn:hover {
+    background: rgba(37, 99, 235, 0.35);
+    border-color: rgba(147, 197, 253, 0.8);
+    transform: translateX(-4px);
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+  }
+  .back-btn svg { width: 16px; height: 16px; }
+
+  .page-head { text-align: center; margin-bottom: 40px; }
+
+  .page-head h2 {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    margin-bottom: 10px;
+    background: linear-gradient(120deg, #ffffff, #dbeafe, #60a5fa, #dbeafe, #ffffff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 5s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.4));
+  }
+  .page-head .sub {
+    color: #6b7ba0;
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+  .page-head .icon-small {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.45), rgba(29, 78, 216, 0.30));
+    border: 1px solid rgba(96, 165, 250, 0.45);
+    margin-bottom: 20px;
+    box-shadow:
+      0 0 30px rgba(37, 99, 235, 0.5),
+      inset 0 0 20px rgba(96, 165, 250, 0.25);
+  }
+  .page-head .icon-small svg {
+    width: 28px; height: 28px;
+    color: #dbeafe;
+    filter: drop-shadow(0 0 10px rgba(147, 197, 253, 0.9));
+  }
+
+  .poem-card, .reason-card {
+    position: relative;
+    background: linear-gradient(180deg, rgba(11, 18, 48, 0.85), rgba(5, 8, 24, 0.85));
+    border: 2px solid rgba(96, 165, 250, 0.40);
+    border-radius: 24px;
+    padding: 48px 48px 40px;
+    box-shadow:
+      0 20px 60px rgba(37, 99, 235, 0.35),
+      inset 0 1px 0 rgba(147, 197, 253, 0.10);
+    backdrop-filter: blur(10px);
+  }
+  .poem-card::before, .reason-card::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 24px;
+    background: radial-gradient(circle at 50% 0%, rgba(96, 165, 250, 0.25), transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(20px);
+  }
+
+  .poem {
+    font-size: 1.08rem;
+    line-height: 1.95;
+    color: #d0d8ec;
+    text-align: center;
+  }
+  .poem .dedication {
+    display: block;
+    font-size: 1.2rem;
+    color: #bfdbfe;
+    font-weight: 600;
+    margin-bottom: 26px;
+    text-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
+  }
+  .poem .stanza { margin-bottom: 26px; display: block; }
+  .poem .final {
+    color: #93c5fd;
+    font-style: italic;
+    margin-top: 28px;
+    display: block;
+    font-size: 0.98rem;
+    text-shadow: 0 0 15px rgba(96, 165, 250, 0.5);
+  }
+
+  .reason {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: #d0d8ec;
+  }
+  .reason p { margin-bottom: 20px; }
+  .reason .first::first-letter {
+    font-size: 2.4rem;
+    color: #60a5fa;
+    font-weight: bold;
+    float: left;
+    line-height: 1;
+    margin-right: 10px;
+    margin-top: 4px;
+    text-shadow:
+      0 0 20px rgba(96, 165, 250, 0.9),
+      0 0 40px rgba(59, 130, 246, 0.5);
+  }
+  .reason .em {
+    color: #bfdbfe;
+    font-weight: 600;
+    text-shadow: 0 0 12px rgba(96, 165, 250, 0.5);
+  }
+  .reason .sign {
+    text-align: right;
+    color: #93c5fd;
+    font-style: italic;
+    margin-top: 32px;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 520px) {
+    .page { padding: 40px 14px; }
+    .poem-card, .reason-card { padding: 32px 22px 26px; border-radius: 20px; }
+    .poem { font-size: 0.98rem; line-height: 1.8; }
+    .reason { font-size: 1rem; }
+    a.card { width: 100%; max-width: 340px; }
+    .icon-circle { width: 92px; height: 92px; }
+    .icon-circle svg { width: 44px; height: 44px; }
+    .cursor-light { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Свет за мышкой -->
+<div class="cursor-light" id="cursorLight"></div>
+
+<!-- Звёзды -->
+<div class="stars" id="stars"></div>
+
+<!-- Свечения -->
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+<div class="glow glow-3"></div>
+<div class="glow glow-4"></div>
+
+<main id="app">
+
+  <!-- ============ ГЛАВНАЯ СТРАНИЦА ============ -->
+  <section id="page-home" class="page">
+    <div class="center-col">
+
+      <div class="icon-wrap fade-up d1">
+        <div class="icon-blur"></div>
+        <div class="icon-circle">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 7v14"/>
+            <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+          </svg>
+        </div>
+      </div>
+
+      <h1 class="title fade-up d2">Класс 5 «М»</h1>
+
+      <div class="divider fade-up d3">
+        <div class="line"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+          <path d="M20 3v4"/><path d="M22 5h-4"/>
+          <path d="M4 17v2"/><path d="M5 18H3"/>
+        </svg>
+        <div class="line right"></div>
+      </div>
+
+      <p class="subtitle fade-up d4">Дорогая Ольга Борисовна, мы приготовили для вас кое-что важное. Выберите, чтобы прочитать.</p>
+
+      <div class="buttons fade-up d5">
+        <a class="card" href="#apology">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+          </div>
+          <h3>Извинение</h3>
+          <p>Наше стихотворение для вас</p>
+        </a>
+
+        <a class="card" href="#reason">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z"/>
+              <path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18"/>
+              <path d="m2.3 2.3 7.286 7.286"/>
+              <circle cx="11" cy="11" r="2"/>
+            </svg>
+          </div>
+          <h3>Почему мы это сделали</h3>
+          <p>Объяснение от всего класса</p>
+        </a>
+      </div>
+
+      <p class="signature fade-up d6">С любовью и уважением, ваш 5 «М»</p>
+
+    </div>
+  </section>
+
+  <!-- ============ СТРАНИЦА: ИЗВИНЕНИЕ ============ -->
+  <section id="page-apology" class="page">
+    <div class="page-inner">
+      <a class="back-btn" href="#home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+        Назад
+      </a>
+
+      <div class="page-head">
+        <div class="icon-small">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          </svg>
+        </div>
+        <h2>Извинение</h2>
+        <div class="sub">Стихотворение от 5 «М»</div>
+      </div>
+
+      <div class="poem-card">
+        <div class="poem">
+          <span class="dedication">Дорогая Ольга Борисовна!</span>
+
+          <span class="stanza">Простите нас, Ольга Борисовна, ради всего,
+Мы на «Калейдоскопе» натворили всего!
+Хотели как лучше, а вышло — беда:
+Шумели, смеялись, не слушали вас иногда.</span>
+
+          <span class="stanza">Класс 5 «М» — он, конечно, шальной,
+Но вас он считает звездою родной.
+Вы нас терпеливо учили считать,
+А мы вас заставили просто устать.</span>
+
+          <span class="stanza">Простите нас, Ольга Борисовна, вновь,
+Дарите нам снова тепло и любовь!
+Мы ценим вас, слышите, очень-преочень,
+И обещаем: тот урок мы не забудем точно!</span>
+
+          <span class="final">С уважением и раскаянием, весь 5 «М»</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ СТРАНИЦА: ПОЧЕМУ МЫ ЭТО СДЕЛАЛИ ============ -->
+  <section id="page-reason" class="page">
+    <div class="page-inner">
+      <a class="back-btn" href="#home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+        Назад
+      </a>
+
+      <div class="page-head">
+        <div class="icon-small">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z"/>
+            <path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18"/>
+            <path d="m2.3 2.3 7.286 7.286"/>
+            <circle cx="11" cy="11" r="2"/>
+          </svg>
+        </div>
+        <h2>Почему мы это сделали</h2>
+        <div class="sub">Объяснение от всего класса</div>
+      </div>
+
+      <div class="reason-card">
+        <div class="reason">
+          <p class="first">Дорогая Ольга Борисовна, мы честно хотим объяснить, почему тот урок «Калейдоскопа» вышел таким шумным. И сразу скажем главное: <span class="em">мы не хотели вас расстраивать</span>.</p>
+
+          <p>Когда задания посыпались одно за другим — как узоры в калейдоскопе, — у нас просто закружилась голова. Кто-то не успевал, кто-то терял нить, кто-то шёпотом просил подсказку. Один смешок — и вот уже смеётся весь класс. Мы не сговаривались шуметь, оно как-то само получилось.</p>
+
+          <p>Мы понимаем: со стороны это выглядело так, будто нам всё равно. Но это не так. Просто в тот момент нам не хватило <span class="em">выдержки, внимания и уважения к вам</span> — а это уже наша вина, и мы её признаём.</p>
+
+          <p>Мы обещаем, что в следующий раз, когда вы скажете «тихо», — мы услышим. Когда вы объясняете — мы будем слушать. И на «Калейдоскопе» покажем себя с той стороны, за которую вам не будет стыдно.</p>
+
+          <p class="sign">— Ваш 5 «М», с уважением и раскаянием</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // ===== Звёзды =====
+  (function() {
+    const starsEl = document.getElementById('stars');
+    let html = '';
+    for (let i = 0; i < 80; i++) {
+      const top = Math.random() * 100;
+      const left = Math.random() * 100;
+      const size = (Math.random() * 2.2 + 0.8).toFixed(2);
+      const dur = (Math.random() * 2.5 + 2.5).toFixed(2);
+      const delay = (Math.random() * 4).toFixed(2);
+      const r = Math.random();
+      let cls = 'star';
+      if (r > 0.85) cls += ' bright-blue';
+      else if (r > 0.55) cls += ' blue';
+      html += `<div class="${cls}" style="top:${top}%;left:${left}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:${delay}s"></div>`;
+    }
+    starsEl.innerHTML = html;
+
+    function spawnShootingStar() {
+      const s = document.createElement('div');
+      s.className = 'shooting-star';
+      s.style.top = (Math.random() * 60) + '%';
+      s.style.left = (Math.random() * 40) + '%';
+      starsEl.appendChild(s);
+      requestAnimationFrame(() => s.classList.add('animate'));
+      setTimeout(() => s.remove(), 1700);
+    }
+    setInterval(spawnShootingStar, 3200);
+    setTimeout(spawnShootingStar, 1000);
+  })();
+
+  // ===== Свет за мышкой =====
+  (function() {
+    const light = document.getElementById('cursorLight');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let lightX = mouseX;
+    let lightY = mouseY;
+    let shown = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!shown) { light.classList.add('active'); shown = true; }
+    });
+
+    function animate() {
+      lightX += (mouseX - lightX) * 0.12;
+      lightY += (mouseY - lightY) * 0.12;
+      light.style.transform = `translate(${lightX}px, ${lightY}px)`;
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    window.addEventListener('mouseleave', () => { light.classList.remove('active'); shown = false; });
+    window.addEventListener('mouseenter', () => { light.classList.add('active'); shown = true; });
+  })();
+
+  // ===== Блик внутри карточек =====
+  (function() {
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+      });
+    });
+  })();
+
+  // ===== Роутер (переключение страниц) =====
+  (function() {
+    function route() {
+      const hash = (location.hash || '#home').replace('#', '');
+      const allowed = ['home', 'apology', 'reason'];
+      const target = allowed.includes(hash) ? hash : 'home';
+
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const el = document.getElementById('page-' + target);
+      if (el) el.classList.add('active');
+
+      const titles = {
+        home: 'Класс 5 «М» — Ольге Борисовне',
+        apology: 'Извинение — 5 «М»',
+        reason: 'Почему мы это сделали — 5 «М»'
+      };
+      document.title = titles[target];
+
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+
+    window.addEventListener('hashchange', route);
+    route();
+  })();
+</script>
+
+</body>
+</html>
