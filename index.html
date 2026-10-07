@@ -28,31 +28,22 @@
     z-index: -1;
   }
 
-  /* ===== Свет за мышкой ===== */
   .cursor-light {
     position: fixed;
     top: 0; left: 0;
-    width: 650px;
-    height: 650px;
+    width: 650px; height: 650px;
     margin-left: -325px;
     margin-top: -325px;
     border-radius: 50%;
     pointer-events: none;
     z-index: 5;
-    background: radial-gradient(
-      circle,
-      rgba(147, 197, 253, 0.22) 0%,
-      rgba(96, 165, 250, 0.14) 22%,
-      rgba(59, 130, 246, 0.07) 45%,
-      transparent 70%
-    );
+    background: radial-gradient(circle, rgba(147, 197, 253, 0.22) 0%, rgba(96, 165, 250, 0.14) 22%, rgba(59, 130, 246, 0.07) 45%, transparent 70%);
     mix-blend-mode: screen;
     opacity: 0;
     will-change: transform;
   }
   .cursor-light.active { opacity: 1; }
 
-  /* ===== Звёзды ===== */
   .stars {
     position: fixed;
     inset: 0;
@@ -100,7 +91,6 @@
     100% { opacity: 0; transform: translate(450px, 280px); }
   }
 
-  /* ===== Свечения ===== */
   .glow {
     position: fixed;
     border-radius: 50%;
@@ -121,7 +111,6 @@
     50%      { transform: translate(calc(-50% + 40px), calc(-50% - 40px)); }
   }
 
-  /* ===== Страницы (роутер) ===== */
   .page {
     display: none;
     position: relative;
@@ -164,7 +153,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ===== Иконка книги ===== */
   .icon-wrap { display: flex; justify-content: center; margin-bottom: 36px; position: relative; }
   .icon-blur {
     position: absolute;
@@ -202,7 +190,6 @@
     filter: drop-shadow(0 0 15px rgba(147, 197, 253, 0.9));
   }
 
-  /* ===== Заголовок ===== */
   h1.title {
     font-size: clamp(2.5rem, 9vw, 5rem);
     font-weight: 700;
@@ -221,7 +208,6 @@
     to { background-position: 200% center; }
   }
 
-  /* ===== Разделитель ===== */
   .divider {
     display: flex; align-items: center; justify-content: center;
     gap: 14px; margin-bottom: 28px;
@@ -249,7 +235,6 @@
     margin: 0 auto 60px;
   }
 
-  /* ===== Кнопки ===== */
   .buttons {
     display: flex;
     gap: 28px;
@@ -351,7 +336,6 @@
     margin-bottom: 20px;
   }
 
-  /* ===== Страница со стихом / объяснением ===== */
   .page-inner {
     max-width: 720px;
     margin: 0 auto;
@@ -510,13 +494,10 @@
 </head>
 <body>
 
-<!-- Свет за мышкой -->
 <div class="cursor-light" id="cursorLight"></div>
 
-<!-- Звёзды -->
 <div class="stars" id="stars"></div>
 
-<!-- Свечения -->
 <div class="glow glow-1"></div>
 <div class="glow glow-2"></div>
 <div class="glow glow-3"></div>
@@ -524,7 +505,6 @@
 
 <main id="app">
 
-  <!-- ============ ГЛАВНАЯ СТРАНИЦА ============ -->
   <section id="page-home" class="page">
     <div class="center-col">
 
@@ -550,7 +530,7 @@
         <div class="line right"></div>
       </div>
 
-      <p class="subtitle fade-up d4">Дорогая Ольга Борисовна, мы приготовили для вас кое-что важное. Выберите, чтобы прочитать.</p>
+      <p class="subtitle fade-up d4">Дорогая Ольга Борисовна, вы — наш классный руководитель, и мы приготовили для вас кое-что важное. Выберите, чтобы прочитать.</p>
 
       <div class="buttons fade-up d5">
         <a class="card" href="#apology">
@@ -582,7 +562,6 @@
     </div>
   </section>
 
-  <!-- ============ СТРАНИЦА: ИЗВИНЕНИЕ ============ -->
   <section id="page-apology" class="page">
     <div class="page-inner">
       <a class="back-btn" href="#home">
@@ -599,7 +578,7 @@
           </svg>
         </div>
         <h2>Извинение</h2>
-        <div class="sub">Стихотворение от 5 «М»</div>
+        <div class="sub">Стихотворение от 5 «М» — классному руководителю</div>
       </div>
 
       <div class="poem-card">
@@ -607,17 +586,19 @@
           <span class="dedication">Дорогая Ольга Борисовна!</span>
 
           <span class="stanza">Простите нас, Ольга Борисовна, ради всего,
-Мы на «Калейдоскопе» натворили всего!
+Мы на уроках натворили всего!
 Хотели как лучше, а вышло — беда:
-Шумели, смеялись, не слушали вас иногда.</span>
+Шумели, смеялись, не слушали мы иногда.</span>
 
           <span class="stanza">Класс 5 «М» — он, конечно, шальной,
 Но вас он считает звездою родной.
-Вы нас терпеливо учили считать,
+Нас терпеливо учили считать,
 А мы вас заставили просто устать.</span>
 
           <span class="stanza">Простите нас, Ольга Борисовна, вновь,
 Дарите нам снова тепло и любовь!
+Вы — классный наш руководитель, наш свет,
+Мы обещаем: таких шалостей больше нет!
 Мы ценим вас, слышите, очень-преочень,
 И обещаем: тот урок мы не забудем точно!</span>
 
@@ -627,7 +608,6 @@
     </div>
   </section>
 
-  <!-- ============ СТРАНИЦА: ПОЧЕМУ МЫ ЭТО СДЕЛАЛИ ============ -->
   <section id="page-reason" class="page">
     <div class="page-inner">
       <a class="back-btn" href="#home">
@@ -652,13 +632,13 @@
 
       <div class="reason-card">
         <div class="reason">
-          <p class="first">Дорогая Ольга Борисовна, мы честно хотим объяснить, почему тот урок «Калейдоскопа» вышел таким шумным. И сразу скажем главное: <span class="em">мы не хотели вас расстраивать</span>.</p>
+          <p class="first">Дорогая Ольга Борисовна, вы — наш классный руководитель, и нам особенно стыдно, что на уроке мы вели себя так шумно. Мы честно хотим объяснить, почему так вышло. И сразу скажем главное: <span class="em">мы не хотели вас расстраивать</span>.</p>
 
-          <p>Когда задания посыпались одно за другим — как узоры в калейдоскопе, — у нас просто закружилась голова. Кто-то не успевал, кто-то терял нить, кто-то шёпотом просил подсказку. Один смешок — и вот уже смеётся весь класс. Мы не сговаривались шуметь, оно как-то само получилось.</p>
+          <p>Когда задания посыпались одно за другим, у нас просто закружилась голова. Кто-то не успевал, кто-то терял нить, кто-то шёпотом просил подсказку. Один смешок — и вот уже смеётся весь класс. Мы не сговаривались шуметь, оно как-то само получилось.</p>
 
-          <p>Мы понимаем: со стороны это выглядело так, будто нам всё равно. Но это не так. Просто в тот момент нам не хватило <span class="em">выдержки, внимания и уважения к вам</span> — а это уже наша вина, и мы её признаём.</p>
+          <p>Мы понимаем: со стороны это выглядело так, будто нам всё равно. Но это не так. Просто в тот момент нам не хватило <span class="em">выдержки, внимания и уважения</span> — а это уже наша вина, и мы её признаём.</p>
 
-          <p>Мы обещаем, что в следующий раз, когда вы скажете «тихо», — мы услышим. Когда вы объясняете — мы будем слушать. И на «Калейдоскопе» покажем себя с той стороны, за которую вам не будет стыдно.</p>
+          <p>Мы обещаем, что в следующий раз, нам скажут «тихо», — мы услышим. Когда объясняют — мы будем слушать. И на уроках покажем себя с той стороны, за которую вам не будет стыдно.</p>
 
           <p class="sign">— Ваш 5 «М», с уважением и раскаянием</p>
         </div>
@@ -669,7 +649,6 @@
 </main>
 
 <script>
-  // ===== Звёзды =====
   (function() {
     const starsEl = document.getElementById('stars');
     let html = '';
@@ -700,7 +679,6 @@
     setTimeout(spawnShootingStar, 1000);
   })();
 
-  // ===== Свет за мышкой =====
   (function() {
     const light = document.getElementById('cursorLight');
     let mouseX = window.innerWidth / 2;
@@ -727,7 +705,6 @@
     window.addEventListener('mouseenter', () => { light.classList.add('active'); shown = true; });
   })();
 
-  // ===== Блик внутри карточек =====
   (function() {
     document.querySelectorAll('.card').forEach(card => {
       card.addEventListener('mousemove', (e) => {
@@ -738,7 +715,6 @@
     });
   })();
 
-  // ===== Роутер (переключение страниц) =====
   (function() {
     function route() {
       const hash = (location.hash || '#home').replace('#', '');
