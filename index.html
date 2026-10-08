@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Класс 5 «М» — Ольге Борисовне</title>
+<title>Ольга Борисовна — лучший классный руководитель</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23060a1f'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%2360a5fa'%3E5%3C/text%3E%3C/svg%3E" />
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -191,9 +191,10 @@
   }
 
   h1.title {
-    font-size: clamp(2.5rem, 9vw, 5rem);
+    font-size: clamp(2rem, 7vw, 4.2rem);
     font-weight: 700;
     letter-spacing: -0.03em;
+    line-height: 1.1;
     margin-bottom: 20px;
     background: linear-gradient(120deg, #ffffff 0%, #dbeafe 25%, #60a5fa 50%, #dbeafe 75%, #ffffff 100%);
     background-size: 200% auto;
@@ -203,6 +204,14 @@
     font-family: Georgia, serif;
     animation: shine 6s linear infinite;
     filter: drop-shadow(0 4px 40px rgba(59, 130, 246, 0.5));
+  }
+  h1.title .accent {
+    display: block;
+    font-size: 0.55em;
+    font-style: italic;
+    color: #bfdbfe;
+    margin-top: 8px;
+    letter-spacing: 0.01em;
   }
   @keyframes shine {
     to { background-position: 200% center; }
@@ -231,7 +240,7 @@
     font-size: clamp(1rem, 2.5vw, 1.25rem);
     color: #a5b4d4;
     line-height: 1.7;
-    max-width: 560px;
+    max-width: 580px;
     margin: 0 auto 60px;
   }
 
@@ -253,7 +262,7 @@
     cursor: pointer;
     color: inherit;
     font-family: inherit;
-    width: 270px;
+    width: 280px;
     text-decoration: none;
     display: block;
     backdrop-filter: blur(12px);
@@ -505,20 +514,24 @@
 
 <main id="app">
 
+  <!-- ============ ГЛАВНАЯ ============ -->
   <section id="page-home" class="page">
     <div class="center-col">
 
       <div class="icon-wrap fade-up d1">
         <div class="icon-blur"></div>
         <div class="icon-circle">
+          <!-- Звезда в круге -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 7v14"/>
-            <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
         </div>
       </div>
 
-      <h1 class="title fade-up d2">Класс 5 «М»</h1>
+      <h1 class="title fade-up d2">
+        Ольга Борисовна
+        <span class="accent">— лучший классный руководитель</span>
+      </h1>
 
       <div class="divider fade-up d3">
         <div class="line"></div>
@@ -530,39 +543,45 @@
         <div class="line right"></div>
       </div>
 
-      <p class="subtitle fade-up d4">Дорогая Ольга Борисовна, вы — наш классный руководитель, и мы приготовили для вас кое-что важное. Выберите, чтобы прочитать.</p>
+      <p class="subtitle fade-up d4">Дорогая Ольга Борисовна, вы — лучший классный руководитель на свете! Мы приготовили для вас пару тёплых слов. Выберите, что почитать.</p>
 
       <div class="buttons fade-up d5">
-        <a class="card" href="#apology">
+        <a class="card" href="#teacher">
           <div class="card-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+              <path d="M4 22h16"/>
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
             </svg>
           </div>
-          <h3>Извинение</h3>
-          <p>Наше стихотворение для вас</p>
+          <h3>Лучший руководитель</h3>
+          <p>Стихотворение для вас</p>
         </a>
 
-        <a class="card" href="#reason">
+        <a class="card" href="#class">
           <div class="card-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z"/>
-              <path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18"/>
-              <path d="m2.3 2.3 7.286 7.286"/>
-              <circle cx="11" cy="11" r="2"/>
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
           </div>
-          <h3>Почему мы это сделали</h3>
-          <p>Объяснение от всего класса</p>
+          <h3>Наш лучший 5 «М»</h3>
+          <p>Стихотворение про наш класс</p>
         </a>
       </div>
 
-      <p class="signature fade-up d6">С любовью и уважением, ваш 5 «М»</p>
+      <p class="signature fade-up d6">С любовью и гордостью, ваш 5 «М»</p>
 
     </div>
   </section>
 
-  <section id="page-apology" class="page">
+  <!-- ============ СТРАНИЦА: ЛУЧШИЙ РУКОВОДИТЕЛЬ ============ -->
+  <section id="page-teacher" class="page">
     <div class="page-inner">
       <a class="back-btn" href="#home">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -574,41 +593,45 @@
       <div class="page-head">
         <div class="icon-small">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
           </svg>
         </div>
-        <h2>Извинение</h2>
-        <div class="sub">Стихотворение от 5 «М» — классному руководителю</div>
+        <h2>Лучший руководитель</h2>
+        <div class="sub">Стихотворение для Ольги Борисовны</div>
       </div>
 
       <div class="poem-card">
         <div class="poem">
           <span class="dedication">Дорогая Ольга Борисовна!</span>
 
-          <span class="stanza">Простите нас, Ольга Борисовна, ради всего,
-Мы на уроках натворили всего!
-Хотели как лучше, а вышло — беда:
-Шумели, смеялись, не слушали мы иногда.</span>
+          <span class="stanza">Вы наш классный руководитель — лучший самый на Земле,<br>
+С вами в классе так уютно, как в родительском тепле.<br>
+Вы всегда поймёте, скажете, поможете, простите,<br>
+И за это, дорогая, вы за всё нас извините!</span>
 
-          <span class="stanza">Класс 5 «М» — он, конечно, шальной,
-Но вас он считает звездою родной.
-Нас терпеливо учили считать,
-А мы вас заставили просто устать.</span>
+          <span class="stanza">Вы — наш компас в море школьном, наш маяк и наш рассвет,<br>
+Вам желаем мы здоровья, много долгих-долгих лет!<br>
+Пусть улыбка ваша светит, как звезда из темноты,<br>
+Ольга Борисовна, спасибо, что с нами рядом вы!</span>
 
-          <span class="stanza">Простите нас, Ольга Борисовна, вновь,
-Дарите нам снова тепло и любовь!
-Вы — классный наш руководитель, наш свет,
-Мы обещаем: таких шалостей больше нет!
-Мы ценим вас, слышите, очень-преочень,
-И обещаем: тот урок мы не забудем точно!</span>
+          <span class="stanza">Класс 5 «М» шумит порою, но вы нас умеете понять,<br>
+Мы клянёмся: будем лучше, будем вас не огорчать!<br>
+Вы для нас — руководитель, наставник и друг,<br>
+С вами в школе мы не знаем ни тревог, ни скук!</span>
 
-          <span class="final">С уважением и раскаянием, весь 5 «М»</span>
+          <span class="final">С любовью и гордостью, весь 5 «М»</span>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="page-reason" class="page">
+  <!-- ============ СТРАНИЦА: НАШ ЛУЧШИЙ 5 «М» ============ -->
+  <section id="page-class" class="page">
     <div class="page-inner">
       <a class="back-btn" href="#home">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -620,27 +643,41 @@
       <div class="page-head">
         <div class="icon-small">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z"/>
-            <path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18"/>
-            <path d="m2.3 2.3 7.286 7.286"/>
-            <circle cx="11" cy="11" r="2"/>
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
         </div>
-        <h2>Почему мы это сделали</h2>
-        <div class="sub">Объяснение от всего класса</div>
+        <h2>Наш лучший 5 «М»</h2>
+        <div class="sub">Стихотворение про наш класс</div>
       </div>
 
-      <div class="reason-card">
-        <div class="reason">
-          <p class="first">Дорогая Ольга Борисовна, вы — наш классный руководитель, и нам особенно стыдно, что на уроке мы вели себя так шумно. Мы честно хотим объяснить, почему так вышло. И сразу скажем главное: <span class="em">мы не хотели вас расстраивать</span>.</p>
+      <div class="poem-card">
+        <div class="poem">
+          <span class="dedication">Мы — 5 «М»!</span>
 
-          <p>Когда задания посыпались одно за другим, у нас просто закружилась голова. Кто-то не успевал, кто-то терял нить, кто-то шёпотом просил подсказку. Один смешок — и вот уже смеётся весь класс. Мы не сговаривались шуметь, оно как-то само получилось.</p>
+          <span class="stanza">Иногда у нас не получается —<br>
+Задачи сложные, примеры не идут.<br>
+Но 5 «М» не сдаётся, не прощается<br>
+С мечтой — мы снова и снова в бой идут!</span>
 
-          <p>Мы понимаем: со стороны это выглядело так, будто нам всё равно. Но это не так. Просто в тот момент нам не хватило <span class="em">выдержки, внимания и уважения</span> — а это уже наша вина, и мы её признаём.</p>
+          <span class="stanza">Иногда мы очень даже шумные,<br>
+Бывает, что не слушаем совсем.<br>
+Но зато мы дружные и умные —<br>
+И это не изменится ни с чем!</span>
 
-          <p>Мы обещаем, что в следующий раз, нам скажут «тихо», — мы услышим. Когда объясняют — мы будем слушать. И на уроках покажем себя с той стороны, за которую вам не будет стыдно.</p>
+          <span class="stanza">Мы разные — весёлые и тихие,<br>
+Спортсмены, книголюбы, шалуны.<br>
+Но вместе мы — 5 «М», и это главное,<br>
+Мы лучший класс огромнейшей страны!</span>
 
-          <p class="sign">— Ваш 5 «М», с уважением и раскаянием</p>
+          <span class="stanza">Спасибо вам, что с нами вы, родные,<br>
+Что учите, прощаете, ведёте в свет.<br>
+Мы — 5 «М», мы ваши, мы такие,<br>
+И лучше нас, поверьте, в мире нет!</span>
+
+          <span class="final">— Ваш любимый 5 «М»</span>
         </div>
       </div>
     </div>
@@ -718,7 +755,7 @@
   (function() {
     function route() {
       const hash = (location.hash || '#home').replace('#', '');
-      const allowed = ['home', 'apology', 'reason'];
+      const allowed = ['home', 'teacher', 'class'];
       const target = allowed.includes(hash) ? hash : 'home';
 
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -726,9 +763,9 @@
       if (el) el.classList.add('active');
 
       const titles = {
-        home: 'Класс 5 «М» — Ольге Борисовне',
-        apology: 'Извинение — 5 «М»',
-        reason: 'Почему мы это сделали — 5 «М»'
+        home: 'Ольга Борисовна — лучший классный руководитель',
+        teacher: 'Лучший руководитель — 5 «М»',
+        class: 'Наш лучший 5 «М»'
       };
       document.title = titles[target];
 
