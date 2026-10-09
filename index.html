@@ -7,12 +7,36 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  /* ===== Переменные темы ===== */
+  :root {
+    --bg: #050818;
+    --bg-grad-1: rgba(37, 99, 235, 0.18);
+    --bg-grad-2: rgba(29, 78, 216, 0.15);
+    --text: #e2e8f0;
+    --text-soft: #a5b4d4;
+    --text-muted: #6b7ba0;
+    --accent: #60a5fa;
+    --accent-soft: #bfdbfe;
+    --font: Georgia, 'Times New Roman', serif;
+    --font-size: 18px;
+    --line-height: 1.7;
+    --weight: 400;
+    --style: normal;
+    --decoration: none;
+    --text-align: center;
+  }
+
   html, body {
     min-height: 100%;
-    background: #050818;
-    color: #e2e8f0;
-    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: var(--font-size);
+    font-weight: var(--weight);
+    font-style: var(--style);
+    text-decoration: var(--decoration);
     overflow-x: hidden;
+    transition: background 0.4s ease, color 0.4s ease;
   }
 
   body::before {
@@ -20,148 +44,422 @@
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37, 99, 235, 0.18), transparent 60%),
-      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(29, 78, 216, 0.15), transparent 60%),
-      linear-gradient(180deg, #050818 0%, #070b24 50%, #050818 100%);
+      radial-gradient(ellipse 80% 60% at 50% 0%, var(--bg-grad-1), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 50% 100%, var(--bg-grad-2), transparent 60%);
     pointer-events: none;
     z-index: -1;
+    transition: background 0.4s ease;
   }
 
+  /* ===== Звёзды ===== */
   .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
   .star { position: absolute; background: #fff; border-radius: 50%; animation: twinkle 3.5s ease-in-out infinite; }
-  .star.blue { background: #93c5fd; box-shadow: 0 0 6px rgba(147, 197, 253, 0.8); }
-  .star.bright { background: #bfdbfe; box-shadow: 0 0 8px rgba(147, 197, 253, 0.9), 0 0 16px rgba(96, 165, 250, 0.6); }
+  .star.blue { background: var(--accent-soft); }
+  .star.bright { background: var(--accent-soft); box-shadow: 0 0 8px var(--accent); }
   @keyframes twinkle { 0%,100% { opacity: .2; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.3); } }
 
   .glow { position: fixed; border-radius: 50%; filter: blur(150px); pointer-events: none; z-index: 0; }
-  .glow-1 { top: -160px; left: -160px; width: 600px; height: 600px; background: rgba(37, 99, 235, 0.28); }
-  .glow-2 { bottom: -160px; right: -160px; width: 600px; height: 600px; background: rgba(29, 78, 216, 0.22); }
+  .glow-1 { top: -160px; left: -160px; width: 600px; height: 600px; background: var(--bg-grad-1); }
+  .glow-2 { bottom: -160px; right: -160px; width: 600px; height: 600px; background: var(--bg-grad-2); }
 
+  /* ===== Страницы ===== */
   .page { display: none; position: relative; z-index: 10; min-height: 100vh; padding: 60px 16px; }
   .page.active { display: block; }
 
   .center-col {
     max-width: 760px; margin: 0 auto;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: calc(100vh - 120px); text-align: center;
+    min-height: calc(100vh - 120px); text-align: var(--text-align);
   }
 
   .icon-wrap { display: flex; justify-content: center; margin-bottom: 36px; }
   .icon-circle {
     width: 110px; height: 110px; border-radius: 50%;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.45), rgba(29, 78, 216, 0.30));
-    border: 1px solid rgba(96, 165, 250, 0.45);
+    background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2));
+    border: 1px solid var(--accent);
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 10px 50px rgba(37, 99, 235, 0.5), inset 0 0 40px rgba(96, 165, 250, 0.25);
+    box-shadow: 0 10px 50px var(--bg-grad-1), inset 0 0 40px var(--bg-grad-2);
   }
-  .icon-circle svg { width: 54px; height: 54px; color: #dbeafe; }
+  .icon-circle svg { width: 54px; height: 54px; color: var(--accent-soft); }
 
   h1.title {
+    font-family: var(--font);
     font-size: clamp(2rem, 7vw, 4.2rem); font-weight: 700; line-height: 1.1;
     margin-bottom: 20px;
-    background: linear-gradient(120deg, #ffffff, #dbeafe, #60a5fa, #dbeafe, #ffffff);
-    background-size: 200% auto;
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    animation: shine 6s linear infinite;
+    color: var(--text);
+    transition: color 0.4s;
   }
-  h1.title .accent { display: block; font-size: 0.55em; font-style: italic; color: #bfdbfe; margin-top: 8px; }
-  @keyframes shine { to { background-position: 200% center; } }
+  h1.title .accent {
+    display: block; font-size: 0.55em; font-style: italic;
+    color: var(--accent-soft); margin-top: 8px;
+  }
 
-  p.subtitle { font-size: clamp(1rem, 2.5vw, 1.25rem); color: #a5b4d4; line-height: 1.7; max-width: 580px; margin: 0 auto 50px; }
+  p.subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: var(--text-soft);
+    line-height: var(--line-height);
+    max-width: 580px; margin: 0 auto 50px;
+  }
 
   .buttons { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px; }
 
   a.card {
-    background: linear-gradient(180deg, rgba(30, 58, 138, 0.15), rgba(30, 58, 138, 0.05));
-    border: 2px solid rgba(96, 165, 250, 0.35);
+    background: linear-gradient(180deg, var(--bg-grad-1), transparent);
+    border: 2px solid var(--accent);
     border-radius: 20px; padding: 32px 34px;
     text-align: left; color: inherit; width: 280px;
     text-decoration: none; display: block;
     transition: transform 0.4s, border-color 0.4s, box-shadow 0.4s;
   }
   a.card:hover {
-    border-color: rgba(147, 197, 253, 0.75);
+    border-color: var(--accent-soft);
     transform: translateY(-8px);
-    box-shadow: 0 20px 50px rgba(37, 99, 235, 0.55), 0 0 80px rgba(59, 130, 246, 0.30);
+    box-shadow: 0 20px 50px var(--bg-grad-1);
   }
 
   .card-icon {
     width: 52px; height: 52px; border-radius: 14px;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.45), rgba(29, 78, 216, 0.30));
-    border: 1px solid rgba(96, 165, 250, 0.40);
+    background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2));
+    border: 1px solid var(--accent);
     display: flex; align-items: center; justify-content: center;
-    color: #dbeafe; margin-bottom: 18px;
+    color: var(--accent-soft); margin-bottom: 18px;
   }
   .card-icon svg { width: 26px; height: 26px; }
 
-  a.card h3 { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
-  a.card p { font-size: 0.875rem; color: #93a5c5; line-height: 1.5; }
+  a.card h3 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  a.card p { font-size: 0.875rem; color: var(--text-soft); line-height: 1.5; }
 
-  .signature { font-size: 0.9rem; color: #6b7ba0; margin-bottom: 20px; }
+  .signature { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; }
 
   .page-inner { max-width: 720px; margin: 0 auto; padding: 20px 0 60px; }
 
   .back-btn {
     display: inline-flex; align-items: center; gap: 10px;
     padding: 10px 20px; border-radius: 999px;
-    background: rgba(30, 58, 138, 0.25);
-    border: 1px solid rgba(96, 165, 250, 0.35);
-    color: #bfdbfe; text-decoration: none; margin-bottom: 40px;
+    background: var(--bg-grad-1);
+    border: 1px solid var(--accent);
+    color: var(--accent-soft); text-decoration: none; margin-bottom: 40px;
     transition: all 0.3s;
+    font-family: var(--font);
+    font-size: 0.9rem;
   }
-  .back-btn:hover { background: rgba(37, 99, 235, 0.35); transform: translateX(-4px); }
+  .back-btn:hover { background: var(--bg-grad-2); transform: translateX(-4px); }
   .back-btn svg { width: 16px; height: 16px; }
 
-  .page-head { text-align: center; margin-bottom: 40px; }
+  .page-head { text-align: var(--text-align); margin-bottom: 40px; }
   .page-head h2 {
+    font-family: var(--font);
     font-size: clamp(1.8rem, 5vw, 2.6rem); margin-bottom: 10px;
-    background: linear-gradient(120deg, #ffffff, #dbeafe, #60a5fa, #dbeafe, #ffffff);
-    background-size: 200% auto;
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    animation: shine 5s linear infinite;
+    color: var(--text);
   }
-  .page-head .sub { color: #6b7ba0; font-style: italic; font-size: 0.9rem; }
+  .page-head .sub { color: var(--text-muted); font-style: italic; font-size: 0.9rem; }
   .page-head .icon-small {
     display: inline-flex; align-items: center; justify-content: center;
     width: 56px; height: 56px; border-radius: 50%;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.45), rgba(29, 78, 216, 0.30));
-    border: 1px solid rgba(96, 165, 250, 0.45);
+    background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2));
+    border: 1px solid var(--accent);
     margin-bottom: 20px;
   }
-  .page-head .icon-small svg { width: 28px; height: 28px; color: #dbeafe; }
+  .page-head .icon-small svg { width: 28px; height: 28px; color: var(--accent-soft); }
 
   .poem-card {
-    background: linear-gradient(180deg, rgba(11, 18, 48, 0.85), rgba(5, 8, 24, 0.85));
-    border: 2px solid rgba(96, 165, 250, 0.40);
+    background: linear-gradient(180deg, var(--bg-grad-1), transparent);
+    border: 2px solid var(--accent);
     border-radius: 24px; padding: 48px;
-    box-shadow: 0 20px 60px rgba(37, 99, 235, 0.35);
+    box-shadow: 0 20px 60px var(--bg-grad-1);
   }
   .poem {
-    font-size: 1.08rem; line-height: 1.95; color: #d0d8ec; text-align: center;
+    font-family: var(--font);
+    font-size: 1.08rem;
+    font-weight: var(--weight);
+    font-style: var(--style);
+    text-decoration: var(--decoration);
+    line-height: var(--line-height);
+    color: var(--text);
+    text-align: var(--text-align);
   }
   .poem .dedication {
-    display: block; font-size: 1.2rem; color: #bfdbfe; font-weight: 600;
+    display: block; font-size: 1.2rem; color: var(--accent-soft); font-weight: 600;
     margin-bottom: 26px;
   }
   .poem .stanza { margin-bottom: 26px; display: block; }
   .poem .final {
-    color: #93c5fd; font-style: italic; margin-top: 28px; display: block; font-size: 0.98rem;
+    color: var(--accent-soft); font-style: italic; margin-top: 28px; display: block; font-size: 0.98rem;
   }
 
   .gallery { display: grid; grid-template-columns: 1fr; gap: 28px; margin-bottom: 40px; }
   .photo {
     border-radius: 20px; overflow: hidden;
-    border: 2px solid rgba(96, 165, 250, 0.35);
-    box-shadow: 0 15px 50px rgba(37, 99, 235, 0.35);
-    background: #0a1230;
+    border: 2px solid var(--accent);
+    box-shadow: 0 15px 50px var(--bg-grad-1);
+    background: var(--bg);
   }
   .photo img { display: block; width: 100%; height: auto; }
+
+  /* ===== Кнопка настроек ===== */
+  .settings-toggle {
+    position: fixed;
+    top: 20px; right: 20px;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--bg-grad-1);
+    border: 2px solid var(--accent);
+    color: var(--accent-soft);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+    box-shadow: 0 8px 24px var(--bg-grad-1);
+    transition: transform 0.3s, background 0.3s;
+    backdrop-filter: blur(10px);
+  }
+  .settings-toggle:hover {
+    transform: scale(1.1) rotate(45deg);
+    background: var(--bg-grad-2);
+  }
+  .settings-toggle svg { width: 24px; height: 24px; }
+
+  /* ===== Панель настроек ===== */
+  .settings-panel {
+    position: fixed;
+    top: 0; right: 0;
+    width: 360px;
+    max-width: 100%;
+    height: 100vh;
+    background: linear-gradient(180deg, #0a1230, #050818);
+    border-left: 2px solid var(--accent);
+    box-shadow: -20px 0 60px rgba(0,0,0,0.6);
+    z-index: 99;
+    padding: 80px 24px 30px;
+    overflow-y: auto;
+    transform: translateX(105%);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    color: #e2e8f0;
+    font-family: Georgia, serif;
+  }
+  .settings-panel.open { transform: translateX(0); }
+
+  .settings-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--accent);
+    color: var(--accent-soft);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .settings-close:hover { background: rgba(255,255,255,0.12); transform: rotate(90deg); }
+  .settings-close svg { width: 16px; height: 16px; }
+
+  .settings-title {
+    font-size: 1.3rem;
+    color: #fff;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .settings-sub {
+    font-size: 0.85rem;
+    color: #6b7ba0;
+    font-style: italic;
+    margin-bottom: 28px;
+  }
+
+  .settings-group { margin-bottom: 24px; }
+  .settings-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #93c5fd;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* Цветные кружки */
+  .swatches {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .swatch {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    position: relative;
+  }
+  .swatch:hover { transform: scale(1.15); border-color: #fff; }
+  .swatch.active { border-color: #fff; transform: scale(1.1); }
+  .swatch.active::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.4);
+  }
+
+  /* Кнопки шрифта */
+  .font-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .font-btn {
+    padding: 12px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(96, 165, 250, 0.3);
+    color: #cbd5e1;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.25s;
+    text-align: center;
+  }
+  .font-btn:hover { border-color: rgba(147, 197, 253, 0.7); background: rgba(255,255,255,0.10); }
+  .font-btn.active {
+    border-color: #93c5fd;
+    background: rgba(59, 130, 246, 0.25);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+
+  /* Ползунки */
+  .range-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  input[type="range"] {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(96, 165, 250, 0.25);
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #93c5fd, #60a5fa);
+    border: 2px solid #fff;
+    box-shadow: 0 0 15px rgba(96, 165, 250, 0.8);
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #93c5fd, #60a5fa);
+    border: 2px solid #fff;
+    box-shadow: 0 0 15px rgba(96, 165, 250, 0.8);
+    cursor: pointer;
+  }
+  .range-value {
+    min-width: 44px;
+    text-align: right;
+    color: #bfdbfe;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  /* Кнопки форматирования */
+  .format-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .format-btn {
+    flex: 1;
+    min-width: 56px;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(96, 165, 250, 0.3);
+    color: #cbd5e1;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.25s;
+    text-align: center;
+  }
+  .format-btn:hover { border-color: rgba(147, 197, 253, 0.7); background: rgba(255,255,255,0.10); }
+  .format-btn.active {
+    border-color: #93c5fd;
+    background: rgba(59, 130, 246, 0.25);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+  .format-btn.bold { font-weight: 700; }
+  .format-btn.italic { font-style: italic; }
+  .format-btn.underline { text-decoration: underline; }
+
+  /* Кнопки выравнивания */
+  .align-btns {
+    display: flex;
+    gap: 8px;
+  }
+  .align-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(96, 165, 250, 0.3);
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .align-btn:hover { border-color: rgba(147, 197, 253, 0.7); background: rgba(255,255,255,0.10); }
+  .align-btn.active {
+    border-color: #93c5fd;
+    background: rgba(59, 130, 246, 0.25);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+  .align-btn svg { width: 20px; height: 20px; }
+
+  .reset-btn {
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    border-radius: 12px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 2px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-family: Georgia, serif;
+    transition: all 0.3s;
+  }
+  .reset-btn:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.7);
+    color: #fff;
+  }
+
+  /* Затемнение фона, когда панель открыта */
+  .settings-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 98;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  .settings-overlay.open { opacity: 1; visibility: visible; }
 
   @media (max-width: 520px) {
     .page { padding: 40px 14px; }
     .poem-card { padding: 32px 22px; border-radius: 20px; }
-    .poem { font-size: 0.98rem; }
     a.card { width: 100%; max-width: 340px; }
+    .settings-panel { width: 100%; }
+    .settings-toggle { top: 14px; right: 14px; width: 46px; height: 46px; }
   }
 </style>
 </head>
@@ -171,9 +469,128 @@
 <div class="glow glow-1"></div>
 <div class="glow glow-2"></div>
 
+<!-- Кнопка настроек -->
+<button class="settings-toggle" id="settingsToggle" aria-label="Настройки">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </svg>
+</button>
+
+<!-- Затемнение -->
+<div class="settings-overlay" id="settingsOverlay"></div>
+
+<!-- Панель настроек -->
+<aside class="settings-panel" id="settingsPanel">
+  <button class="settings-close" id="settingsClose" aria-label="Закрыть">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+    </svg>
+  </button>
+
+  <h2 class="settings-title">Настройки</h2>
+  <p class="settings-sub">измените цвет и вид текста</p>
+
+  <!-- Цвет фона -->
+  <div class="settings-group">
+    <label class="settings-label">Цвет фона</label>
+    <div class="swatches" id="bgSwatches">
+      <div class="swatch active" data-bg="#050818" data-grad1="rgba(37,99,235,0.18)" data-grad2="rgba(29,78,216,0.15)" style="background:linear-gradient(135deg,#050818,#0a1230)"></div>
+      <div class="swatch" data-bg="#000000" data-grad1="rgba(80,80,80,0.15)" data-grad2="rgba(40,40,40,0.12)" style="background:#000"></div>
+      <div class="swatch" data-bg="#1a0a2e" data-grad1="rgba(139,92,246,0.25)" data-grad2="rgba(88,28,135,0.20)" style="background:linear-gradient(135deg,#1a0a2e,#2d1b4e)"></div>
+      <div class="swatch" data-bg="#0a1f1a" data-grad1="rgba(16,185,129,0.20)" data-grad2="rgba(5,150,105,0.15)" style="background:linear-gradient(135deg,#0a1f1a,#0f2e26)"></div>
+      <div class="swatch" data-bg="#1f0a14" data-grad1="rgba(225,29,72,0.18)" data-grad2="rgba(159,18,57,0.15)" style="background:linear-gradient(135deg,#1f0a14,#2e0f1c)"></div>
+      <div class="swatch" data-bg="#f0e6d2" data-grad1="rgba(200,160,90,0.20)" data-grad2="rgba(180,140,70,0.15)" style="background:linear-gradient(135deg,#f0e6d2,#e8d8b8)"></div>
+    </div>
+  </div>
+
+  <!-- Цвет текста -->
+  <div class="settings-group">
+    <label class="settings-label">Цвет текста</label>
+    <div class="swatches" id="textSwatches">
+      <div class="swatch active" data-text="#e2e8f0" data-accent="#60a5fa" data-accent-soft="#bfdbfe" data-soft="#a5b4d4" data-muted="#6b7ba0" style="background:#e2e8f0"></div>
+      <div class="swatch" data-text="#bfdbfe" data-accent="#93c5fd" data-accent-soft="#dbeafe" data-soft="#93c5fd" data-muted="#6b93c5" style="background:#bfdbfe"></div>
+      <div class="swatch" data-text="#fef3c7" data-accent="#fbbf24" data-accent-soft="#fde68a" data-soft="#fcd34d" data-muted="#b45309" style="background:#fef3c7"></div>
+      <div class="swatch" data-text="#fbcfe8" data-accent="#f472b6" data-accent-soft="#fbcfe8" data-soft="#f9a8d4" data-muted="#9d174d" style="background:#fbcfe8"></div>
+      <div class="swatch" data-text="#bbf7d0" data-accent="#4ade80" data-accent-soft="#bbf7d0" data-soft="#86efac" data-muted="#166534" style="background:#bbf7d0"></div>
+      <div class="swatch" data-text="#f5f5f4" data-accent="#d6d3d1" data-accent-soft="#fafaf9" data-soft="#d6d3d1" data-muted="#a8a29e" style="background:#f5f5f4"></div>
+    </div>
+  </div>
+
+  <!-- Шрифт -->
+  <div class="settings-group">
+    <label class="settings-label">Шрифт</label>
+    <div class="font-btns" id="fontBtns">
+      <button class="font-btn active" data-font="Georgia, 'Times New Roman', serif" style="font-family:Georgia,serif">Georgia</button>
+      <button class="font-btn" data-font="'Times New Roman', Times, serif" style="font-family:'Times New Roman',serif">Times</button>
+      <button class="font-btn" data-font="Arial, Helvetica, sans-serif" style="font-family:Arial,sans-serif">Arial</button>
+      <button class="font-btn" data-font="'Courier New', Courier, monospace" style="font-family:'Courier New',monospace">Courier</button>
+    </div>
+  </div>
+
+  <!-- Размер текста -->
+  <div class="settings-group">
+    <label class="settings-label">Размер текста</label>
+    <div class="range-row">
+      <input type="range" id="sizeRange" min="14" max="26" value="18" step="1">
+      <span class="range-value" id="sizeValue">18px</span>
+    </div>
+  </div>
+
+  <!-- Межстрочный интервал -->
+  <div class="settings-group">
+    <label class="settings-label">Межстрочный интервал</label>
+    <div class="range-row">
+      <input type="range" id="lineRange" min="1.2" max="2.4" value="1.7" step="0.1">
+      <span class="range-value" id="lineValue">1.7</span>
+    </div>
+  </div>
+
+  <!-- Форматирование -->
+  <div class="settings-group">
+    <label class="settings-label">Форматирование текста</label>
+    <div class="format-btns" id="formatBtns">
+      <button class="format-btn bold" data-format="weight" data-value="700">Ж</button>
+      <button class="format-btn italic" data-format="style" data-value="italic">К</button>
+      <button class="format-btn underline" data-format="decoration" data-value="underline">Ч</button>
+    </div>
+  </div>
+
+  <!-- Выравнивание -->
+  <div class="settings-group">
+    <label class="settings-label">Выравнивание</label>
+    <div class="align-btns" id="alignBtns">
+      <button class="align-btn active" data-align="center" aria-label="По центру">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="21" y1="6" x2="3" y2="6"/>
+          <line x1="17" y1="12" x2="7" y2="12"/>
+          <line x1="19" y1="18" x2="5" y2="18"/>
+        </svg>
+      </button>
+      <button class="align-btn" data-align="left" aria-label="По левому краю">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="21" y1="6" x2="3" y2="6"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+          <line x1="17" y1="18" x2="3" y2="18"/>
+        </svg>
+      </button>
+      <button class="align-btn" data-align="right" aria-label="По правому краю">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="21" y1="6" x2="3" y2="6"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+          <line x1="21" y1="18" x2="7" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <button class="reset-btn" id="resetBtn">Сбросить настройки</button>
+</aside>
+
+<!-- ===== КОНТЕНТ ===== -->
 <main id="app">
 
-  <!-- ===== ГЛАВНАЯ ===== -->
+  <!-- ГЛАВНАЯ -->
   <section id="page-home" class="page active">
     <div class="center-col">
 
@@ -225,7 +642,7 @@
     </div>
   </section>
 
-  <!-- ===== ЛУЧШИЙ РУКОВОДИТЕЛЬ ===== -->
+  <!-- ЛУЧШИЙ РУКОВОДИТЕЛЬ -->
   <section id="page-teacher" class="page">
     <div class="page-inner">
       <a class="back-btn" href="#home">
@@ -273,7 +690,7 @@
     </div>
   </section>
 
-  <!-- ===== НАШ ЛУЧШИЙ 5 «М» ===== -->
+  <!-- НАШ ЛУЧШИЙ 5М -->
   <section id="page-class" class="page">
     <div class="page-inner">
       <a class="back-btn" href="#home">
@@ -333,6 +750,7 @@
 </main>
 
 <script>
+  // ===== Звёзды =====
   (function() {
     const starsEl = document.getElementById('stars');
     let html = '';
@@ -351,6 +769,7 @@
     starsEl.innerHTML = html;
   })();
 
+  // ===== Роутер =====
   (function() {
     function route() {
       const hash = (location.hash || '#home').replace('#', '');
@@ -364,6 +783,209 @@
     }
     window.addEventListener('hashchange', route);
     route();
+  })();
+
+  // ===== Настройки =====
+  (function() {
+    const root = document.documentElement;
+    const toggle = document.getElementById('settingsToggle');
+    const panel = document.getElementById('settingsPanel');
+    const overlay = document.getElementById('settingsOverlay');
+    const closeBtn = document.getElementById('settingsClose');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // Открытие/закрытие панели
+    function openPanel() { panel.classList.add('open'); overlay.classList.add('open'); }
+    function closePanel() { panel.classList.remove('open'); overlay.classList.remove('open'); }
+    toggle.addEventListener('click', openPanel);
+    closeBtn.addEventListener('click', closePanel);
+    overlay.addEventListener('click', closePanel);
+
+    // ----- Сохранение в localStorage -----
+    const STORAGE_KEY = 'olga-site-settings';
+
+    function saveSettings() {
+      const s = {
+        bg: root.style.getPropertyValue('--bg'),
+        grad1: root.style.getPropertyValue('--bg-grad-1'),
+        grad2: root.style.getPropertyValue('--bg-grad-2'),
+        text: root.style.getPropertyValue('--text'),
+        accent: root.style.getPropertyValue('--accent'),
+        accentSoft: root.style.getPropertyValue('--accent-soft'),
+        soft: root.style.getPropertyValue('--text-soft'),
+        muted: root.style.getPropertyValue('--text-muted'),
+        font: root.style.getPropertyValue('--font'),
+        fontSize: root.style.getPropertyValue('--font-size'),
+        lineHeight: root.style.getPropertyValue('--line-height'),
+        weight: root.style.getPropertyValue('--weight'),
+        style: root.style.getPropertyValue('--style'),
+        decoration: root.style.getPropertyValue('--decoration'),
+        align: root.style.getPropertyValue('--text-align'),
+        // метки активных кнопок
+        bgIdx: [...document.querySelectorAll('#bgSwatches .swatch')].findIndex(s => s.classList.contains('active')),
+        textIdx: [...document.querySelectorAll('#textSwatches .swatch')].findIndex(s => s.classList.contains('active')),
+        fontIdx: [...document.querySelectorAll('#fontBtns .font-btn')].findIndex(b => b.classList.contains('active')),
+        alignValue: [...document.querySelectorAll('#alignBtns .align-btn')].find(b => b.classList.contains('active'))?.dataset.align || 'center',
+        bold: document.querySelector('[data-format="weight"]').classList.contains('active'),
+        italic: document.querySelector('[data-format="style"]').classList.contains('active'),
+        underline: document.querySelector('[data-format="decoration"]').classList.contains('active')
+      };
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e) {}
+    }
+
+    function loadSettings() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const s = JSON.parse(raw);
+
+        if (s.bg) root.style.setProperty('--bg', s.bg);
+        if (s.grad1) root.style.setProperty('--bg-grad-1', s.grad1);
+        if (s.grad2) root.style.setProperty('--bg-grad-2', s.grad2);
+        if (s.text) root.style.setProperty('--text', s.text);
+        if (s.accent) root.style.setProperty('--accent', s.accent);
+        if (s.accentSoft) root.style.setProperty('--accent-soft', s.accentSoft);
+        if (s.soft) root.style.setProperty('--text-soft', s.soft);
+        if (s.muted) root.style.setProperty('--text-muted', s.muted);
+        if (s.font) root.style.setProperty('--font', s.font);
+        if (s.fontSize) root.style.setProperty('--font-size', s.fontSize);
+        if (s.lineHeight) root.style.setProperty('--line-height', s.lineHeight);
+        if (s.weight) root.style.setProperty('--weight', s.weight);
+        if (s.style) root.style.setProperty('--style', s.style);
+        if (s.decoration) root.style.setProperty('--decoration', s.decoration);
+        if (s.align) root.style.setProperty('--text-align', s.align);
+
+        // Восстановление активных кнопок
+        const bgSw = document.querySelectorAll('#bgSwatches .swatch');
+        const txtSw = document.querySelectorAll('#textSwatches .swatch');
+        const fontBtns = document.querySelectorAll('#fontBtns .font-btn');
+        const alignBtns = document.querySelectorAll('#alignBtns .align-btn');
+
+        if (s.bgIdx >= 0 && bgSw[s.bgIdx]) {
+          bgSw.forEach(x => x.classList.remove('active'));
+          bgSw[s.bgIdx].classList.add('active');
+        }
+        if (s.textIdx >= 0 && txtSw[s.textIdx]) {
+          txtSw.forEach(x => x.classList.remove('active'));
+          txtSw[s.textIdx].classList.add('active');
+        }
+        if (s.fontIdx >= 0 && fontBtns[s.fontIdx]) {
+          fontBtns.forEach(x => x.classList.remove('active'));
+          fontBtns[s.fontIdx].classList.add('active');
+        }
+        alignBtns.forEach(b => {
+          b.classList.toggle('active', b.dataset.align === s.alignValue);
+        });
+
+        // Ползунки
+        if (s.fontSize) {
+          const sizePx = parseInt(s.fontSize);
+          document.getElementById('sizeRange').value = sizePx;
+          document.getElementById('sizeValue').textContent = sizePx + 'px';
+        }
+        if (s.lineHeight) {
+          const lh = parseFloat(s.lineHeight);
+          document.getElementById('lineRange').value = lh;
+          document.getElementById('lineValue').textContent = lh.toFixed(1);
+        }
+
+        // Форматирование
+        document.querySelector('[data-format="weight"]').classList.toggle('active', !!s.bold);
+        document.querySelector('[data-format="style"]').classList.toggle('active', !!s.italic);
+        document.querySelector('[data-format="decoration"]').classList.toggle('active', !!s.underline);
+      } catch(e) {}
+    }
+
+    // ----- Цвет фона -----
+    document.querySelectorAll('#bgSwatches .swatch').forEach(sw => {
+      sw.addEventListener('click', () => {
+        document.querySelectorAll('#bgSwatches .swatch').forEach(x => x.classList.remove('active'));
+        sw.classList.add('active');
+        root.style.setProperty('--bg', sw.dataset.bg);
+        root.style.setProperty('--bg-grad-1', sw.dataset.grad1);
+        root.style.setProperty('--bg-grad-2', sw.dataset.grad2);
+        saveSettings();
+      });
+    });
+
+    // ----- Цвет текста -----
+    document.querySelectorAll('#textSwatches .swatch').forEach(sw => {
+      sw.addEventListener('click', () => {
+        document.querySelectorAll('#textSwatches .swatch').forEach(x => x.classList.remove('active'));
+        sw.classList.add('active');
+        root.style.setProperty('--text', sw.dataset.text);
+        root.style.setProperty('--accent', sw.dataset.accent);
+        root.style.setProperty('--accent-soft', sw.dataset.accentSoft);
+        root.style.setProperty('--text-soft', sw.dataset.soft);
+        root.style.setProperty('--text-muted', sw.dataset.muted);
+        saveSettings();
+      });
+    });
+
+    // ----- Шрифт -----
+    document.querySelectorAll('#fontBtns .font-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#fontBtns .font-btn').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+        root.style.setProperty('--font', btn.dataset.font);
+        saveSettings();
+      });
+    });
+
+    // ----- Размер текста -----
+    const sizeRange = document.getElementById('sizeRange');
+    const sizeValue = document.getElementById('sizeValue');
+    sizeRange.addEventListener('input', () => {
+      root.style.setProperty('--font-size', sizeRange.value + 'px');
+      sizeValue.textContent = sizeRange.value + 'px';
+      saveSettings();
+    });
+
+    // ----- Межстрочный интервал -----
+    const lineRange = document.getElementById('lineRange');
+    const lineValue = document.getElementById('lineValue');
+    lineRange.addEventListener('input', () => {
+      root.style.setProperty('--line-height', lineRange.value);
+      lineValue.textContent = parseFloat(lineRange.value).toFixed(1);
+      saveSettings();
+    });
+
+    // ----- Форматирование -----
+    document.querySelectorAll('#formatBtns .format-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+        const isActive = btn.classList.contains('active');
+        const format = btn.dataset.format;
+
+        if (format === 'weight') {
+          root.style.setProperty('--weight', isActive ? '700' : '400');
+        } else if (format === 'style') {
+          root.style.setProperty('--style', isActive ? 'italic' : 'normal');
+        } else if (format === 'decoration') {
+          root.style.setProperty('--decoration', isActive ? 'underline' : 'none');
+        }
+        saveSettings();
+      });
+    });
+
+    // ----- Выравнивание -----
+    document.querySelectorAll('#alignBtns .align-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#alignBtns .align-btn').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+        root.style.setProperty('--text-align', btn.dataset.align);
+        saveSettings();
+      });
+    });
+
+    // ----- Сброс -----
+    resetBtn.addEventListener('click', () => {
+      try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+      location.reload();
+    });
+
+    // ----- Загрузка при старте -----
+    loadSettings();
   })();
 </script>
 
