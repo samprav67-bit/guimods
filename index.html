@@ -7,7 +7,6 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ===== Переменные темы ===== */
   :root {
     --bg: #050818;
     --bg-grad-1: rgba(37, 99, 235, 0.18);
@@ -18,12 +17,7 @@
     --accent: #60a5fa;
     --accent-soft: #bfdbfe;
     --font: Georgia, 'Times New Roman', serif;
-    --font-size: 18px;
     --line-height: 1.7;
-    --weight: 400;
-    --style: normal;
-    --decoration: none;
-    --text-align: center;
   }
 
   html, body {
@@ -31,12 +25,8 @@
     background: var(--bg);
     color: var(--text);
     font-family: var(--font);
-    font-size: var(--font-size);
-    font-weight: var(--weight);
-    font-style: var(--style);
-    text-decoration: var(--decoration);
+    font-size: 18px;
     overflow-x: hidden;
-    transition: background 0.4s ease, color 0.4s ease;
   }
 
   body::before {
@@ -48,10 +38,8 @@
       radial-gradient(ellipse 70% 50% at 50% 100%, var(--bg-grad-2), transparent 60%);
     pointer-events: none;
     z-index: -1;
-    transition: background 0.4s ease;
   }
 
-  /* ===== Звёзды ===== */
   .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
   .star { position: absolute; background: #fff; border-radius: 50%; animation: twinkle 3.5s ease-in-out infinite; }
   .star.blue { background: var(--accent-soft); }
@@ -62,14 +50,13 @@
   .glow-1 { top: -160px; left: -160px; width: 600px; height: 600px; background: var(--bg-grad-1); }
   .glow-2 { bottom: -160px; right: -160px; width: 600px; height: 600px; background: var(--bg-grad-2); }
 
-  /* ===== Страницы ===== */
-  .page { display: none; position: relative; z-index: 10; min-height: 100vh; padding: 60px 16px; }
+  .page { display: none; position: relative; z-index: 10; min-height: 100vh; padding: 60px 16px 120px; }
   .page.active { display: block; }
 
   .center-col {
     max-width: 760px; margin: 0 auto;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: calc(100vh - 120px); text-align: var(--text-align);
+    min-height: calc(100vh - 200px); text-align: center;
   }
 
   .icon-wrap { display: flex; justify-content: center; margin-bottom: 36px; }
@@ -87,7 +74,6 @@
     font-size: clamp(2rem, 7vw, 4.2rem); font-weight: 700; line-height: 1.1;
     margin-bottom: 20px;
     color: var(--text);
-    transition: color 0.4s;
   }
   h1.title .accent {
     display: block; font-size: 0.55em; font-style: italic;
@@ -129,7 +115,161 @@
   a.card h3 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
   a.card p { font-size: 0.875rem; color: var(--text-soft); line-height: 1.5; }
 
-  .signature { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; }
+  .signature { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 40px; }
+
+  /* Счётчик */
+  .counter-box {
+    display: inline-flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 20px 32px; border-radius: 20px;
+    background: linear-gradient(180deg, var(--bg-grad-1), transparent);
+    border: 2px solid var(--accent);
+    box-shadow: 0 10px 40px var(--bg-grad-1);
+    margin-bottom: 32px;
+    transition: transform 0.3s;
+  }
+  .counter-box:hover { transform: translateY(-4px); }
+  .counter-label { font-size: 0.85rem; color: var(--text-soft); font-style: italic; letter-spacing: 0.04em; }
+  .counter-value {
+    font-size: 1.9rem; font-weight: 700; color: var(--accent-soft);
+    font-family: var(--font); text-shadow: 0 0 25px var(--bg-grad-1); line-height: 1.2;
+  }
+  .counter-detail { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.06em; }
+
+  /* Цитата дня */
+  .quote-box {
+    max-width: 560px;
+    margin: 0 auto 40px;
+    padding: 22px 32px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, var(--bg-grad-1), transparent);
+    border: 2px solid var(--accent);
+    box-shadow: 0 10px 40px var(--bg-grad-1);
+    position: relative;
+    transition: transform 0.3s;
+  }
+  .quote-box:hover { transform: translateY(-3px); }
+  .quote-label {
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .quote-text {
+    font-size: 1.08rem;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.7;
+    position: relative;
+  }
+  .quote-text::before {
+    content: '«';
+    color: var(--accent-soft);
+    font-size: 1.6rem;
+    line-height: 0;
+    vertical-align: -6px;
+    margin-right: 4px;
+  }
+  .quote-text::after {
+    content: '»';
+    color: var(--accent-soft);
+    font-size: 1.6rem;
+    line-height: 0;
+    vertical-align: -6px;
+    margin-left: 4px;
+  }
+  .quote-author {
+    display: block;
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: normal;
+  }
+
+  /* Кнопка Спасибо */
+  .thanks-wrap { position: relative; margin-bottom: 50px; }
+  .thanks-btn {
+    position: relative; padding: 18px 44px; border-radius: 999px;
+    background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2));
+    border: 2px solid var(--accent);
+    color: var(--text); font-family: var(--font); font-size: 1.15rem; font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 40px var(--bg-grad-1);
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    z-index: 2;
+  }
+  .thanks-btn:hover {
+    transform: scale(1.05); border-color: var(--accent-soft);
+    box-shadow: 0 15px 55px var(--bg-grad-1);
+  }
+  .thanks-btn:active { transform: scale(0.97); }
+
+  .thanks-toast {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    padding: 22px 40px; border-radius: 20px;
+    background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2));
+    border: 2px solid var(--accent);
+    color: var(--text); font-size: 1.25rem; font-weight: 600;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+    opacity: 0; pointer-events: none; z-index: 200;
+    transition: opacity 0.3s, transform 0.3s;
+    backdrop-filter: blur(10px); text-align: center;
+  }
+  .thanks-toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+  .heart-particle {
+    position: fixed; pointer-events: none; z-index: 150; font-size: 22px;
+    animation: heartFly 1.4s ease-out forwards;
+  }
+  @keyframes heartFly {
+    0% { opacity: 1; transform: translate(0, 0) scale(0.6) rotate(0deg); }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.2) rotate(var(--rot)); }
+  }
+
+  .marquee {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    overflow: hidden; padding: 12px 0;
+    background: linear-gradient(180deg, transparent, rgba(5, 8, 24, 0.85));
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--bg-grad-1);
+    z-index: 50; pointer-events: none;
+  }
+  .marquee-track {
+    display: inline-block; white-space: nowrap;
+    animation: marquee 40s linear infinite;
+    padding-left: 100%;
+  }
+  .marquee-track span {
+    display: inline-block; padding: 0 40px;
+    color: var(--text-soft); font-size: 0.95rem; font-style: italic; opacity: 0.85;
+  }
+  .marquee-track span::after {
+    content: '✦'; display: inline-block; margin-left: 40px;
+    color: var(--accent); font-style: normal; opacity: 0.6;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  .live-clock {
+    position: fixed; bottom: 58px; right: 20px;
+    padding: 10px 18px; border-radius: 14px;
+    background: linear-gradient(180deg, var(--bg-grad-1), var(--bg-grad-2));
+    border: 1px solid var(--accent);
+    color: var(--accent-soft); font-size: 0.85rem;
+    letter-spacing: 0.04em; text-align: right;
+    z-index: 60; backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px var(--bg-grad-1);
+    line-height: 1.4; pointer-events: none;
+  }
+  .live-clock .time {
+    font-size: 1.15rem; font-weight: 700; color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .live-clock .date { color: var(--text-soft); font-size: 0.78rem; }
 
   .page-inner { max-width: 720px; margin: 0 auto; padding: 20px 0 60px; }
 
@@ -140,13 +280,12 @@
     border: 1px solid var(--accent);
     color: var(--accent-soft); text-decoration: none; margin-bottom: 40px;
     transition: all 0.3s;
-    font-family: var(--font);
-    font-size: 0.9rem;
+    font-family: var(--font); font-size: 0.9rem;
   }
   .back-btn:hover { background: var(--bg-grad-2); transform: translateX(-4px); }
   .back-btn svg { width: 16px; height: 16px; }
 
-  .page-head { text-align: var(--text-align); margin-bottom: 40px; }
+  .page-head { text-align: center; margin-bottom: 40px; }
   .page-head h2 {
     font-family: var(--font);
     font-size: clamp(1.8rem, 5vw, 2.6rem); margin-bottom: 10px;
@@ -171,12 +310,9 @@
   .poem {
     font-family: var(--font);
     font-size: 1.08rem;
-    font-weight: var(--weight);
-    font-style: var(--style);
-    text-decoration: var(--decoration);
     line-height: var(--line-height);
     color: var(--text);
-    text-align: var(--text-align);
+    text-align: center;
   }
   .poem .dedication {
     display: block; font-size: 1.2rem; color: var(--accent-soft); font-weight: 600;
@@ -187,279 +323,74 @@
     color: var(--accent-soft); font-style: italic; margin-top: 28px; display: block; font-size: 0.98rem;
   }
 
+  /* Фото + лайтбокс */
   .gallery { display: grid; grid-template-columns: 1fr; gap: 28px; margin-bottom: 40px; }
   .photo {
     border-radius: 20px; overflow: hidden;
     border: 2px solid var(--accent);
     box-shadow: 0 15px 50px var(--bg-grad-1);
     background: var(--bg);
+    cursor: zoom-in;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
   }
-  .photo img { display: block; width: 100%; height: auto; }
+  .photo:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-soft);
+    box-shadow: 0 22px 65px var(--bg-grad-1), 0 0 40px var(--bg-grad-1);
+  }
+  .photo img { display: block; width: 100%; height: auto; transition: transform 0.5s; }
+  .photo:hover img { transform: scale(1.02); }
 
-  /* ===== Кнопка настроек ===== */
-  .settings-toggle {
-    position: fixed;
+  .lightbox {
+    position: fixed; inset: 0;
+    background: rgba(2, 4, 12, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.35s, visibility 0.35s;
+    cursor: zoom-out;
+  }
+  .lightbox.open { opacity: 1; visibility: visible; }
+  .lightbox img {
+    max-width: 95vw;
+    max-height: 92vh;
+    border-radius: 16px;
+    border: 2px solid var(--accent);
+    box-shadow: 0 30px 100px rgba(0,0,0,0.8), 0 0 60px var(--bg-grad-1);
+    transform: scale(0.92);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    object-fit: contain;
+  }
+  .lightbox.open img { transform: scale(1); }
+  .lightbox-close {
+    position: absolute;
     top: 20px; right: 20px;
-    width: 52px; height: 52px;
+    width: 44px; height: 44px;
     border-radius: 50%;
-    background: var(--bg-grad-1);
+    background: rgba(255,255,255,0.08);
     border: 2px solid var(--accent);
     color: var(--accent-soft);
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    z-index: 100;
-    box-shadow: 0 8px 24px var(--bg-grad-1);
-    transition: transform 0.3s, background 0.3s;
-    backdrop-filter: blur(10px);
-  }
-  .settings-toggle:hover {
-    transform: scale(1.1) rotate(45deg);
-    background: var(--bg-grad-2);
-  }
-  .settings-toggle svg { width: 24px; height: 24px; }
-
-  /* ===== Панель настроек ===== */
-  .settings-panel {
-    position: fixed;
-    top: 0; right: 0;
-    width: 360px;
-    max-width: 100%;
-    height: 100vh;
-    background: linear-gradient(180deg, #0a1230, #050818);
-    border-left: 2px solid var(--accent);
-    box-shadow: -20px 0 60px rgba(0,0,0,0.6);
-    z-index: 99;
-    padding: 80px 24px 30px;
-    overflow-y: auto;
-    transform: translateX(105%);
-    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    color: #e2e8f0;
-    font-family: Georgia, serif;
-  }
-  .settings-panel.open { transform: translateX(0); }
-
-  .settings-close {
-    position: absolute;
-    top: 20px; right: 20px;
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--accent);
-    color: var(--accent-soft);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
     transition: background 0.3s, transform 0.3s;
+    z-index: 2;
   }
-  .settings-close:hover { background: rgba(255,255,255,0.12); transform: rotate(90deg); }
-  .settings-close svg { width: 16px; height: 16px; }
-
-  .settings-title {
-    font-size: 1.3rem;
-    color: #fff;
-    margin-bottom: 6px;
-    font-weight: 700;
-  }
-  .settings-sub {
-    font-size: 0.85rem;
-    color: #6b7ba0;
-    font-style: italic;
-    margin-bottom: 28px;
-  }
-
-  .settings-group { margin-bottom: 24px; }
-  .settings-label {
-    display: block;
-    font-size: 0.8rem;
-    color: #93c5fd;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  /* Цветные кружки */
-  .swatches {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .swatch {
-    width: 38px; height: 38px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    transition: transform 0.2s, border-color 0.2s;
-    position: relative;
-  }
-  .swatch:hover { transform: scale(1.15); border-color: #fff; }
-  .swatch.active { border-color: #fff; transform: scale(1.1); }
-  .swatch.active::after {
-    content: '';
-    position: absolute;
-    inset: 5px;
-    border-radius: 50%;
-    border: 2px solid rgba(0,0,0,0.4);
-  }
-
-  /* Кнопки шрифта */
-  .font-btns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .font-btn {
-    padding: 12px 10px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.05);
-    border: 2px solid rgba(96, 165, 250, 0.3);
-    color: #cbd5e1;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.25s;
-    text-align: center;
-  }
-  .font-btn:hover { border-color: rgba(147, 197, 253, 0.7); background: rgba(255,255,255,0.10); }
-  .font-btn.active {
-    border-color: #93c5fd;
-    background: rgba(59, 130, 246, 0.25);
-    color: #fff;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-  }
-
-  /* Ползунки */
-  .range-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  input[type="range"] {
-    flex: 1;
-    height: 4px;
-    border-radius: 2px;
-    background: rgba(96, 165, 250, 0.25);
-    -webkit-appearance: none;
-    appearance: none;
-    outline: none;
-    cursor: pointer;
-  }
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #93c5fd, #60a5fa);
-    border: 2px solid #fff;
-    box-shadow: 0 0 15px rgba(96, 165, 250, 0.8);
-    cursor: pointer;
-  }
-  input[type="range"]::-moz-range-thumb {
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #93c5fd, #60a5fa);
-    border: 2px solid #fff;
-    box-shadow: 0 0 15px rgba(96, 165, 250, 0.8);
-    cursor: pointer;
-  }
-  .range-value {
-    min-width: 44px;
-    text-align: right;
-    color: #bfdbfe;
-    font-size: 0.9rem;
-    font-weight: 600;
-  }
-
-  /* Кнопки форматирования */
-  .format-btns {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .format-btn {
-    flex: 1;
-    min-width: 56px;
-    padding: 10px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.05);
-    border: 2px solid rgba(96, 165, 250, 0.3);
-    color: #cbd5e1;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.25s;
-    text-align: center;
-  }
-  .format-btn:hover { border-color: rgba(147, 197, 253, 0.7); background: rgba(255,255,255,0.10); }
-  .format-btn.active {
-    border-color: #93c5fd;
-    background: rgba(59, 130, 246, 0.25);
-    color: #fff;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-  }
-  .format-btn.bold { font-weight: 700; }
-  .format-btn.italic { font-style: italic; }
-  .format-btn.underline { text-decoration: underline; }
-
-  /* Кнопки выравнивания */
-  .align-btns {
-    display: flex;
-    gap: 8px;
-  }
-  .align-btn {
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.05);
-    border: 2px solid rgba(96, 165, 250, 0.3);
-    color: #cbd5e1;
-    cursor: pointer;
-    transition: all 0.25s;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .align-btn:hover { border-color: rgba(147, 197, 253, 0.7); background: rgba(255,255,255,0.10); }
-  .align-btn.active {
-    border-color: #93c5fd;
-    background: rgba(59, 130, 246, 0.25);
-    color: #fff;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-  }
-  .align-btn svg { width: 20px; height: 20px; }
-
-  .reset-btn {
-    width: 100%;
-    padding: 14px;
-    margin-top: 12px;
-    border-radius: 12px;
-    background: rgba(239, 68, 68, 0.15);
-    border: 2px solid rgba(239, 68, 68, 0.4);
-    color: #fca5a5;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-family: Georgia, serif;
-    transition: all 0.3s;
-  }
-  .reset-btn:hover {
-    background: rgba(239, 68, 68, 0.25);
-    border-color: rgba(239, 68, 68, 0.7);
-    color: #fff;
-  }
-
-  /* Затемнение фона, когда панель открыта */
-  .settings-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 98;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-  }
-  .settings-overlay.open { opacity: 1; visibility: visible; }
+  .lightbox-close:hover { background: rgba(255,255,255,0.18); transform: rotate(90deg); }
+  .lightbox-close svg { width: 20px; height: 20px; }
 
   @media (max-width: 520px) {
-    .page { padding: 40px 14px; }
+    .page { padding: 40px 14px 130px; }
     .poem-card { padding: 32px 22px; border-radius: 20px; }
     a.card { width: 100%; max-width: 340px; }
-    .settings-panel { width: 100%; }
-    .settings-toggle { top: 14px; right: 14px; width: 46px; height: 46px; }
+    .live-clock { bottom: 54px; right: 10px; padding: 8px 14px; }
+    .live-clock .time { font-size: 1rem; }
+    .counter-value { font-size: 1.5rem; }
+    .thanks-btn { padding: 16px 32px; font-size: 1rem; }
+    .marquee-track span { font-size: 0.85rem; }
+    .quote-box { padding: 18px 22px; }
+    .quote-text { font-size: 1rem; }
   }
 </style>
 </head>
@@ -469,125 +400,34 @@
 <div class="glow glow-1"></div>
 <div class="glow glow-2"></div>
 
-<!-- Кнопка настроек -->
-<button class="settings-toggle" id="settingsToggle" aria-label="Настройки">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-    <circle cx="12" cy="12" r="3"/>
-  </svg>
-</button>
+<div class="live-clock">
+  <div class="time" id="liveTime">--:--:--</div>
+  <div class="date" id="liveDate">—</div>
+</div>
 
-<!-- Затемнение -->
-<div class="settings-overlay" id="settingsOverlay"></div>
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Спасибо за ваше терпение</span>
+    <span>Вы — лучшая</span>
+    <span>5 «М» вас очень любит</span>
+    <span>С вами тепло и спокойно</span>
+    <span>Спасибо, что вы рядом</span>
+    <span>Вы — наш классный руководитель и друг</span>
+  </div>
+</div>
 
-<!-- Панель настроек -->
-<aside class="settings-panel" id="settingsPanel">
-  <button class="settings-close" id="settingsClose" aria-label="Закрыть">
+<div class="thanks-toast" id="thanksToast">Спасибо, Ольга Борисовна! ❤</div>
+
+<!-- Лайтбокс для фото -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Закрыть">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
     </svg>
   </button>
+  <img id="lightboxImg" src="" alt="">
+</div>
 
-  <h2 class="settings-title">Настройки</h2>
-  <p class="settings-sub">измените цвет и вид текста</p>
-
-  <!-- Цвет фона -->
-  <div class="settings-group">
-    <label class="settings-label">Цвет фона</label>
-    <div class="swatches" id="bgSwatches">
-      <div class="swatch active" data-bg="#050818" data-grad1="rgba(37,99,235,0.18)" data-grad2="rgba(29,78,216,0.15)" style="background:linear-gradient(135deg,#050818,#0a1230)"></div>
-      <div class="swatch" data-bg="#000000" data-grad1="rgba(80,80,80,0.15)" data-grad2="rgba(40,40,40,0.12)" style="background:#000"></div>
-      <div class="swatch" data-bg="#1a0a2e" data-grad1="rgba(139,92,246,0.25)" data-grad2="rgba(88,28,135,0.20)" style="background:linear-gradient(135deg,#1a0a2e,#2d1b4e)"></div>
-      <div class="swatch" data-bg="#0a1f1a" data-grad1="rgba(16,185,129,0.20)" data-grad2="rgba(5,150,105,0.15)" style="background:linear-gradient(135deg,#0a1f1a,#0f2e26)"></div>
-      <div class="swatch" data-bg="#1f0a14" data-grad1="rgba(225,29,72,0.18)" data-grad2="rgba(159,18,57,0.15)" style="background:linear-gradient(135deg,#1f0a14,#2e0f1c)"></div>
-      <div class="swatch" data-bg="#f0e6d2" data-grad1="rgba(200,160,90,0.20)" data-grad2="rgba(180,140,70,0.15)" style="background:linear-gradient(135deg,#f0e6d2,#e8d8b8)"></div>
-    </div>
-  </div>
-
-  <!-- Цвет текста -->
-  <div class="settings-group">
-    <label class="settings-label">Цвет текста</label>
-    <div class="swatches" id="textSwatches">
-      <div class="swatch active" data-text="#e2e8f0" data-accent="#60a5fa" data-accent-soft="#bfdbfe" data-soft="#a5b4d4" data-muted="#6b7ba0" style="background:#e2e8f0"></div>
-      <div class="swatch" data-text="#bfdbfe" data-accent="#93c5fd" data-accent-soft="#dbeafe" data-soft="#93c5fd" data-muted="#6b93c5" style="background:#bfdbfe"></div>
-      <div class="swatch" data-text="#fef3c7" data-accent="#fbbf24" data-accent-soft="#fde68a" data-soft="#fcd34d" data-muted="#b45309" style="background:#fef3c7"></div>
-      <div class="swatch" data-text="#fbcfe8" data-accent="#f472b6" data-accent-soft="#fbcfe8" data-soft="#f9a8d4" data-muted="#9d174d" style="background:#fbcfe8"></div>
-      <div class="swatch" data-text="#bbf7d0" data-accent="#4ade80" data-accent-soft="#bbf7d0" data-soft="#86efac" data-muted="#166534" style="background:#bbf7d0"></div>
-      <div class="swatch" data-text="#f5f5f4" data-accent="#d6d3d1" data-accent-soft="#fafaf9" data-soft="#d6d3d1" data-muted="#a8a29e" style="background:#f5f5f4"></div>
-    </div>
-  </div>
-
-  <!-- Шрифт -->
-  <div class="settings-group">
-    <label class="settings-label">Шрифт</label>
-    <div class="font-btns" id="fontBtns">
-      <button class="font-btn active" data-font="Georgia, 'Times New Roman', serif" style="font-family:Georgia,serif">Georgia</button>
-      <button class="font-btn" data-font="'Times New Roman', Times, serif" style="font-family:'Times New Roman',serif">Times</button>
-      <button class="font-btn" data-font="Arial, Helvetica, sans-serif" style="font-family:Arial,sans-serif">Arial</button>
-      <button class="font-btn" data-font="'Courier New', Courier, monospace" style="font-family:'Courier New',monospace">Courier</button>
-    </div>
-  </div>
-
-  <!-- Размер текста -->
-  <div class="settings-group">
-    <label class="settings-label">Размер текста</label>
-    <div class="range-row">
-      <input type="range" id="sizeRange" min="14" max="26" value="18" step="1">
-      <span class="range-value" id="sizeValue">18px</span>
-    </div>
-  </div>
-
-  <!-- Межстрочный интервал -->
-  <div class="settings-group">
-    <label class="settings-label">Межстрочный интервал</label>
-    <div class="range-row">
-      <input type="range" id="lineRange" min="1.2" max="2.4" value="1.7" step="0.1">
-      <span class="range-value" id="lineValue">1.7</span>
-    </div>
-  </div>
-
-  <!-- Форматирование -->
-  <div class="settings-group">
-    <label class="settings-label">Форматирование текста</label>
-    <div class="format-btns" id="formatBtns">
-      <button class="format-btn bold" data-format="weight" data-value="700">Ж</button>
-      <button class="format-btn italic" data-format="style" data-value="italic">К</button>
-      <button class="format-btn underline" data-format="decoration" data-value="underline">Ч</button>
-    </div>
-  </div>
-
-  <!-- Выравнивание -->
-  <div class="settings-group">
-    <label class="settings-label">Выравнивание</label>
-    <div class="align-btns" id="alignBtns">
-      <button class="align-btn active" data-align="center" aria-label="По центру">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="21" y1="6" x2="3" y2="6"/>
-          <line x1="17" y1="12" x2="7" y2="12"/>
-          <line x1="19" y1="18" x2="5" y2="18"/>
-        </svg>
-      </button>
-      <button class="align-btn" data-align="left" aria-label="По левому краю">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="21" y1="6" x2="3" y2="6"/>
-          <line x1="15" y1="12" x2="3" y2="12"/>
-          <line x1="17" y1="18" x2="3" y2="18"/>
-        </svg>
-      </button>
-      <button class="align-btn" data-align="right" aria-label="По правому краю">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="21" y1="6" x2="3" y2="6"/>
-          <line x1="21" y1="12" x2="9" y2="12"/>
-          <line x1="21" y1="18" x2="7" y2="18"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-
-  <button class="reset-btn" id="resetBtn">Сбросить настройки</button>
-</aside>
-
-<!-- ===== КОНТЕНТ ===== -->
 <main id="app">
 
   <!-- ГЛАВНАЯ -->
@@ -608,6 +448,18 @@
       </h1>
 
       <p class="subtitle">Дорогая Ольга Борисовна, вы — лучший классный руководитель на свете! Мы приготовили для вас пару тёплых слов. Выберите, что почитать.</p>
+
+      <div class="counter-box">
+        <div class="counter-label">Мы с вами уже</div>
+        <div class="counter-value" id="daysCounter">—</div>
+        <div class="counter-detail" id="daysDetail">с 1 сентября</div>
+      </div>
+
+      <div class="quote-box">
+        <div class="quote-label">Цитата дня</div>
+        <div class="quote-text" id="quoteText">…</div>
+        <div class="quote-author" id="quoteAuthor"></div>
+      </div>
 
       <div class="buttons">
         <a class="card" href="#teacher">
@@ -635,6 +487,12 @@
           <h3>Наш лучший 5 «М»</h3>
           <p>Стихотворение и наши фото</p>
         </a>
+      </div>
+
+      <div class="thanks-wrap">
+        <button class="thanks-btn" id="thanksBtn">
+          💙 Сказать спасибо
+        </button>
       </div>
 
       <p class="signature">С любовью и гордостью, ваш 5 «М»</p>
@@ -737,10 +595,10 @@
       </div>
 
       <div class="gallery">
-        <div class="photo">
+        <div class="photo" data-src="photo-class.jpg">
           <img src="photo-class.jpg" alt="" onerror="this.style.display='none'">
         </div>
-        <div class="photo">
+        <div class="photo" data-src="photo-racket.jpg">
           <img src="photo-racket.jpg" alt="" onerror="this.style.display='none'">
         </div>
       </div>
@@ -750,7 +608,7 @@
 </main>
 
 <script>
-  // ===== Звёзды =====
+  // Звёзды
   (function() {
     const starsEl = document.getElementById('stars');
     let html = '';
@@ -769,13 +627,12 @@
     starsEl.innerHTML = html;
   })();
 
-  // ===== Роутер =====
+  // Роутер
   (function() {
     function route() {
       const hash = (location.hash || '#home').replace('#', '');
       const allowed = ['home', 'teacher', 'class'];
       const target = allowed.includes(hash) ? hash : 'home';
-
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       const el = document.getElementById('page-' + target);
       if (el) el.classList.add('active');
@@ -785,207 +642,164 @@
     route();
   })();
 
-  // ===== Настройки =====
+  // Живые часы
   (function() {
-    const root = document.documentElement;
-    const toggle = document.getElementById('settingsToggle');
-    const panel = document.getElementById('settingsPanel');
-    const overlay = document.getElementById('settingsOverlay');
-    const closeBtn = document.getElementById('settingsClose');
-    const resetBtn = document.getElementById('resetBtn');
+    const timeEl = document.getElementById('liveTime');
+    const dateEl = document.getElementById('liveDate');
+    const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+    function updateClock() {
+      const now = new Date();
+      timeEl.textContent = String(now.getHours()).padStart(2, '0') + ':' +
+                           String(now.getMinutes()).padStart(2, '0') + ':' +
+                           String(now.getSeconds()).padStart(2, '0');
+      dateEl.textContent = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  })();
 
-    // Открытие/закрытие панели
-    function openPanel() { panel.classList.add('open'); overlay.classList.add('open'); }
-    function closePanel() { panel.classList.remove('open'); overlay.classList.remove('open'); }
-    toggle.addEventListener('click', openPanel);
-    closeBtn.addEventListener('click', closePanel);
-    overlay.addEventListener('click', closePanel);
+  // Счётчик дней
+  (function() {
+    const valueEl = document.getElementById('daysCounter');
+    const detailEl = document.getElementById('daysDetail');
+    const now0 = new Date();
+    const year = now0.getMonth() >= 8 ? now0.getFullYear() : now0.getFullYear() - 1;
+    const startDate = new Date(year, 8, 1, 0, 0, 0);
+    function update() {
+      const now = new Date();
+      const diff = now - startDate;
+      const totalSec = Math.floor(diff / 1000);
+      const days = Math.floor(totalSec / 86400);
+      const hours = Math.floor((totalSec % 86400) / 3600);
+      const minutes = Math.floor((totalSec % 3600) / 60);
+      const seconds = totalSec % 60;
+      valueEl.textContent = days + ' ' + declOfNum(days, ['день', 'дня', 'дней']);
+      detailEl.textContent = hours + ' ч · ' + minutes + ' мин · ' + seconds + ' сек · с 1 сентября ' + year;
+    }
+    function declOfNum(n, titles) {
+      const cases = [2, 0, 1, 1, 1, 2];
+      return titles[(n % 100 > 4 && n % 100 < 20) ? 2 : cases[(n % 10 < 5) ? n % 10 : 5]];
+    }
+    update();
+    setInterval(update, 1000);
+  })();
 
-    // ----- Сохранение в localStorage -----
-    const STORAGE_KEY = 'olga-site-settings';
+  // Цитата дня
+  (function() {
+    const quotes = [
+      { t: 'Учитель прикасается к вечности: никто не может сказать, где кончается его влияние.', a: 'Генри Адамс' },
+      { t: 'Учить — это не наполнять сосуд, а зажигать огонь.', a: 'Плутарх' },
+      { t: 'Учитель — тот, кто смотрит в будущее и не боится его.', a: 'Джон Дьюи' },
+      { t: 'Хороший учитель — как свеча: сгорает, освещая другим путь.', a: 'Народная мудрость' },
+      { t: 'Учитель — сердце школы.', a: 'Народная мудрость' },
+      { t: 'Образование — самое мощное оружие, которое можно использовать, чтобы изменить мир.', a: 'Нельсон Мандела' },
+      { t: 'Учитель влияет на вечность сильнее, чем кажется.', a: 'Генри Б. Адамс' },
+      { t: 'Воспитание — великое дело: им решается участь человека.', a: 'В. Г. Белинский' },
+      { t: 'Учитель — это тот, кто открывает двери, но войти ты должен сам.', a: 'Китайская мудрость' },
+      { t: 'Педагог — это человек, который стоит у истоков каждой профессии.', a: 'Константин Ушинский' },
+      { t: 'Учитель — не тот, кто учит, а тот, у кого учатся.', a: 'Анатоль Франс' },
+      { t: 'Задача учителя — открыть в каждом ребёнке лучшее.', a: 'С. Л. Соловейчик' },
+      { t: 'Учить детей — это искусство, а воспитывать — ещё большее.', a: 'Л. Н. Толстой' },
+      { t: 'Учитель — это тот, кто умеет превратить сложное в простое.', a: 'Ральф Эмерсон' },
+      { t: 'Знание — сила. Учитель — тот, кто даёт эту силу.', a: 'Фрэнсис Бэкон' },
+      { t: 'Учитель — это не тот, кто даёт ответы, а тот, кто учит искать.', a: 'Сократ' },
+      { t: 'Учитель должен вдохновлять, а не только объяснять.', a: 'Уильям Уорд' },
+      { t: 'Ребёнок — это не сосуд, который надо заполнить, а светильник, который надо зажечь.', a: 'Плутарх' },
+      { t: 'Учитель и ученик растут вместе.', a: 'Конфуций' },
+      { t: 'Учитель — это тот, кто помнит, каково это — не знать.', a: 'Джон Холт' },
+      { t: 'Образование — это то, что остаётся, когда забываешь всё выученное.', a: 'Б. Ф. Скиннер' },
+      { t: 'Настоящий учитель — тот, кто любит то, чему учит.', a: 'Константин Ушинский' },
+      { t: 'Учитель без любви к детям — как дерево без корней.', a: 'Народная мудрость' },
+      { t: 'Терпение и труд всё перетрут — так учит нас учитель.', a: 'Русская пословица' },
+      { t: 'Учитель — это человек, который всегда учится сам.', a: 'Джон Коттон Дана' },
+      { t: 'Учитель открывает двери, но входит ученик сам.', a: 'Китайская мудрость' },
+      { t: 'Хорошее учение даёт много плодов.', a: 'Ян Амос Коменский' },
+      { t: 'Учитель — тот, кто находит радость в успехах учеников.', a: 'Народная мудрость' },
+      { t: 'Кто учит — тот дважды учится.', a: 'Жозеф Жубер' },
+      { t: 'Классный руководитель — это второй родитель, только строже и добрее.', a: 'Народная мудрость' },
+      { t: 'Учителя — это те, кто делает нас теми, кем мы становимся.', a: 'Народная мудрость' }
+    ];
 
-    function saveSettings() {
-      const s = {
-        bg: root.style.getPropertyValue('--bg'),
-        grad1: root.style.getPropertyValue('--bg-grad-1'),
-        grad2: root.style.getPropertyValue('--bg-grad-2'),
-        text: root.style.getPropertyValue('--text'),
-        accent: root.style.getPropertyValue('--accent'),
-        accentSoft: root.style.getPropertyValue('--accent-soft'),
-        soft: root.style.getPropertyValue('--text-soft'),
-        muted: root.style.getPropertyValue('--text-muted'),
-        font: root.style.getPropertyValue('--font'),
-        fontSize: root.style.getPropertyValue('--font-size'),
-        lineHeight: root.style.getPropertyValue('--line-height'),
-        weight: root.style.getPropertyValue('--weight'),
-        style: root.style.getPropertyValue('--style'),
-        decoration: root.style.getPropertyValue('--decoration'),
-        align: root.style.getPropertyValue('--text-align'),
-        // метки активных кнопок
-        bgIdx: [...document.querySelectorAll('#bgSwatches .swatch')].findIndex(s => s.classList.contains('active')),
-        textIdx: [...document.querySelectorAll('#textSwatches .swatch')].findIndex(s => s.classList.contains('active')),
-        fontIdx: [...document.querySelectorAll('#fontBtns .font-btn')].findIndex(b => b.classList.contains('active')),
-        alignValue: [...document.querySelectorAll('#alignBtns .align-btn')].find(b => b.classList.contains('active'))?.dataset.align || 'center',
-        bold: document.querySelector('[data-format="weight"]').classList.contains('active'),
-        italic: document.querySelector('[data-format="style"]').classList.contains('active'),
-        underline: document.querySelector('[data-format="decoration"]').classList.contains('active')
-      };
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e) {}
+    const textEl = document.getElementById('quoteText');
+    const authorEl = document.getElementById('quoteAuthor');
+    const day = new Date().getDate();
+    const q = quotes[(day - 1) % quotes.length];
+    textEl.textContent = q.t;
+    authorEl.textContent = '— ' + q.a;
+  })();
+
+  // Кнопка Спасибо
+  (function() {
+    const btn = document.getElementById('thanksBtn');
+    const toast = document.getElementById('thanksToast');
+    const emojis = ['💙', '❤️', '✨', '⭐', '💫', '🌟', '💖'];
+    btn.addEventListener('click', () => {
+      toast.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => toast.classList.remove('show'), 1800);
+      const rect = btn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const count = 14;
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'heart-particle';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+        const dist = 120 + Math.random() * 180;
+        el.style.left = cx + 'px';
+        el.style.top = cy + 'px';
+        el.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+        el.style.setProperty('--dy', (Math.sin(angle) * dist - 40) + 'px');
+        el.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+        el.style.fontSize = (18 + Math.random() * 16) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1500);
+      }
+    });
+  })();
+
+  // Лайтбокс для фото
+  (function() {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const closeBtn = document.getElementById('lightboxClose');
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
 
-    function loadSettings() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return;
-        const s = JSON.parse(raw);
-
-        if (s.bg) root.style.setProperty('--bg', s.bg);
-        if (s.grad1) root.style.setProperty('--bg-grad-1', s.grad1);
-        if (s.grad2) root.style.setProperty('--bg-grad-2', s.grad2);
-        if (s.text) root.style.setProperty('--text', s.text);
-        if (s.accent) root.style.setProperty('--accent', s.accent);
-        if (s.accentSoft) root.style.setProperty('--accent-soft', s.accentSoft);
-        if (s.soft) root.style.setProperty('--text-soft', s.soft);
-        if (s.muted) root.style.setProperty('--text-muted', s.muted);
-        if (s.font) root.style.setProperty('--font', s.font);
-        if (s.fontSize) root.style.setProperty('--font-size', s.fontSize);
-        if (s.lineHeight) root.style.setProperty('--line-height', s.lineHeight);
-        if (s.weight) root.style.setProperty('--weight', s.weight);
-        if (s.style) root.style.setProperty('--style', s.style);
-        if (s.decoration) root.style.setProperty('--decoration', s.decoration);
-        if (s.align) root.style.setProperty('--text-align', s.align);
-
-        // Восстановление активных кнопок
-        const bgSw = document.querySelectorAll('#bgSwatches .swatch');
-        const txtSw = document.querySelectorAll('#textSwatches .swatch');
-        const fontBtns = document.querySelectorAll('#fontBtns .font-btn');
-        const alignBtns = document.querySelectorAll('#alignBtns .align-btn');
-
-        if (s.bgIdx >= 0 && bgSw[s.bgIdx]) {
-          bgSw.forEach(x => x.classList.remove('active'));
-          bgSw[s.bgIdx].classList.add('active');
-        }
-        if (s.textIdx >= 0 && txtSw[s.textIdx]) {
-          txtSw.forEach(x => x.classList.remove('active'));
-          txtSw[s.textIdx].classList.add('active');
-        }
-        if (s.fontIdx >= 0 && fontBtns[s.fontIdx]) {
-          fontBtns.forEach(x => x.classList.remove('active'));
-          fontBtns[s.fontIdx].classList.add('active');
-        }
-        alignBtns.forEach(b => {
-          b.classList.toggle('active', b.dataset.align === s.alignValue);
-        });
-
-        // Ползунки
-        if (s.fontSize) {
-          const sizePx = parseInt(s.fontSize);
-          document.getElementById('sizeRange').value = sizePx;
-          document.getElementById('sizeValue').textContent = sizePx + 'px';
-        }
-        if (s.lineHeight) {
-          const lh = parseFloat(s.lineHeight);
-          document.getElementById('lineRange').value = lh;
-          document.getElementById('lineValue').textContent = lh.toFixed(1);
-        }
-
-        // Форматирование
-        document.querySelector('[data-format="weight"]').classList.toggle('active', !!s.bold);
-        document.querySelector('[data-format="style"]').classList.toggle('active', !!s.italic);
-        document.querySelector('[data-format="decoration"]').classList.toggle('active', !!s.underline);
-      } catch(e) {}
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => { lightboxImg.src = ''; }, 350);
     }
 
-    // ----- Цвет фона -----
-    document.querySelectorAll('#bgSwatches .swatch').forEach(sw => {
-      sw.addEventListener('click', () => {
-        document.querySelectorAll('#bgSwatches .swatch').forEach(x => x.classList.remove('active'));
-        sw.classList.add('active');
-        root.style.setProperty('--bg', sw.dataset.bg);
-        root.style.setProperty('--bg-grad-1', sw.dataset.grad1);
-        root.style.setProperty('--bg-grad-2', sw.dataset.grad2);
-        saveSettings();
+    document.querySelectorAll('.photo').forEach(photo => {
+      photo.addEventListener('click', () => {
+        const src = photo.dataset.src || (photo.querySelector('img')?.src);
+        if (src) openLightbox(src);
       });
     });
 
-    // ----- Цвет текста -----
-    document.querySelectorAll('#textSwatches .swatch').forEach(sw => {
-      sw.addEventListener('click', () => {
-        document.querySelectorAll('#textSwatches .swatch').forEach(x => x.classList.remove('active'));
-        sw.classList.add('active');
-        root.style.setProperty('--text', sw.dataset.text);
-        root.style.setProperty('--accent', sw.dataset.accent);
-        root.style.setProperty('--accent-soft', sw.dataset.accentSoft);
-        root.style.setProperty('--text-soft', sw.dataset.soft);
-        root.style.setProperty('--text-muted', sw.dataset.muted);
-        saveSettings();
-      });
+    // Клик по фону (в любом месте lightbox, кроме кнопки закрытия)
+    lightbox.addEventListener('click', (e) => {
+      closeLightbox();
     });
 
-    // ----- Шрифт -----
-    document.querySelectorAll('#fontBtns .font-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#fontBtns .font-btn').forEach(x => x.classList.remove('active'));
-        btn.classList.add('active');
-        root.style.setProperty('--font', btn.dataset.font);
-        saveSettings();
-      });
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeLightbox();
     });
 
-    // ----- Размер текста -----
-    const sizeRange = document.getElementById('sizeRange');
-    const sizeValue = document.getElementById('sizeValue');
-    sizeRange.addEventListener('input', () => {
-      root.style.setProperty('--font-size', sizeRange.value + 'px');
-      sizeValue.textContent = sizeRange.value + 'px';
-      saveSettings();
+    // Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+        closeLightbox();
+      }
     });
-
-    // ----- Межстрочный интервал -----
-    const lineRange = document.getElementById('lineRange');
-    const lineValue = document.getElementById('lineValue');
-    lineRange.addEventListener('input', () => {
-      root.style.setProperty('--line-height', lineRange.value);
-      lineValue.textContent = parseFloat(lineRange.value).toFixed(1);
-      saveSettings();
-    });
-
-    // ----- Форматирование -----
-    document.querySelectorAll('#formatBtns .format-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('active');
-        const isActive = btn.classList.contains('active');
-        const format = btn.dataset.format;
-
-        if (format === 'weight') {
-          root.style.setProperty('--weight', isActive ? '700' : '400');
-        } else if (format === 'style') {
-          root.style.setProperty('--style', isActive ? 'italic' : 'normal');
-        } else if (format === 'decoration') {
-          root.style.setProperty('--decoration', isActive ? 'underline' : 'none');
-        }
-        saveSettings();
-      });
-    });
-
-    // ----- Выравнивание -----
-    document.querySelectorAll('#alignBtns .align-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#alignBtns .align-btn').forEach(x => x.classList.remove('active'));
-        btn.classList.add('active');
-        root.style.setProperty('--text-align', btn.dataset.align);
-        saveSettings();
-      });
-    });
-
-    // ----- Сброс -----
-    resetBtn.addEventListener('click', () => {
-      try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
-      location.reload();
-    });
-
-    // ----- Загрузка при старте -----
-    loadSettings();
   })();
 </script>
 
