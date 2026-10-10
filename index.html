@@ -271,6 +271,42 @@
     color: var(--accent-soft); font-style: italic; margin-top: 28px; display: block; font-size: 0.98rem;
   }
 
+  /* ===== Видео ===== */
+  .video-section {
+    max-width: 720px;
+    margin: 0 auto 50px;
+  }
+  .video-label {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .video-frame {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 2px solid var(--accent);
+    box-shadow: 0 20px 60px var(--bg-grad-1), 0 0 60px var(--bg-grad-1);
+    background: #000;
+    position: relative;
+    transition: box-shadow 0.4s, border-color 0.4s;
+  }
+  .video-frame:hover {
+    border-color: var(--accent-soft);
+    box-shadow: 0 25px 75px var(--bg-grad-1), 0 0 90px var(--bg-grad-1);
+  }
+  .video-frame video {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 75vh;
+    background: #000;
+    cursor: pointer;
+  }
+
   /* ===== Галерея ===== */
   .gallery {
     display: grid;
@@ -302,7 +338,6 @@
   }
   .photo:hover img { transform: scale(1.08); }
 
-  /* Лайтбокс */
   .lightbox {
     position: fixed; inset: 0;
     background: rgba(2, 4, 12, 0.95);
@@ -443,7 +478,7 @@
             </svg>
           </div>
           <h3>Наш лучший 5 «М»</h3>
-          <p>Стихотворение и наши фото</p>
+          <p>Стихотворение, видео и фото</p>
         </a>
       </div>
 
@@ -526,10 +561,10 @@
           </svg>
         </div>
         <h2>Наш лучший 5 «М»</h2>
-        <div class="sub">Стихотворение и наши фото</div>
+        <div class="sub">Стихотворение, видео и наши фото</div>
       </div>
 
-      <div class="poem-card" style="margin-bottom: 40px;">
+      <div class="poem-card" style="margin-bottom: 50px;">
         <div class="poem">
           <span class="dedication">Мы — 5 «М»!</span>
 
@@ -552,6 +587,18 @@
         </div>
       </div>
 
+      <!-- ===== ВИДЕО ===== -->
+      <div class="video-section">
+        <div class="video-label">Видео от 5 «М»</div>
+        <div class="video-frame">
+          <video id="classVideo" controls preload="metadata" playsinline poster="">
+            <source src="video.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео. <a href="video.mp4">Скачать файл</a>.
+          </video>
+        </div>
+      </div>
+
+      <!-- ===== ГАЛЕРЕЯ ===== -->
       <div class="gallery">
         <div class="photo" data-src="photo-1.jpg">
           <img src="photo-1.jpg" alt="" onerror="this.style.display='none'">
@@ -613,6 +660,9 @@
       const el = document.getElementById('page-' + target);
       if (el) el.classList.add('active');
       window.scrollTo(0, 0);
+      // Пауза видео при уходе со страницы
+      const vid = document.getElementById('classVideo');
+      if (vid && target !== 'class') vid.pause();
     }
     window.addEventListener('hashchange', route);
     route();
@@ -691,7 +741,7 @@
     });
   })();
 
-  // Лайтбокс
+  // Лайтбокс для фото
   (function() {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
