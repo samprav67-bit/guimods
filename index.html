@@ -84,7 +84,61 @@
     font-size: clamp(1rem, 2.5vw, 1.25rem);
     color: var(--text-soft);
     line-height: var(--line-height);
-    max-width: 580px; margin: 0 auto 50px;
+    max-width: 580px; margin: 0 auto 40px;
+  }
+
+  /* ===== Новости класса ===== */
+  .news-box {
+    max-width: 620px;
+    margin: 0 auto 40px;
+    padding: 24px 32px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, var(--bg-grad-1), transparent);
+    border: 2px solid var(--accent);
+    box-shadow: 0 10px 40px var(--bg-grad-1);
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: left;
+  }
+  .news-box:hover { transform: translateY(-3px); box-shadow: 0 15px 50px var(--bg-grad-1); }
+  .news-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--bg-grad-1);
+  }
+  .news-head svg {
+    width: 20px; height: 20px;
+    color: var(--accent);
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px var(--bg-grad-1));
+  }
+  .news-head .news-title {
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .news-head .news-date {
+    margin-left: auto;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .news-text {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--text);
+  }
+  .news-text.rest {
+    color: var(--accent-soft);
+    font-style: italic;
+    text-align: center;
+    font-size: 1.15rem;
+    padding: 6px 0;
   }
 
   .buttons { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px; }
@@ -271,27 +325,17 @@
     color: var(--accent-soft); font-style: italic; margin-top: 28px; display: block; font-size: 0.98rem;
   }
 
-  /* ===== Видео ===== */
-  .video-section {
-    max-width: 720px;
-    margin: 0 auto 50px;
-  }
+  .video-section { max-width: 720px; margin: 0 auto 50px; }
   .video-label {
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--accent);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    font-weight: 600;
+    text-align: center; font-size: 0.8rem; color: var(--accent);
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
     margin-bottom: 16px;
   }
   .video-frame {
-    border-radius: 20px;
-    overflow: hidden;
+    border-radius: 20px; overflow: hidden;
     border: 2px solid var(--accent);
     box-shadow: 0 20px 60px var(--bg-grad-1), 0 0 60px var(--bg-grad-1);
-    background: #000;
-    position: relative;
+    background: #000; position: relative;
     transition: box-shadow 0.4s, border-color 0.4s;
   }
   .video-frame:hover {
@@ -299,15 +343,10 @@
     box-shadow: 0 25px 75px var(--bg-grad-1), 0 0 90px var(--bg-grad-1);
   }
   .video-frame video {
-    display: block;
-    width: 100%;
-    height: auto;
-    max-height: 75vh;
-    background: #000;
-    cursor: pointer;
+    display: block; width: 100%; height: auto;
+    max-height: 75vh; background: #000; cursor: pointer;
   }
 
-  /* ===== Галерея ===== */
   .gallery {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -316,8 +355,7 @@
   }
   .photo {
     aspect-ratio: 4 / 3;
-    border-radius: 16px;
-    overflow: hidden;
+    border-radius: 16px; overflow: hidden;
     border: 2px solid var(--accent);
     box-shadow: 0 10px 35px var(--bg-grad-1);
     background: var(--bg);
@@ -330,11 +368,8 @@
     box-shadow: 0 18px 55px var(--bg-grad-1), 0 0 40px var(--bg-grad-1);
   }
   .photo img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s;
+    display: block; width: 100%; height: 100%;
+    object-fit: cover; transition: transform 0.5s;
   }
   .photo:hover img { transform: scale(1.08); }
 
@@ -351,8 +386,7 @@
   }
   .lightbox.open { opacity: 1; visibility: visible; }
   .lightbox img {
-    max-width: 95vw;
-    max-height: 92vh;
+    max-width: 95vw; max-height: 92vh;
     border-radius: 16px;
     border: 2px solid var(--accent);
     box-shadow: 0 30px 100px rgba(0,0,0,0.8), 0 0 60px var(--bg-grad-1);
@@ -391,6 +425,8 @@
     .thanks-btn { padding: 16px 32px; font-size: 1rem; }
     .marquee-track span { font-size: 0.85rem; }
     .gallery { grid-template-columns: 1fr; gap: 16px; }
+    .news-box { padding: 20px 20px; }
+    .news-text { font-size: 1rem; }
   }
 </style>
 </head>
@@ -452,6 +488,21 @@
         <div class="counter-label">Мы с вами уже</div>
         <div class="counter-value" id="daysCounter">—</div>
         <div class="counter-detail" id="daysDetail">с 1 сентября</div>
+      </div>
+
+      <!-- НОВОСТИ КЛАССА -->
+      <div class="news-box" id="newsBox">
+        <div class="news-head">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+            <path d="M18 14h-8"/>
+            <path d="M15 18h-5"/>
+            <path d="M10 6h8v4h-8V6Z"/>
+          </svg>
+          <span class="news-title">Новости класса</span>
+          <span class="news-date" id="newsDate">—</span>
+        </div>
+        <div class="news-text" id="newsText">…</div>
       </div>
 
       <div class="buttons">
@@ -571,7 +622,7 @@
           <span class="stanza">Иногда у нас не получается —<br>
 Задачи сложные, примеры не идут.<br>
 Но 5 «М» не сдаётся, не прощается<br>
-С мечтой — мы снова и снова в бой идут!</span>
+С мечтой — мы снова и снова в бой идём!</span>
 
           <span class="stanza">Иногда мы очень даже шумные,<br>
 Бывает, что не слушаем совсем.<br>
@@ -587,18 +638,16 @@
         </div>
       </div>
 
-      <!-- ===== ВИДЕО ===== -->
       <div class="video-section">
         <div class="video-label">Видео от 5 «М»</div>
         <div class="video-frame">
-          <video id="classVideo" controls preload="metadata" playsinline poster="">
+          <video id="classVideo" controls preload="metadata" playsinline>
             <source src="video.mp4" type="video/mp4">
             Ваш браузер не поддерживает видео. <a href="video.mp4">Скачать файл</a>.
           </video>
         </div>
       </div>
 
-      <!-- ===== ГАЛЕРЕЯ ===== -->
       <div class="gallery">
         <div class="photo" data-src="photo-1.jpg">
           <img src="photo-1.jpg" alt="" onerror="this.style.display='none'">
@@ -631,6 +680,83 @@
 </main>
 
 <script>
+  // ============================================================
+  // НОВОСТИ КЛАССА
+  // ============================================================
+  // Формат: 'ГГГГ-ММ-ДД': 'текст новости',
+  // В будни показывается ваша новость. В выходные и каникулы —
+  // автоматически выводится «Сегодня выходной» или «<название> каникулы».
+  //
+  const newsByDate = {
+    // '2025-10-13': 'Сегодня писали проверочную по математике, все справились!',
+    // '2025-10-14': 'Готовимся к празднику осени, рисуем стенгазету.',
+    // '2025-10-15': 'Экскурсия в музей — всем очень понравилось.',
+  };
+
+  // ============================================================
+  // КАНИКУЛЫ — с названиями и эмодзи
+  // ============================================================
+  // Формат: { from, to, label, emoji }
+  // Если сегодня попадает в диапазон — в новостях появится
+  // «<label> — отдыхайте! <emoji>». Например: «Осенние каникулы — отдыхайте! 🍁»
+  //
+  const holidays = [
+    { from: '2025-10-27', to: '2025-11-04', label: 'Осенние каникулы',           emoji: '🍁' },
+    { from: '2025-12-29', to: '2026-01-11', label: 'Зимние каникулы',             emoji: '❄️' },
+    { from: '2026-02-16', to: '2026-02-22', label: 'Дополнительные каникулы',     emoji: '🌸' },
+    { from: '2026-03-23', to: '2026-03-31', label: 'Весенние каникулы',           emoji: '🌷' },
+    { from: '2026-05-25', to: '2026-08-31', label: 'Летние каникулы',             emoji: '☀️' },
+  ];
+
+  (function() {
+    const weekdays = ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+    const monthsGen = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function toISO(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+
+    // Возвращает объект каникул, если сегодня попадаем в диапазон, иначе null
+    function findHoliday(iso) {
+      for (let i = 0; i < holidays.length; i++) {
+        const h = holidays[i];
+        if (iso >= h.from && iso <= h.to) return h;
+      }
+      return null;
+    }
+
+    const now = new Date();
+    const iso = toISO(now);
+    const dow = now.getDay();
+
+    const dateEl = document.getElementById('newsDate');
+    const textEl = document.getElementById('newsText');
+
+    dateEl.textContent = now.getDate() + ' ' + monthsGen[now.getMonth()] + ', ' + weekdays[dow];
+
+    const isWeekend = (dow === 0 || dow === 6);
+    const holiday = findHoliday(iso);
+
+    if (holiday) {
+      // Сейчас каникулы
+      textEl.classList.add('rest');
+      textEl.textContent = holiday.label + ' — отдыхайте! ' + holiday.emoji;
+    } else if (isWeekend) {
+      // Суббота или воскресенье
+      textEl.classList.add('rest');
+      textEl.textContent = 'Сегодня выходной — можно отдохнуть 🌿';
+    } else {
+      // Будний день
+      const text = newsByDate[iso];
+      if (text) {
+        textEl.classList.remove('rest');
+        textEl.textContent = text;
+      } else {
+        textEl.classList.remove('rest');
+        textEl.textContent = 'Сегодня новостей пока нет — заходите позже 🙂';
+      }
+    }
+  })();
+
   // Звёзды
   (function() {
     const starsEl = document.getElementById('stars');
@@ -660,7 +786,6 @@
       const el = document.getElementById('page-' + target);
       if (el) el.classList.add('active');
       window.scrollTo(0, 0);
-      // Пауза видео при уходе со страницы
       const vid = document.getElementById('classVideo');
       if (vid && target !== 'class') vid.pause();
     }
@@ -741,7 +866,7 @@
     });
   })();
 
-  // Лайтбокс для фото
+  // Лайтбокс
   (function() {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
@@ -766,9 +891,7 @@
       });
     });
 
-    lightbox.addEventListener('click', () => {
-      closeLightbox();
-    });
+    lightbox.addEventListener('click', () => closeLightbox());
 
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -776,9 +899,7 @@
     });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && lightbox.classList.contains('open')) {
-        closeLightbox();
-      }
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
     });
   })();
 </script>
